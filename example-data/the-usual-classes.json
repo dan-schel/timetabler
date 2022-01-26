@@ -1,6 +1,6 @@
 {
+    "$schema": "../data-schema.json",
     "version": "1",
-    "dayRange": "weekdays",
     "times": "8am-8pm",
     "subjects": [
         {
