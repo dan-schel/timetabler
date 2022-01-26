@@ -1,5 +1,5 @@
 # Timetabler
-A tool to help chose options on a timetable where there might be multiple classes running!
+A tool to help choose options on a timetable where there might be multiple classes running!
 Allows you to quickly select different time slots and checks for clashes for you as you go.
 
 ## Providing your timetable
