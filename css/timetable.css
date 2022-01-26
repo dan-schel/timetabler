@@ -1,0 +1,138 @@
+.timetable-canvas {
+    position: relative;
+    min-height: 700px;
+    height: 100%;
+    min-width: 600px;
+}
+.timetable-grid {
+    z-index: 1;
+    position: absolute;
+    width: calc(100% - 64px);
+    height: calc(100% - 32px);
+    left: 48px;
+    top: 16px;
+}
+.day {
+    position: absolute;
+    width: 14.285%;
+    height: 100%;
+    top: 0;
+    border-left: 1px solid #00000030;
+    border-top: 1px solid #00000030;
+}
+.day h4 {
+    width: 100%;
+    text-align: center;
+    margin-top: 7px;
+}
+.day:nth-child(odd) {
+    background-color: #0000000D;
+}
+.day:nth-child(1) {
+    left: calc(14.285% * 0);
+}
+.day:nth-child(2) {
+    left: calc(14.285% * 1);
+}
+.day:nth-child(3) {
+    left: calc(14.285% * 2);
+}
+.day:nth-child(4) {
+    left: calc(14.285% * 3);
+}
+.day:nth-child(5) {
+    left: calc(14.285% * 4);
+}
+.day:nth-child(6) {
+    left: calc(14.285% * 5);
+}
+.day:nth-child(7) {
+    left: calc(14.285% * 6);
+    border-right: 1px solid #00000030;
+}
+
+.timetable-markers {
+    position: absolute;
+    width: calc(100% - 64px);
+    height: calc(100% - 64px);
+    left: 48px;
+    top: 48px;
+    z-index: 2;
+}
+.timetable-marker {
+    position: relative;
+    height: 4.166%;
+    border-top: 1px solid #00000018;
+}
+.timetable-marker:nth-child(odd) {
+    border-top: 1px solid #00000030;
+}
+.timetable-marker:last-child {
+    height: 0px;
+}
+.timetable-marker h6 {
+    color: #888888;
+    font-size: 0.7rem;
+    font-weight: normal;
+
+    position: absolute;
+    left: -40px;
+    top: -6px;
+}
+
+
+.timetable-classes {
+    position: absolute;
+    width: calc(100% - 64px);
+    height: calc(100% - 64px);
+    left: 48px;
+    top: 48px;
+    z-index: 3;
+}
+.timetable-class {
+    position: absolute;
+    width: 14.285%;
+}
+.timetable-class-bg {
+    margin: 2px;
+    height: calc(100% - 4px);
+    width: calc(100% - 4px);
+    
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    
+    border-radius: 4px;
+    border: 1px solid #00000040;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+.timetable-class h5 {
+    text-align: center;
+    color: white;
+    font-size: 0.8rem;
+    white-space: normal;
+    word-wrap: break-word;
+    width: 100%;
+    margin-bottom: 4px;
+}
+.timetable-class p {
+    text-align: center;
+    color: white;
+    font-size: 0.7rem;
+    white-space: normal;
+    word-wrap: break-word;
+    width: 100%;
+    display: none;
+}
+.timetable-class-bg-online h5 {
+    color: black;
+}
+.timetable-class-bg-online p {
+    color: black;
+}

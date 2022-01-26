@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Timetabler</title>
+        <link rel="stylesheet" href="css/reset.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/timetable.css">
+    </head>
+    <body>
+        <div class="load-config">
+            <h1>TIMETABLER</h1>
+            <p>Provide a .json file with the subjects and timetable options below to get started</p>
+            <p id="load-config-error" class="gone"></p>
+            <input type="file" id="load-config-file" autocomplete="off">
+        </div>
+        <div class="options gone">
+            <h1>TIMETABLER</h1>
+            <h2>Choose time slots below:</h2>
+            <p id="timetable-status-clash" class="gone">You have subject clashes!</p>
+            <div class="subjects"></div>
+        </div>
+        <div class="timetable gone">
+            <div class="timetable-canvas">
+                <div class="timetable-grid">
+                    <div class="day"><h4>Mon</h4></div>
+                    <div class="day"><h4>Tue</h4></div>
+                    <div class="day"><h4>Wed</h4></div>
+                    <div class="day"><h4>Thu</h4></div>
+                    <div class="day"><h4>Fri</h4></div>
+                    <div class="day"><h4>Sat</h4></div>
+                    <div class="day"><h4>Sun</h4></div>
+                </div>
+                <div class="timetable-markers">
+                    <div class="timetable-marker"><h6>8am</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>9am</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>10am</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>11am</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>12pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>1pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>2pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>3pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>4pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>5pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>6pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>7pm</h6></div>
+                    <div class="timetable-marker"></div>
+                    <div class="timetable-marker"><h6>8pm</h6></div>
+                </div>
+                <div class="timetable-classes"></div>
+            </div>
+        </div>
+
+        <script src="js/jquery-3.6.0.min.js"></script>
+		<script src="js/data.js"></script>
+		<script src="js/readSubjects.js"></script>
+		<script src="js/main.js"></script>
+    </body>
+</html>
