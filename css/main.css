@@ -885,7 +885,7 @@ body {
 .day h4 {
   width: 100%;
   text-align: center;
-  margin-top: 7px;
+  margin-top: 8px;
 }
 
 .day:nth-child(odd) {
