@@ -43,7 +43,7 @@ function createSelects(subjects) {
 
             return `<option value="${j}">${name}</option>`;
         }).join('');
-        let html = `<div class="subject" id="subject-${i}"><h3 style="color:${subject.color}">${subject.name} (${subject.type})</h3><select><option>Choose a time slot...</option>${optionsHtml}</select></div>`;
+        let html = `<div class="subject" id="subject-${i}"><p style="color:${subject.color}">${subject.name} (${subject.type})</p><select><option>Choose a time slot...</option>${optionsHtml}</select></div>`;
 
         $('.subjects').append(html);
 
