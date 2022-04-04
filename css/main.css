@@ -2,7 +2,10 @@
 * {
   box-sizing: border-box;
   font-family: sans-serif;
-  font-size: 0.95rem;
+}
+
+*:not(html) {
+  font-size: 0.9rem;
 }
 
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
@@ -160,6 +163,15 @@ body.dark {
 .light .border-top {
   border-top: 1px solid rgba(54, 69, 99, 0.3);
 }
+.light .border-bottom {
+  border-bottom: 1px solid rgba(54, 69, 99, 0.3);
+}
+.light .border-left {
+  border-left: 1px solid rgba(54, 69, 99, 0.3);
+}
+.light .border-right {
+  border-right: 1px solid rgba(54, 69, 99, 0.3);
+}
 .light .border-accent {
   border: 1px solid #00a5ca;
 }
@@ -181,6 +193,15 @@ body.dark {
 }
 .dark .border-top {
   border-top: 1px solid rgba(179, 196, 230, 0.2);
+}
+.dark .border-bottom {
+  border-bottom: 1px solid rgba(179, 196, 230, 0.2);
+}
+.dark .border-left {
+  border-left: 1px solid rgba(179, 196, 230, 0.2);
+}
+.dark .border-right {
+  border-right: 1px solid rgba(179, 196, 230, 0.2);
 }
 .dark .border-accent {
   border: 1px solid #19d6ff;
@@ -354,7 +375,7 @@ button, input[type=button], input[type=submit], input[type=reset], a.button {
   align-items: center;
   border-radius: 4px;
   outline: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 a.button {
@@ -403,7 +424,7 @@ a.button {
   border: 2px solid #19d6ff;
 }
 
-button.icon-button, input.icon-button[type=button], input.icon-button[type=submit], input.icon-button[type=reset] {
+button.icon-button, input.icon-button[type=button], input.icon-button[type=submit], input.icon-button[type=reset], a.icon-button {
   height: 40px;
   width: 40px;
   padding: 0;
@@ -414,41 +435,41 @@ button.icon-button, input.icon-button[type=button], input.icon-button[type=submi
   border-radius: 12px;
   outline: none;
 }
-button.icon-button i, input.icon-button[type=button] i, input.icon-button[type=submit] i, input.icon-button[type=reset] i {
-  font-size: 1.2rem;
+button.icon-button i, input.icon-button[type=button] i, input.icon-button[type=submit] i, input.icon-button[type=reset] i, a.icon-button i {
+  font-size: 1.125rem;
 }
 
-.light button.icon-button, .light input.icon-button[type=button], .light input.icon-button[type=submit], .light input.icon-button[type=reset] {
+.light button.icon-button, .light input.icon-button[type=button], .light input.icon-button[type=submit], .light input.icon-button[type=reset], .light a.icon-button {
   background-color: transparent;
   border: none;
 }
-.light button.icon-button:hover, .light input.icon-button[type=button]:hover, .light input.icon-button[type=submit]:hover, .light input.icon-button[type=reset]:hover {
+.light button.icon-button:hover, .light input.icon-button[type=button]:hover, .light input.icon-button[type=submit]:hover, .light input.icon-button[type=reset]:hover, .light a.icon-button:hover {
   background-color: rgba(54, 69, 99, 0.1);
   border: none;
 }
-.light button.icon-button:active, .light input.icon-button[type=button]:active, .light input.icon-button[type=submit]:active, .light input.icon-button[type=reset]:active {
+.light button.icon-button:active, .light input.icon-button[type=button]:active, .light input.icon-button[type=submit]:active, .light input.icon-button[type=reset]:active, .light a.icon-button:active {
   background-color: rgba(54, 69, 99, 0.15);
   border: none;
 }
-.light button.icon-button:disabled, .light button.icon-button[disabled], .light input.icon-button[type=button]:disabled, .light input.icon-button[type=button][disabled], .light input.icon-button[type=submit]:disabled, .light input.icon-button[type=submit][disabled], .light input.icon-button[type=reset]:disabled, .light input.icon-button[type=reset][disabled] {
+.light button.icon-button:disabled, .light button.icon-button[disabled], .light input.icon-button[type=button]:disabled, .light input.icon-button[type=button][disabled], .light input.icon-button[type=submit]:disabled, .light input.icon-button[type=submit][disabled], .light input.icon-button[type=reset]:disabled, .light input.icon-button[type=reset][disabled], .light a.icon-button:disabled, .light a.icon-button[disabled] {
   opacity: 0.5;
   background-color: transparent;
   border: none;
 }
 
-.dark button.icon-button, .dark input.icon-button[type=button], .dark input.icon-button[type=submit], .dark input.icon-button[type=reset] {
+.dark button.icon-button, .dark input.icon-button[type=button], .dark input.icon-button[type=submit], .dark input.icon-button[type=reset], .dark a.icon-button {
   background-color: transparent;
   border: none;
 }
-.dark button.icon-button:hover, .dark input.icon-button[type=button]:hover, .dark input.icon-button[type=submit]:hover, .dark input.icon-button[type=reset]:hover {
+.dark button.icon-button:hover, .dark input.icon-button[type=button]:hover, .dark input.icon-button[type=submit]:hover, .dark input.icon-button[type=reset]:hover, .dark a.icon-button:hover {
   background-color: rgba(179, 196, 230, 0.08);
   border: none;
 }
-.dark button.icon-button:active, .dark input.icon-button[type=button]:active, .dark input.icon-button[type=submit]:active, .dark input.icon-button[type=reset]:active {
+.dark button.icon-button:active, .dark input.icon-button[type=button]:active, .dark input.icon-button[type=submit]:active, .dark input.icon-button[type=reset]:active, .dark a.icon-button:active {
   background-color: rgba(179, 196, 230, 0.11);
   border: none;
 }
-.dark button.icon-button:disabled, .dark button.icon-button[disabled], .dark input.icon-button[type=button]:disabled, .dark input.icon-button[type=button][disabled], .dark input.icon-button[type=submit]:disabled, .dark input.icon-button[type=submit][disabled], .dark input.icon-button[type=reset]:disabled, .dark input.icon-button[type=reset][disabled] {
+.dark button.icon-button:disabled, .dark button.icon-button[disabled], .dark input.icon-button[type=button]:disabled, .dark input.icon-button[type=button][disabled], .dark input.icon-button[type=submit]:disabled, .dark input.icon-button[type=submit][disabled], .dark input.icon-button[type=reset]:disabled, .dark input.icon-button[type=reset][disabled], .dark a.icon-button:disabled, .dark a.icon-button[disabled] {
   opacity: 0.5;
   background-color: transparent;
   border: none;
@@ -465,7 +486,7 @@ button.subtle, input.subtle[type=button], input.subtle[type=submit], input.subtl
   outline: none;
 }
 button.subtle i, input.subtle[type=button] i, input.subtle[type=submit] i, input.subtle[type=reset] i, a.button-subtle i {
-  font-size: 1.2rem;
+  font-size: 1.125rem;
 }
 
 .light button.subtle, .light input.subtle[type=button], .light input.subtle[type=submit], .light input.subtle[type=reset], .light a.button-subtle {
@@ -511,7 +532,7 @@ input[type=text], input[type=password], input[type=search], input[type=url], inp
   align-items: center;
   border-radius: 4px;
   outline: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   padding: 0px 10px;
 }
 
@@ -633,7 +654,7 @@ select {
   align-items: center;
   border-radius: 4px;
   outline: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-overflow: ellipsis;
 }
 select option.default {
