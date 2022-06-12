@@ -1,5 +1,5 @@
 {
-    "$schema": "../data-schema.json",
+    "$schema": "https://schel-d.com/timetabler/data-schema.json",
     "version": "1",
     "times": "8am-8pm",
     "subjects": [
