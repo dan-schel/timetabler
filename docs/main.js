@@ -1,6 +1,1 @@
-"use strict";
-(() => {
-  // ts/main.ts
-  console.log("hello");
-})();
-//# sourceMappingURL=main.js.map
+"use strict";(()=>{console.log("hello");})();
