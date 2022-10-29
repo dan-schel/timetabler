@@ -1,0 +1,53 @@
+{
+  "name": "timetabler",
+  "version": "1.0.0",
+  "description": "A tool to help choose options on a timetable where there might be multiple classes running!",
+  "scripts": {
+    "clean": "rimraf docs/*",
+    "prebuild": "npm run clean",
+    "build": "npm run build:html & npm run build:sass & npm run build:ts & npm run build:other",
+    "build:html": "copyfiles -u 1 \"html/**/*\" docs",
+    "build:sass": "sass scss/main.scss docs/main.css --style compressed",
+    "build:ts": "esbuild ts/main.ts --bundle --minify --outfile=docs/main.js",
+    "build:other": "copyfiles -u 1 \"other/**/*\" docs",
+    "dev": "npm run builddev & concurrently \"npm run watch:html\" \"npm run watch:sass\" \"npm run watch:ts\" \"npm run watch:other\" \"serve docs\"",
+    "prebuilddev": "npm run clean",
+    "builddev": "npm run build:html & npm run builddev:sass & npm run builddev:ts & npm run build:other",
+    "builddev:sass": "sass scss/main.scss docs/main.css",
+    "builddev:ts": "esbuild ts/main.ts --bundle --outfile=docs/main.js",
+    "watch:html": "onchange \"html/**/*.html\" -- npm run build:html",
+    "watch:sass": "sass -w scss/main.scss docs/main.css",
+    "watch:ts": "esbuild ts/main.ts --bundle --watch --sourcemap --outfile=docs/main.js",
+    "watch:other": "onchange \"other/**/*\" -- npm run build:other",
+    "lint": "eslint . & tsc --project ts/tsconfig.json --noemit",
+    "start": "serve docs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schel-d/timetabler.git"
+  },
+  "keywords": [],
+  "author": "schel-d",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/schel-d/timetabler/issues"
+  },
+  "homepage": "https://github.com/schel-d/timetabler#readme",
+  "dependencies": {
+    "concurrently": "^7.5.0",
+    "copyfiles": "^2.4.1",
+    "esbuild": "^0.15.12",
+    "onchange": "^7.1.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.4",
+    "zod": "^3.19.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.7.1"
+  }
+}

@@ -1,0 +1,111 @@
+@use "css-template/import" as template;
+
+@mixin controls {
+  border: 1px solid var(--clr-ink-10);
+  background-color: var(--clr-paper-20);
+  box-shadow: 0px 2px 4px var(--clr-shadow-10);
+  border-radius: 0.75rem;
+
+  padding: 1rem;
+
+  #wordmark {
+    color: var(--clr-ink-100);
+    align-self: center;
+    width: 10rem;
+    height: auto;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  #header-row {
+    @include template.row;
+    h2 {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--clr-ink-100);
+    }
+    button {
+      @include template.btn-hover;
+      @include template.content-text-icon;
+
+      padding: 0rem 0.5rem;
+      height: 1.5rem;
+      gap: 0.25rem;
+      p {
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+    }
+    margin-bottom: 1rem;
+  }
+
+  #add-class-button {
+    @include template.btn-filled;
+    @include template.content-text-icon;
+    height: 2.5rem;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    .iconify {
+      font-size: 1.2rem;
+    }
+  }
+
+  .class {
+    .one-line {
+      @include template.one-line;
+    }
+    h3 {
+      margin-bottom: 0.75rem;
+    }
+    h4 {
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .options {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+    }
+    .option {
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+
+      cursor: pointer;
+
+      & > input[type="radio"] {
+        position: fixed;
+        opacity: 0;
+        pointer-events: none;
+      }
+      input[type="radio"] + .button {
+        height: 1.5rem;
+        border-radius: 0.75rem;
+        justify-content: center;
+        align-items: center;
+        padding: 0rem 0.75rem;
+        background-color: var(--clr-ink-10);
+        transition: background-color 0.1s;
+        p {
+          font-size: 0.75rem;
+          transition: color 0.1s;
+        }
+      }
+      input[type="radio"]:hover + .button,
+      input[type="radio"]:focus-visible + .button {
+        background-color: var(--clr-ink-20);
+      }
+      input[type="radio"]:active + .button {
+        background-color: var(--clr-ink-30);
+      }
+      input[type="radio"]:checked + .button {
+        background-color: var(--clr-accent);
+        p {
+          color: var(--clr-on-accent);
+        }
+      }
+    }
+  }
+}

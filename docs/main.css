@@ -1,0 +1,583 @@
+:root {
+  --clr-paper-0: var(--clr-light-paper-0);
+  --clr-paper-10: var(--clr-light-paper-10);
+  --clr-paper-20: var(--clr-light-paper-20);
+  --clr-paper-30: var(--clr-light-paper-30);
+  --clr-ink-100: var(--clr-light-ink-100);
+  --clr-ink-90: var(--clr-light-ink-90);
+  --clr-ink-80: var(--clr-light-ink-80);
+  --clr-ink-70: var(--clr-light-ink-70);
+  --clr-ink-60: var(--clr-light-ink-60);
+  --clr-ink-50: var(--clr-light-ink-50);
+  --clr-ink-40: var(--clr-light-ink-40);
+  --clr-ink-30: var(--clr-light-ink-30);
+  --clr-ink-20: var(--clr-light-ink-20);
+  --clr-ink-10: var(--clr-light-ink-10);
+  --clr-accent: var(--clr-light-accent);
+  --clr-on-accent: var(--clr-light-on-accent);
+}
+
+:root,
+dialog::backdrop {
+  --clr-shadow-100: var(--clr-light-shadow-100);
+  --clr-shadow-30: var(--clr-light-shadow-30);
+  --clr-shadow-20: var(--clr-light-shadow-20);
+  --clr-shadow-10: var(--clr-light-shadow-10);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --clr-paper-0: var(--clr-dark-paper-0);
+    --clr-paper-10: var(--clr-dark-paper-10);
+    --clr-paper-20: var(--clr-dark-paper-20);
+    --clr-paper-30: var(--clr-dark-paper-30);
+    --clr-ink-100: var(--clr-dark-ink-100);
+    --clr-ink-90: var(--clr-dark-ink-90);
+    --clr-ink-80: var(--clr-dark-ink-80);
+    --clr-ink-70: var(--clr-dark-ink-70);
+    --clr-ink-60: var(--clr-dark-ink-60);
+    --clr-ink-50: var(--clr-dark-ink-50);
+    --clr-ink-40: var(--clr-dark-ink-40);
+    --clr-ink-30: var(--clr-dark-ink-30);
+    --clr-ink-20: var(--clr-dark-ink-20);
+    --clr-ink-10: var(--clr-dark-ink-10);
+    --clr-accent: var(--clr-dark-accent);
+    --clr-on-accent: var(--clr-dark-on-accent);
+  }
+
+  :root,
+dialog::backdrop {
+    --clr-shadow-100: var(--clr-dark-shadow-100);
+    --clr-shadow-30: var(--clr-dark-shadow-30);
+    --clr-shadow-20: var(--clr-dark-shadow-20);
+    --clr-shadow-10: var(--clr-dark-shadow-10);
+  }
+
+  :root,
+dialog::backdrop {
+    color-scheme: dark;
+  }
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+div,
+a,
+dialog,
+main,
+nav,
+section,
+header,
+footer,
+aside,
+form,
+button,
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+dialog:not([open]) {
+  display: none;
+}
+
+button,
+input[type=button],
+input[type=submit],
+input[type=reset] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+button[disabled], button:disabled,
+input[type=button][disabled],
+input[type=button]:disabled,
+input[type=submit][disabled],
+input[type=submit]:disabled,
+input[type=reset][disabled],
+input[type=reset]:disabled {
+  cursor: default;
+}
+
+input[type=button],
+input[type=submit],
+input[type=reset] {
+  line-height: 1em;
+}
+
+:root {
+  --btn-rounding: 0.25rem;
+  --btn-outline: 1px;
+}
+
+input[type=date],
+input[type=datetime-local],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week] {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --input-rounding: 0.25rem;
+  --input-outline: 2px;
+  --input-outline-disabled: var(--input-outline);
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+:root {
+  --font-default: sans-serif;
+  --font-size-default: 1rem;
+  --line-spacing: 0.5em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+input,
+select {
+  font-family: var(--font-default);
+  font-size: var(--font-size-default);
+  font-weight: normal;
+  color: var(--clr-ink-80);
+}
+
+input::placeholder {
+  opacity: 100%;
+  color: var(--clr-ink-50);
+}
+
+.iconify {
+  color: var(--clr-ink-80);
+  width: 1em;
+  height: 1em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  line-height: calc(1em + var(--line-spacing));
+  text-align: left;
+}
+h1::before, h1::after,
+h2::before,
+h2::after,
+h3::before,
+h3::after,
+h4::before,
+h4::after,
+h5::before,
+h5::after,
+h6::before,
+h6::after,
+p::before,
+p::after {
+  content: "";
+  margin-top: calc(var(--line-spacing) / -2);
+  height: 0;
+  display: block;
+}
+
+a,
+i,
+em,
+b,
+strong,
+span {
+  font: inherit;
+}
+
+i,
+em {
+  font-style: italic;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+:root {
+  --clr-light-paper-0: hsl(220deg, 25%, 90%);
+  --clr-light-paper-10: hsl(220deg, 30%, 93.5%);
+  --clr-light-paper-20: hsl(220deg, 35%, 97%);
+  --clr-light-paper-30: hsl(220deg, 40%, 100%);
+  --clr-light-ink-100: hsl(220deg, 100%, 0%);
+  --clr-light-ink-90: hsla(220deg, 100%, 2%, 0.9);
+  --clr-light-ink-80: hsla(220deg, 100%, 4%, 0.8);
+  --clr-light-ink-70: hsla(220deg, 100%, 6%, 0.7);
+  --clr-light-ink-60: hsla(220deg, 100%, 8%, 0.6);
+  --clr-light-ink-50: hsla(220deg, 100%, 10%, 0.5);
+  --clr-light-ink-40: hsla(220deg, 100%, 12%, 0.4);
+  --clr-light-ink-30: hsla(220deg, 100%, 14%, 0.3);
+  --clr-light-ink-20: hsla(220deg, 100%, 16%, 0.2);
+  --clr-light-ink-10: hsla(220deg, 100%, 18%, 0.1);
+  --clr-light-accent: hsl(210, 100%, 45%);
+  --clr-light-on-accent: #ffffff;
+  --clr-dark-paper-0: hsl(220deg, 15%, 2%);
+  --clr-dark-paper-10: hsl(220deg, 16%, 7%);
+  --clr-dark-paper-20: hsl(220deg, 17%, 12%);
+  --clr-dark-paper-30: hsl(220deg, 18%, 17%);
+  --clr-dark-ink-100: hsl(220deg, 100%, 100%);
+  --clr-dark-ink-90: hsla(220deg, 100%, 98%, 0.9);
+  --clr-dark-ink-80: hsla(220deg, 100%, 96%, 0.8);
+  --clr-dark-ink-70: hsla(220deg, 100%, 94%, 0.7);
+  --clr-dark-ink-60: hsla(220deg, 100%, 92%, 0.6);
+  --clr-dark-ink-50: hsla(220deg, 100%, 90%, 0.5);
+  --clr-dark-ink-40: hsla(220deg, 100%, 88%, 0.4);
+  --clr-dark-ink-30: hsla(220deg, 100%, 86%, 0.3);
+  --clr-dark-ink-20: hsla(220deg, 100%, 84%, 0.2);
+  --clr-dark-ink-10: hsla(220deg, 100%, 82%, 0.1);
+  --clr-dark-accent: hsl(210, 100%, 70%);
+  --clr-dark-on-accent: #000000;
+}
+
+:root,
+dialog::backdrop {
+  --clr-light-shadow-100: black;
+  --clr-light-shadow-30: rgba(0, 0, 0, 70%);
+  --clr-light-shadow-20: rgba(0, 0, 0, 40%);
+  --clr-light-shadow-10: rgba(0, 0, 0, 10%);
+  --clr-dark-shadow-100: black;
+  --clr-dark-shadow-30: rgba(0, 0, 0, 80%);
+  --clr-dark-shadow-20: rgba(0, 0, 0, 60%);
+  --clr-dark-shadow-10: rgba(0, 0, 0, 20%);
+}
+
+body {
+  background-color: var(--clr-paper-10);
+}
+
+:root {
+  --min-page-width: 20rem;
+  --page-width: 64rem;
+}
+
+body {
+  min-width: var(--min-page-width);
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/inter-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/inter-700.woff2") format("woff2");
+}
+:root {
+  --font-default: "Inter", sans-serif;
+}
+
+body {
+  height: 100vh;
+  height: 100svh;
+}
+
+#controls {
+  border: 1px solid var(--clr-ink-10);
+  background-color: var(--clr-paper-20);
+  box-shadow: 0px 2px 4px var(--clr-shadow-10);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  z-index: 1;
+  min-width: 0;
+  overflow: scroll;
+}
+#controls #wordmark {
+  color: var(--clr-ink-100);
+  align-self: center;
+  width: 10rem;
+  height: auto;
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+}
+#controls #header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+#controls #header-row h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--clr-ink-100);
+}
+#controls #header-row button {
+  --clr-content: var(--clr-ink-80);
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0rem 0.5rem;
+  height: 1.5rem;
+  gap: 0.25rem;
+}
+#controls #header-row button > * {
+  z-index: 1;
+}
+#controls #header-row button::before {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--btn-rounding);
+}
+#controls #header-row button:disabled > *, #controls #header-row button[disabled] > * {
+  opacity: 50%;
+}
+#controls #header-row button::before {
+  transition: background-color 0.05s;
+}
+#controls #header-row button:hover::before, #controls #header-row button:focus-visible::before {
+  background-color: var(--clr-ink-10);
+}
+#controls #header-row button:active::before {
+  background-color: var(--clr-ink-20);
+}
+#controls #header-row button:disabled::before, #controls #header-row button[disabled]::before {
+  background-color: transparent;
+}
+#controls #header-row button > p {
+  color: var(--clr-content);
+}
+#controls #header-row button > .iconify {
+  color: var(--clr-content);
+}
+#controls #header-row button p {
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+#controls #add-class-button {
+  --clr-content: var(--clr-ink-80);
+  position: relative;
+  --clr-content: var(--clr-on-accent);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+#controls #add-class-button > * {
+  z-index: 1;
+}
+#controls #add-class-button::before {
+  z-index: 0;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--btn-rounding);
+}
+#controls #add-class-button:disabled > *, #controls #add-class-button[disabled] > * {
+  opacity: 50%;
+}
+#controls #add-class-button::before {
+  transition: opacity 0.05s;
+  background-color: var(--clr-accent);
+  opacity: 80%;
+}
+#controls #add-class-button:hover::before, #controls #add-class-button:focus-visible::before {
+  opacity: 100%;
+}
+#controls #add-class-button:active::before {
+  opacity: 60%;
+}
+#controls #add-class-button:disabled, #controls #add-class-button[disabled] {
+  --clr-content: var(--clr-ink-80);
+}
+#controls #add-class-button:disabled::before, #controls #add-class-button[disabled]::before {
+  opacity: 100%;
+  background-color: transparent;
+  border: var(--btn-outline) solid var(--clr-ink-10);
+}
+#controls #add-class-button > p {
+  color: var(--clr-content);
+}
+#controls #add-class-button > .iconify {
+  color: var(--clr-content);
+}
+#controls #add-class-button .iconify {
+  font-size: 1.2rem;
+}
+#controls .class .one-line > :is(h1, h2, h3, h4, h5, h6, p) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-bottom: 0.25em;
+  flex-shrink: 1;
+}
+#controls .class .one-line::after {
+  content: "";
+  margin-bottom: -0.25em;
+  height: 0;
+  display: block;
+}
+#controls .class h3 {
+  margin-bottom: 0.75rem;
+}
+#controls .class h4 {
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+#controls .class .options {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+#controls .class .option {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+#controls .class .option > input[type=radio] {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+}
+#controls .class .option input[type=radio] + .button {
+  height: 1.5rem;
+  border-radius: 0.75rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0rem 0.75rem;
+  background-color: var(--clr-ink-10);
+  transition: background-color 0.1s;
+}
+#controls .class .option input[type=radio] + .button p {
+  font-size: 0.75rem;
+  transition: color 0.1s;
+}
+#controls .class .option input[type=radio]:hover + .button,
+#controls .class .option input[type=radio]:focus-visible + .button {
+  background-color: var(--clr-ink-20);
+}
+#controls .class .option input[type=radio]:active + .button {
+  background-color: var(--clr-ink-30);
+}
+#controls .class .option input[type=radio]:checked + .button {
+  background-color: var(--clr-accent);
+}
+#controls .class .option input[type=radio]:checked + .button p {
+  color: var(--clr-on-accent);
+}
+
+#canvas {
+  background-color: var(--clr-paper-0);
+  z-index: 0;
+}
+
+.gone {
+  display: none !important;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+@media screen and (min-width: 40rem) {
+  body {
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 20rem 2fr;
+  }
+  body #controls {
+    margin: 0.5rem;
+  }
+}
+@media screen and (min-width: 62rem) {
+  body {
+    grid-template-columns: 1fr 20rem 42rem 1fr;
+  }
+  body #controls {
+    grid-column: 2;
+  }
+  body #canvas {
+    grid-column: 3;
+  }
+}
+@media screen and (max-width: 39.999rem) {
+  body {
+    position: relative;
+  }
+  body #controls {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+  body #canvas {
+    position: absolute;
+    top: 10rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */

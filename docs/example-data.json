@@ -1,0 +1,36 @@
+{
+  "$schema": "https://timetabler.danschellekens.com/data-schema.json",
+  "version": "1",
+  "times": "8am-8pm",
+  "subjects": [
+    {
+      "name": "Planetary Colonisation Fundamentals",
+      "type": "Lecture",
+      "color": "orange",
+      "options": [
+        "mon 13:00 2h online",
+        "tue 14:30 2h",
+        "fri 8:00 2h"
+      ]
+    },
+    {
+      "name": "Advanced Tin Opening",
+      "type": "Workshop",
+      "color": "blue",
+      "options": [
+        [
+          "tue 16:30 30m",
+          "fri 9:30 90m"
+        ],
+        [
+          "thu 12:00 30m",
+          "fri 14:00 90m"
+        ],
+        [
+          "sat 10:00 30m",
+          "sun 10:00 90m"
+        ]
+      ]
+    }
+  ]
+}
