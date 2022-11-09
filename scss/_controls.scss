@@ -1,15 +1,15 @@
 @use "css-template/import" as template;
 
 @mixin controls {
-  border: 1px solid var(--clr-ink-10);
-  background-color: var(--clr-paper-20);
-  box-shadow: 0px 2px 4px var(--clr-shadow-10);
+  border: 1px solid var(--color-ink-10);
+  background-color: var(--color-paper-20);
+  box-shadow: 0px 2px 4px var(--color-shadow-10);
   border-radius: 0.75rem;
 
   padding: 1rem;
 
   #wordmark {
-    color: var(--clr-ink-100);
+    color: var(--color-ink-100);
     align-self: center;
     width: 10rem;
     height: auto;
@@ -22,10 +22,10 @@
     h2 {
       font-size: 1rem;
       font-weight: bold;
-      color: var(--clr-ink-100);
+      color: var(--color-ink-100);
     }
     button {
-      @include template.btn-hover;
+      @include template.button-hover;
       @include template.content-text-icon;
 
       padding: 0rem 0.5rem;
@@ -40,7 +40,7 @@
   }
 
   #add-class-button {
-    @include template.btn-filled;
+    @include template.button-filled;
     @include template.content-text-icon;
     height: 2.5rem;
     gap: 0.5rem;
@@ -63,47 +63,18 @@
       font-weight: bold;
     }
     .options {
+      @include template.picker-pills("button");
       flex-direction: row;
       flex-wrap: wrap;
       gap: 0.25rem;
-    }
-    .option {
-      appearance: none;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      -webkit-tap-highlight-color: transparent;
 
-      cursor: pointer;
-
-      & > input[type="radio"] {
-        position: fixed;
-        opacity: 0;
-        pointer-events: none;
-      }
-      input[type="radio"] + .button {
+      .button {
+        @include template.content-text();
+        --button-rounding: 0.75rem;
         height: 1.5rem;
-        border-radius: 0.75rem;
-        justify-content: center;
-        align-items: center;
         padding: 0rem 0.75rem;
-        background-color: var(--clr-ink-10);
-        transition: background-color 0.1s;
         p {
           font-size: 0.75rem;
-          transition: color 0.1s;
-        }
-      }
-      input[type="radio"]:hover + .button,
-      input[type="radio"]:focus-visible + .button {
-        background-color: var(--clr-ink-20);
-      }
-      input[type="radio"]:active + .button {
-        background-color: var(--clr-ink-30);
-      }
-      input[type="radio"]:checked + .button {
-        background-color: var(--clr-accent);
-        p {
-          color: var(--clr-on-accent);
         }
       }
     }
