@@ -36,7 +36,6 @@ window.addEventListener("resize", () => fitCanvas());
 // clicked (only appears when the screen is too small to keep it permanently
 // open).
 html.mobileExpanderButton.addEventListener("click", () => {
-  console.log("hello");
   html.controls.classList.toggle("collapsed");
 });
 
