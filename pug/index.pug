@@ -1,0 +1,62 @@
+include iconify.pug
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Timetabler &ndash; Visualise your uni timetable
+    meta(name="description", content="A tool to help choose options on a timetable where there might be multiple classes running! Allows you to quickly select different time slots and checks for clashes for you as you go.")
+    link(rel="shortcut icon", href="/favicon.svg", type="image/x-icon")
+    link(rel="stylesheet", href="/main.css")
+    script(src="/main.js", defer)
+  body
+    section#controls
+      include timetabler-logo-svg.pug
+      +timetabler-logo()#wordmark
+
+      #expanded-content
+        #header-row
+          h2 My Classes
+          .flex-grow
+          button
+            +iconify("uil:import")
+            p IMPORT
+          button
+            +iconify("uil:export")
+            p EXPORT
+
+        button#add-class-button
+          +iconify("uil:plus")
+          p Add class
+
+        #classes
+          .class
+            .one-line
+              h3 Advanced Programming Techniques
+            .one-line
+              h4 LECTURE
+            .options
+              label.option
+                input(type="radio", name="class01-option", autocomplete="off")
+                .button
+                  p Mon 2:30pm
+              label.option
+                input(type="radio", name="class01-option", autocomplete="off")
+                .button
+                  p Wed 10:30am
+              label.option
+                input(type="radio", name="class01-option", autocomplete="off")
+                .button
+                  p Thu 5:30pm online
+
+      #collapsed-content
+        p [Todo collapsed view]
+
+      button#mobile-expander-button
+        +iconify("uil:angle-down").up
+        +iconify("uil:angle-up").down
+
+    #canvas-container
+      canvas#canvas

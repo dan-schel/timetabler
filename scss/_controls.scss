@@ -8,6 +8,9 @@
 
   padding: 1rem;
 
+  // For the mobile-expander-button positioning.
+  position: relative;
+
   #wordmark {
     color: var(--color-ink-100);
     align-self: center;
@@ -77,6 +80,38 @@
           font-size: 0.75rem;
         }
       }
+    }
+  }
+
+  #mobile-expander-button {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99;
+    height: 2rem;
+    width: 2rem;
+    .iconify {
+      font-size: 1.2rem;
+    }
+  }
+
+  &.collapsed {
+    height: 9rem;
+    #mobile-expander-button .up {
+      @include template.gone;
+    }
+    #expanded-content {
+      @include template.gone;
+    }
+  }
+  &:not(.collapsed) {
+    #mobile-expander-button .down {
+      @include template.gone;
+    }
+    #collapsed-content {
+      @include template.gone;
     }
   }
 }
