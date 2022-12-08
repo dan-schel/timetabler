@@ -68,9 +68,5 @@
     "version",
     "times",
     "subjects"
-  ],
-  "oneOf": [
-    "subjects",
-    "classes"
   ]
 }

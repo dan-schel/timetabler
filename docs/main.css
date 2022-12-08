@@ -621,21 +621,6 @@ body {
 #controls #mobile-expander-button .iconify {
   font-size: 1.2rem;
 }
-#controls.collapsed {
-  height: 9rem;
-}
-#controls.collapsed #mobile-expander-button .up {
-  display: none !important;
-}
-#controls.collapsed #expanded-content {
-  display: none !important;
-}
-#controls:not(.collapsed) #mobile-expander-button .down {
-  display: none !important;
-}
-#controls:not(.collapsed) #collapsed-content {
-  display: none !important;
-}
 
 #canvas-container {
   background-color: var(--color-paper-0);
@@ -665,10 +650,16 @@ body {
   body #controls {
     margin: 0.5rem;
   }
+  body #controls #mobile-expander-button {
+    display: none !important;
+  }
+  body #controls #collapsed-content {
+    display: none !important;
+  }
 }
-@media screen and (min-width: 62rem) {
+@media screen and (min-width: 64rem) {
   body {
-    grid-template-columns: 1fr 20rem 42rem 1fr;
+    grid-template-columns: 1fr 20rem 43rem 1fr;
   }
   body #controls {
     grid-column: 2;
@@ -686,6 +677,21 @@ body {
     left: 0.5rem;
     right: 0.5rem;
     top: 0.5rem;
+  }
+  body #controls.collapsed {
+    height: 9rem;
+  }
+  body #controls.collapsed #mobile-expander-button .up {
+    display: none !important;
+  }
+  body #controls.collapsed #expanded-content {
+    display: none !important;
+  }
+  body #controls:not(.collapsed) #mobile-expander-button .down {
+    display: none !important;
+  }
+  body #controls:not(.collapsed) #collapsed-content {
+    display: none !important;
   }
   body #canvas-container {
     position: absolute;

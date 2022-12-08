@@ -34,7 +34,7 @@ body {
 }
 
 #controls {
-  @include controls.controls();
+  @include controls.controls;
   z-index: 1;
   min-width: 0;
   overflow: scroll;
@@ -64,13 +64,14 @@ body {
     display: grid;
     grid-template-columns: 20rem 2fr;
     #controls {
+      @include controls.controls-desktop;
       margin: 0.5rem;
     }
   }
 }
-@media screen and (min-width: 62rem) {
+@media screen and (min-width: 64rem) {
   body {
-    grid-template-columns: 1fr 20rem 42rem 1fr;
+    grid-template-columns: 1fr 20rem 43rem 1fr;
     #controls {
       grid-column: 2;
     }
@@ -83,6 +84,7 @@ body {
   body {
     position: relative;
     #controls {
+      @include controls.controls-mobile;
       position: absolute;
       left: 0.5rem;
       right: 0.5rem;
