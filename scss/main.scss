@@ -26,6 +26,7 @@
 
 :root {
   --font-default: "Atkinson Hyperlegible", sans-serif;
+  --line-spacing: 0.3em;
 }
 
 body {
@@ -56,6 +57,9 @@ body {
 }
 .flex-grow {
   @include template.flex-grow;
+}
+.link {
+  @include template.link;
 }
 
 @media screen and (min-width: 40rem) {

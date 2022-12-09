@@ -1,45 +1,44 @@
 import { areUnique, arraysMatch } from "schel-d-utils";
 import { Timetable } from "./timetable";
 import { TimetableClass } from "./timetable-class";
+import { TimetableError } from "./timetable-error";
 import { TimetableOption } from "./timetable-option";
 
 /**
- * Mutable object that stores the timetable as well as the currently selected
- * choices for each class in the timetable.
+ * Stores the timetable as well as the currently selected choices for each class
+ * in the timetable. Should be treated as immutable (despite arrays technically
+ * being mutable).
  */
 export class TimetableChoices {
   /** The timetable. */
-  timetable: Timetable;
+  readonly timetable: Timetable;
 
   /**
-   * The choices for each class. For {@link isValid} to pass, every class must
-   * be present in the array and a valid choice chosen for each.
+   * The choices for each class. There must be a choice present representing
+   * each class in the timetable.
    */
-  choices: TimetableChoice[];
+  readonly choices: TimetableChoice[];
 
   /**
    * Creates a {@link TimetableChoices}.
    * @param timetable The timetable.
-   * @param choices The choices (which may be null if not chosen yet, or class
-   * is optional) for each class, matching the indexing in the timetable. This
-   * array must always match the length of the classes in timetable.
+   * @param choices The choices for each class. There must be a choice present
+   * representing each class in the timetable.
    */
   constructor(timetable: Timetable, choices: TimetableChoice[]) {
-    // Don't bother checking the validity of choices here.
+    // Check that the classes present in the choices array match the classes
+    // in the timetable. Either array cannot have an element the other does not.
+    if (!arraysMatch(choices.map(c => c.timetableClass), timetable.classes)) {
+      throw TimetableError.classesChoicesMismatch();
+    }
+
+    // Check no classes are present twice in the choices array.
+    if (!areUnique(choices.map(c => c.timetableClass), (a, b) => a.equals(b))) {
+      throw TimetableError.duplicatedClassInChoices();
+    }
+
     this.timetable = timetable;
     this.choices = choices;
-  }
-
-  /**
-   * Returns true if each class is present (once) in the array and every choice
-   * is valid.
-   */
-  isValid(): boolean {
-    // Ensure there are no duplicates (areUnique), that every class is present
-    // (arraysMatch), and every choice is valid (isValid).
-    return areUnique(this.choices.map(c => c.timetableClass), (a, b) => a.equals(b))
-      && arraysMatch(this.choices.map(c => c.timetableClass), this.timetable.classes)
-      && this.choices.every(c => c.isValid());
   }
 }
 
@@ -61,23 +60,11 @@ export class TimetableChoice {
    * may be a valid choice for an optional class.
    */
   constructor(timetableClass: TimetableClass, option: TimetableOption | null) {
-    this.timetableClass = timetableClass;
-    this.option = option;
-  }
-
-  /**
-   * Returns false if the option is not an option for this class, or an option
-   * is not chosen and the class is not optional.
-   */
-  isValid(): boolean {
-    const option = this.option;
-
-    // Option can only be null if the class is optional.
-    if (option == null) {
-      return this.timetableClass.optional;
+    if (option != null && !timetableClass.options.some(o => o.equals(option))) {
+      throw TimetableError.optionMissing();
     }
 
-    // Otherwise ensure the class has this as an option.
-    return this.timetableClass.options.some(o => o.equals(option));
+    this.timetableClass = timetableClass;
+    this.option = option;
   }
 }

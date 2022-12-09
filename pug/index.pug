@@ -31,25 +31,18 @@ html(lang="en")
           +iconify("uil:plus")
           p Add class
 
+        #empty-classes-message
+          p
+            | Start by adding your classes, which will then show up here.
+          p
+            | If you'd prefer, you can provide your classes by writing a .json
+            | file and clicking "import" above. An
+            | <a class="link" href="/example.json" download>example .json file</a>
+            | and
+            | <a class="link" href="https://github.com/schel-d/timetabler">guide</a>
+            | are available to get you started.
+
         #classes
-          .class
-            .one-line
-              h3 Advanced Programming Techniques
-            .one-line
-              h4 LECTURE
-            .options
-              label.option
-                input(type="radio", name="class01-option", autocomplete="off")
-                .button
-                  p Mon 2:30pm
-              label.option
-                input(type="radio", name="class01-option", autocomplete="off")
-                .button
-                  p Wed 10:30am
-              label.option
-                input(type="radio", name="class01-option", autocomplete="off")
-                .button
-                  p Thu 5:30pm online
 
       #collapsed-content
         p [Todo collapsed view]

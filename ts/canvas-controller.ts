@@ -4,9 +4,6 @@ import { Html } from "./main";
  * Handles the sizing/rendering of the canvas.
  */
 export class CanvasController {
-  /** References to the HTML elements on the page. */
-  readonly html: Html;
-
   /** The current width of the canvas. */
   width: number;
 
@@ -15,6 +12,9 @@ export class CanvasController {
 
   /** The current DPI ratio of the canvas. */
   dpiRatio: number;
+
+  /** References to the HTML elements on the page. */
+  private readonly _html: Html;
 
   /** A reference to the canvas 2D context. */
   private _ctx: CanvasRenderingContext2D;
@@ -29,7 +29,7 @@ export class CanvasController {
    * @param html References to the HTML elements on the page.
    */
   constructor(html: Html) {
-    this.html = html;
+    this._html = html;
     this.width = 0;
     this.height = 0;
     this.dpiRatio = 1;
@@ -56,20 +56,20 @@ export class CanvasController {
    */
   fitCanvas() {
     // Get the width/height available.
-    const containerSize = this.html.canvasContainer.getBoundingClientRect();
+    const containerSize = this._html.canvasContainer.getBoundingClientRect();
     this.width = containerSize.width;
     this.height = containerSize.height;
 
     // Get the canvas context. Throw if null (shouldn't be on any SLIGHTLY modern
     // browser).
-    const ctx = this.html.canvas.getContext("2d");
+    const ctx = this._html.canvas.getContext("2d");
     if (ctx == null) { throw new Error("Cannot get canvas context"); }
     this.dpiRatio = calculateDpiRatio(ctx);
 
-    this.html.canvas.style.width = `${this.width}px`;
-    this.html.canvas.style.height = `${this.height}px`;
-    this.html.canvas.width = this.width * this.dpiRatio;
-    this.html.canvas.height = this.height * this.dpiRatio;
+    this._html.canvas.style.width = `${this.width}px`;
+    this._html.canvas.style.height = `${this.height}px`;
+    this._html.canvas.width = this.width * this.dpiRatio;
+    this._html.canvas.height = this.height * this.dpiRatio;
 
     // Now the size has changed, redraw everything.
     this.draw();

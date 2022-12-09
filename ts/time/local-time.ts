@@ -126,6 +126,18 @@ export class LocalTime {
   }
 
   /**
+   * Returns the local time as a 12-hour formatted string, e.g. "4:02am". The
+   * next day flag will be ignored.
+   */
+  to12HString(): string {
+    const suffix = this.hour < 12 ? "am" : "pm";
+    const hour12 = (this.hour + 11) % 12 + 1;
+
+    return `${hour12.toFixed()}:` +
+      `${this.minute.toFixed().padStart(2, "0")}${suffix}`;
+  }
+
+  /**
    * Returns true if this time occurs earlier than the {@link other}.
    * @param other The time that if later, results in the method returning true.
    */

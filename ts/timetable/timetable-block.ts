@@ -118,4 +118,16 @@ export class TimetableBlock {
       ? `${dow} ${time} ${duration} online`
       : `${dow} ${time} ${duration}`;
   }
+
+  /**
+   * Converts this timetable block to a simple human-friendly string. The string
+   * returned doesn't include the duration.
+   */
+  toDisplayString(): string {
+    // Like the codename, but with a starting capital letter.
+    const dow = this.dayOfWeek.name.substring(0, 3);
+
+    const onlineSuffix = this.online ? " online" : "";
+    return `${dow} ${this.startTime.to12HString()}${onlineSuffix}`;
+  }
 }

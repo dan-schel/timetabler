@@ -53,6 +53,20 @@
     }
   }
 
+  #empty-classes-message {
+    gap: 1rem;
+  }
+
+  &.non-empty {
+    #empty-classes-message {
+      @include template.gone;
+    }
+  }
+
+  #classes {
+    gap: 1rem;
+  }
+
   .class {
     .one-line {
       @include template.one-line;

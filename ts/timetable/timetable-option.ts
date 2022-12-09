@@ -65,4 +65,12 @@ export class TimetableOption {
       ? this.blocks[0].toString()
       : this.blocks.map(b => b.toString());
   }
+
+  /**
+   * Converts this timetable option to a simple human-friendly string. The
+   * string returned doesn't include the durations of the blocks.
+   */
+  toDisplayString(): string {
+    return this.blocks.map(b => b.toDisplayString()).join(" & ");
+  }
 }
