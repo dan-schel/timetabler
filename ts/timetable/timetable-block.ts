@@ -58,7 +58,7 @@ export class TimetableBlock {
    * @param value The string, e.g. "mon 13:00 2h online" or "fri 9:30 90m".
    */
   static tryFromString(value: string): TimetableBlock | null {
-    const bits = value.trim().split(" ").filter(s => s.length == 0);
+    const bits = value.trim().split(" ").filter(s => s.length != 0);
     if (bits.length != 3 && bits.length != 4) { return null; }
 
     const dayOfWeek = DayOfWeek.tryFromCodeName(bits[0]);
@@ -108,8 +108,14 @@ export class TimetableBlock {
   toString(): string {
     const dow = this.dayOfWeek.codeName;
     const time = this.startTime.toString(false);
+
+    // Use hours for duration if possible.
+    const duration = this.durationMins % 60 == 0
+      ? `${this.durationMins / 60}h`
+      : `${this.durationMins}m`;
+
     return this.online
-      ? `${dow} ${time} ${this.durationMins}m online`
-      : `${dow} ${time} ${this.durationMins}m`;
+      ? `${dow} ${time} ${duration} online`
+      : `${dow} ${time} ${duration}`;
   }
 }
