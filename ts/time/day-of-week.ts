@@ -1,7 +1,9 @@
 import { posMod } from "schel-d-utils";
 import { TimeError } from "./time-error";
 
-type DayOfWeekNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+const DayOfWeekNumbers = [0, 1, 2, 3, 4, 5, 6] as const;
+
+type DayOfWeekNumber = typeof DayOfWeekNumbers[number];
 
 /**
  * Represents a day of the week value, e.g. Thursday.
@@ -106,6 +108,17 @@ export class DayOfWeek {
     }
 
     return new DayOfWeek(daysSinceMonday as DayOfWeekNumber);
+  }
+
+  /**
+   * Creates a {@link DayOfWeek} from a (case-insensitive) codename, e.g. "sat"
+   * or "Fri".
+   * @param codename The codename (case-insensitive), e.g. "sat" or "Fri".
+   */
+  static tryFromCodeName(codename: string): DayOfWeek | null {
+    const num = DayOfWeekNumbers.find(n => names[n].codeName === codename.toLowerCase());
+    if (num == null) { return null; }
+    return new DayOfWeek(num);
   }
 }
 

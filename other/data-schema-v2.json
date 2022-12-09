@@ -4,14 +4,11 @@
   "properties": {
     "version": {
       "type": "string",
+      "pattern": "^2$",
       "description": "The version of this timetabler data file."
     },
-    "times": {
-      "type": "string",
-      "description": "The range of times viewed on the timetable for each day, e.g. '8am-8pm'"
-    },
-    "subjects": {
-      "description": "An array of all the subjects forming the timetable",
+    "classes": {
+      "description": "An array of all the classes forming the timetable",
       "type": "array",
       "items": {
         "type": "object",
@@ -28,10 +25,14 @@
             "type": "string",
             "description": "The color to show on the timetable",
             "enum": [
+              "red",
               "orange",
-              "blue",
+              "yellow",
               "green",
-              "purple"
+              "cyan",
+              "blue",
+              "purple",
+              "pink"
             ]
           },
           "options": {
@@ -49,10 +50,16 @@
                   "items": {
                     "type": "string",
                     "description": "Details about this time slot in this group. Strings must be in the format 'day time duration [online?]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'."
-                  }
+                  },
+                  "minItems": 1
                 }
               ]
-            }
+            },
+            "minItems": 1
+          },
+          "optional": {
+            "type": "boolean",
+            "description": "True, if not adding the class to the timetable is an option. Defaults to false if not provided."
           }
         },
         "required": [
@@ -66,7 +73,6 @@
   },
   "required": [
     "version",
-    "times",
-    "subjects"
+    "classes"
   ]
 }

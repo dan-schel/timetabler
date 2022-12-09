@@ -69,14 +69,14 @@ export class LocalTime {
    * Parses a {@link LocalTime} from a string, e.g. "2:04" or "15:28". The
    * string must be in 24-hour format (leading zero not mandatory). To indicate
    * that the time occurs on the next day, use the next day flag, not a ">"
-   * character. Throws a {@link TimeError} on failure.
+   * character. Returns null on failure.
    * @param value The string, e.g. "2:04" or "15:28".
    * @param nextDay Whether this time occurs on the next day.
    */
-  static parse(value: string, nextDay = false): LocalTime {
+  static tryParse(value: string, nextDay = false): LocalTime | null {
     // Checks for 1 or 2 digits, a colon, then 2 digits.
     const correctFormat = /^[0-9]{1,2}:[0-9]{2}$/g.test(value);
-    if (!correctFormat) { throw TimeError.badTimeString(value); }
+    if (!correctFormat) { return null; }
 
     const components = value.split(":");
 
@@ -84,9 +84,23 @@ export class LocalTime {
     // check.
     const hour = parseInt(components[0]);
     const minute = parseInt(components[1]);
-    if (hour >= 24 || minute >= 60) { throw TimeError.badTimeString(value); }
+    if (hour >= 24 || minute >= 60) { return null; }
 
     return LocalTime.fromTime(hour, minute, nextDay);
+  }
+
+  /**
+   * Parses a {@link LocalTime} from a string, e.g. "2:04" or "15:28". The
+   * string must be in 24-hour format (leading zero not mandatory). To indicate
+   * that the time occurs on the next day, use the next day flag, not a ">"
+   * character. Throws a {@link TimeError} on failure.
+   * @param value The string, e.g. "2:04" or "15:28".
+   * @param nextDay Whether this time occurs on the next day.
+   */
+  static parse(value: string, nextDay = false): LocalTime {
+    const val = LocalTime.tryParse(value, nextDay);
+    if (val == null) { throw TimeError.badTimeString(value); }
+    return val;
   }
 
   /**

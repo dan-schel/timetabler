@@ -1,4 +1,5 @@
 import { areUnique, arraysMatch } from "schel-d-utils";
+import { z } from "zod";
 import { TimetableBlock } from "./timetable-block";
 import { TimetableError } from "./timetable-error";
 
@@ -9,6 +10,26 @@ import { TimetableError } from "./timetable-error";
 export class TimetableOption {
   /** The timetable blocks this option consists of. Must contain at least 1. */
   readonly blocks: TimetableBlock[];
+
+  /** Zod schema for parsing from JSON. */
+  static readonly json = z.union([
+    z.string()
+      .refine(s => TimetableBlock.isValidString(s))
+      .transform(s => [TimetableBlock.fromString(s)]),
+    z.string()
+      .refine(s => TimetableBlock.isValidString(s))
+      .transform(s => TimetableBlock.fromString(s))
+      .array()
+      .min(1)
+  ]).transform(x =>
+    new TimetableOption(x)
+  );
+
+  /** Zod schema for parsing from JSON but only using raw types. */
+  static readonly rawJson = z.union([
+    z.string(),
+    z.string().array()
+  ]);
 
   /**
    * Creates a {@link TimetableOption}.
@@ -34,5 +55,14 @@ export class TimetableOption {
    */
   equals(other: TimetableOption) {
     return arraysMatch(this.blocks, other.blocks, (a, b) => a.equals(b));
+  }
+
+  /** Convert to JSON object according to {@link TimetableOption.rawJson}. */
+  toJSON(): z.infer<typeof TimetableOption.rawJson> {
+    // If there's just one block output the single string, otherwise output the
+    // array of strings.
+    return this.blocks.length == 1
+      ? this.blocks[0].toString()
+      : this.blocks.map(b => b.toString());
   }
 }

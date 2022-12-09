@@ -12,9 +12,8 @@ export class TimetableChoices {
   timetable: Timetable;
 
   /**
-   * The choices (which may be null if not chosen yet, or class is optional)
-   * for each class, matching the indexing in the timetable. This array must
-   * always match the length of the classes in timetable.
+   * The choices for each class. For {@link isValid} to pass, every class must
+   * be present in the array and a valid choice chosen for each.
    */
   choices: TimetableChoice[];
 

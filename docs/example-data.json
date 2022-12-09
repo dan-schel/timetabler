@@ -1,8 +1,7 @@
 {
   "$schema": "https://timetabler.danschellekens.com/data-schema.json",
-  "version": "1",
-  "times": "8am-8pm",
-  "subjects": [
+  "version": "2",
+  "classes": [
     {
       "name": "Planetary Colonisation Fundamentals",
       "type": "Lecture",

@@ -1,3 +1,4 @@
+import { parseIntNull } from "schel-d-utils";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
 import { TimetableError } from "./timetable-error";
@@ -49,5 +50,66 @@ export class TimetableBlock {
       && this.startTime.equals(other.startTime)
       && this.durationMins === other.durationMins
       && this.online === other.online;
+  }
+
+  /**
+   * Parses a {@link TimetableBlock} from a string, e.g. "mon 13:00 2h online"
+   * or "fri 9:30 90m". Returns null on failure.
+   * @param value The string, e.g. "mon 13:00 2h online" or "fri 9:30 90m".
+   */
+  static tryFromString(value: string): TimetableBlock | null {
+    const bits = value.trim().split(" ").filter(s => s.length == 0);
+    if (bits.length != 3 && bits.length != 4) { return null; }
+
+    const dayOfWeek = DayOfWeek.tryFromCodeName(bits[0]);
+    if (dayOfWeek == null) { return null; }
+
+    const startTime = LocalTime.tryParse(bits[1]);
+    if (startTime == null) { return null; }
+
+    const durationStr = bits[2];
+    const durationNum = parseIntNull(durationStr.substring(0, durationStr.length - 1));
+    if (durationNum == null) { return null; }
+    const durationMins = durationStr.endsWith("h") ? durationNum * 60 : durationNum;
+
+    let online = false;
+    if (bits.length == 4) {
+      if (bits[3] != "online") { return null; }
+      online = true;
+    }
+
+    return new TimetableBlock(dayOfWeek, startTime, durationMins, online);
+  }
+
+  /**
+   * Parses a {@link TimetableBlock} from a string, e.g. "mon 13:00 2h online"
+   * or "fri 9:30 90m". Throws a {@link TimetableError} on failure.
+   * @param value The string, e.g. "mon 13:00 2h online" or "fri 9:30 90m".
+   */
+  static fromString(value: string): TimetableBlock {
+    const block = TimetableBlock.tryFromString(value);
+    if (block == null) { throw TimetableError.badBlockString(value); }
+    return block;
+  }
+
+  /**
+   * Returns true if the given string is a valid timetable block string, e.g.
+   * "mon 13:00 2h online" or "fri 9:30 90m".
+   * @param value The string, e.g. "mon 13:00 2h online" or "fri 9:30 90m".
+   */
+  static isValidString(value: string): boolean {
+    return this.tryFromString(value) != null;
+  }
+
+  /**
+   * Converts this timetable block to a string, e.g. "mon 13:00 2h online" or
+   * "fri 9:30 90m".
+   */
+  toString(): string {
+    const dow = this.dayOfWeek.codeName;
+    const time = this.startTime.toString(false);
+    return this.online
+      ? `${dow} ${time} ${this.durationMins}m online`
+      : `${dow} ${time} ${this.durationMins}m`;
   }
 }

@@ -66,4 +66,13 @@ export class TimetableError extends Error {
       `A class cannot have duplicate options`
     );
   }
+
+  /**
+   * "`val`" is not a valid time block.
+   */
+  static badBlockString(val: string): TimetableError {
+    return new TimetableError(
+      `"${val}" is not a valid time block`
+    );
+  }
 }
