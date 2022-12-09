@@ -13,6 +13,8 @@ export class ControlsController {
    */
   private _prevTimetable: TimetableChoices | null;
 
+  private _classUIs: ClassUIController[];
+
   /**
    * Creates a {@link ControlsController}.
    * @param html References to the HTML elements on the page.
@@ -20,6 +22,7 @@ export class ControlsController {
   constructor(html: Html) {
     this._html = html;
     this._prevTimetable = null;
+    this._classUIs = [];
   }
 
   /**
@@ -36,10 +39,34 @@ export class ControlsController {
         "non-empty", timetable.timetable.classes.length != 0
       );
 
-      this._html.classes.replaceChildren(...timetable.timetable.classes.map(c => {
-        return ClassUIController.create(c).$div;
-      }));
+      this._classUIs = timetable.timetable.classes.map(cl => {
+        const choice = timetable.choices.find(ch => ch.timetableClass.equals(cl));
+
+        // Should never happen. TimetableChoice ensures there's a choice for
+        // each class.
+        if (choice == null) { throw new Error(); }
+
+        const ui = ClassUIController.create(cl);
+        ui.select(choice.option);
+
+        return ui;
+      });
+
+      this._html.classes.replaceChildren(...this._classUIs.map(u => u.$div));
     }
+
+    // Update the selected options regardless.
+    timetable.choices.forEach(ch => {
+      const classUI = this._classUIs.find(
+        u => u.timetableClass.equals(ch.timetableClass)
+      );
+
+      // Should never happen. A class UI is made for each class in the timetable
+      // and a choice cannot have a class that isn't in the timetable.
+      if (classUI == null) { throw new Error(); }
+
+      classUI.select(ch.option);
+    });
 
     this._prevTimetable = timetable;
   }

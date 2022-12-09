@@ -71,6 +71,22 @@
       }
     }
   },
+  "choices": {
+    "type": "array",
+    "description": "An array that for each of the \"classes\" either contains the index of a choice or null to indicate no choice for that class. The array is ordered according to the order of \"classes\".",
+    "items": {
+      "anyOf": [
+        {
+          "type": "number",
+          "description": "The index of the option to choose."
+        },
+        {
+          "type": "null",
+          "description": "Indicates no choice for this class."
+        }
+      ]
+    }
+  },
   "required": [
     "version",
     "classes"

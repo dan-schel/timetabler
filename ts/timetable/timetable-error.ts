@@ -90,4 +90,18 @@ export class TimetableError extends Error {
       `The chosen option doesn't exist for this class`
     );
   }
+
+  /** The number of choices in the array must match the number of classes. */
+  static badChoiceArrayLength(): TimetableError {
+    return new TimetableError(
+      ` The number of choices in the array must match the number of classes`
+    );
+  }
+
+  /** The choice index "`index`" was out of range for this class. */
+  static badChoiceIndex(index: number): TimetableError {
+    return new TimetableError(
+      `The choice index "${index}" was out of range for this class`
+    );
+  }
 }

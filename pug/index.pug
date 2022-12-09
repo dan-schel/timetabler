@@ -13,10 +13,10 @@ html(lang="en")
     script(src="/main.js", defer)
   body
     section#controls
-      include timetabler-logo-svg.pug
-      +timetabler-logo()#wordmark
-
       #expanded-content
+        include timetabler-logo-svg.pug
+        +timetabler-logo("logo1").wordmark
+
         #header-row
           h2 My Classes
           .flex-grow
@@ -45,6 +45,8 @@ html(lang="en")
         #classes
 
       #collapsed-content
+        include timetabler-logo-svg.pug
+        +timetabler-logo("logo2").wordmark
         p [Todo collapsed view]
 
       button#mobile-expander-button

@@ -2,7 +2,7 @@ import { download, finder, openFileDialog } from "schel-d-utils-browser";
 import { CanvasController } from "./canvas-controller";
 import { ControlsController } from "./controls-controller";
 import { Timetable } from "./timetable/timetable";
-import { TimetableChoice, TimetableChoices } from "./timetable/timetable-choices";
+import { TimetableChoices } from "./timetable/timetable-choices";
 
 // Retrieve the HTML elements from the page.
 const html = {
@@ -39,21 +39,17 @@ html.mobileExpanderButton.addEventListener("click", () => {
 // Import a timetable.
 html.importButton.addEventListener("click", () => {
   openFileDialog(".json", (file: string) => {
-    let newTimetable: TimetableChoices | null = null;
-
-    try {
-      const json = JSON.parse(file);
-      const timetable = Timetable.json.parse(json);
-
-      // Start with all "null" choices.
-      const choices = timetable.classes.map(c => new TimetableChoice(c, null));
-
-      newTimetable = new TimetableChoices(timetable, choices);
-    }
-    catch (err) {
-      alert("That .json file was invalid.");
-      console.error(err);
-    }
+    const newTimetable = (() => {
+      try {
+        const json = JSON.parse(file);
+        return TimetableChoices.json.parse(json);
+      }
+      catch (err) {
+        alert("That .json file was invalid.");
+        console.error(err);
+        return null;
+      }
+    })();
 
     if (newTimetable != null) {
       updateTimetable(newTimetable);
@@ -63,7 +59,7 @@ html.importButton.addEventListener("click", () => {
 
 // Export the timetable.
 html.exportButton.addEventListener("click", () => {
-  const text = JSON.stringify(timetable.timetable.toJSON());
+  const text = JSON.stringify(timetable.toJSON());
   download(text, "timetable.json");
 });
 
@@ -71,7 +67,12 @@ html.exportButton.addEventListener("click", () => {
  * Modifies the timetable/choices being displayed with a new one.
  * @param newTimetable The new timetable.
  */
-function updateTimetable(newTimetable: TimetableChoices) {
+export function updateTimetable(newTimetable: TimetableChoices) {
   timetable = newTimetable;
   controls.onTimetableUpdate(timetable);
+}
+
+/** Returns the current choices/timetable. */
+export function getCurrentTimetable(): TimetableChoices {
+  return timetable;
 }

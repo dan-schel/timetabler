@@ -9,7 +9,7 @@
       "options": [
         "mon 13:00 2h online",
         "tue 14:30 2h",
-        "fri 8:00 2h"
+        "fri 08:00 2h"
       ]
     },
     {
@@ -19,7 +19,7 @@
       "options": [
         [
           "tue 16:30 30m",
-          "fri 9:30 90m"
+          "fri 09:30 90m"
         ],
         [
           "thu 12:00 30m",
