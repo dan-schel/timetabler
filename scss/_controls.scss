@@ -113,6 +113,8 @@
 }
 
 @mixin controls-mobile {
+  padding-bottom: 2rem;
+
   &.collapsed {
     height: 9rem;
     #mobile-expander-button .up {
