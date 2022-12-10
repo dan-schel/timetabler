@@ -19,6 +19,8 @@ export class CanvasController {
 
   /** A reference to frequently used CSS values. */
   readonly css: {
+    colorInk10: string,
+    colorInk30: string,
     colorInk80: string
   };
 
@@ -64,6 +66,8 @@ export class CanvasController {
     this.css = (() => {
       const style = getComputedStyle(html.canvas);
       return {
+        colorInk10: style.getPropertyValue("--color-ink-10"),
+        colorInk30: style.getPropertyValue("--color-ink-30"),
         colorInk80: style.getPropertyValue("--color-ink-80")
       };
     })();
