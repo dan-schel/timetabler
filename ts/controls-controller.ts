@@ -27,7 +27,7 @@ export class ControlsController {
 
   /**
    * Called whenever the timetable/choices changes.
-   * @param timetable
+   * @param timetable The updated timetable.
    */
   onTimetableUpdate(timetable: TimetableChoices) {
     // Avoid recreating the UI for each class if the timetable hasn't changed.

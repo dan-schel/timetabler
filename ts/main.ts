@@ -1,5 +1,5 @@
 import { download, finder, openFileDialog } from "schel-d-utils-browser";
-import { CanvasController } from "./canvas-controller";
+import { CanvasController } from "./canvas/canvas-controller";
 import { ControlsController } from "./controls-controller";
 import { Timetable } from "./timetable/timetable";
 import { TimetableChoices } from "./timetable/timetable-choices";
@@ -70,6 +70,7 @@ html.exportButton.addEventListener("click", () => {
 export function updateTimetable(newTimetable: TimetableChoices) {
   timetable = newTimetable;
   controls.onTimetableUpdate(timetable);
+  canvas.onTimetableUpdate(timetable);
 }
 
 /** Returns the current choices/timetable. */
