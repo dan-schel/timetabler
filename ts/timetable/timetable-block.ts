@@ -42,6 +42,14 @@ export class TimetableBlock {
   }
 
   /**
+   * Returns the end time of this timetable block (if the end time occurs on the
+   * next day, the next day flag will be set inside the local time).
+   */
+  get endTime(): LocalTime {
+    return new LocalTime(this.startTime.minuteOfDay + this.durationMins);
+  }
+
+  /**
    * Returns true if the given object has an identical value to this one.
    * @param other The other object.
    */

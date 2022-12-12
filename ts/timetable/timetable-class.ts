@@ -1,5 +1,6 @@
 import { areUnique, arraysMatch } from "schel-d-utils";
 import { z } from "zod";
+import { LocalTime } from "../time/local-time";
 import { TimetableColor, TimetableColors } from "./timetable-class-color";
 import { TimetableError } from "./timetable-error";
 import { TimetableOption } from "./timetable-option";
@@ -92,5 +93,24 @@ export class TimetableClass {
       options: this.options.map(o => o.toJSON()),
       optional: this.optional ? true : undefined
     };
+  }
+
+  /**
+   * Returns true if the timetable has classes with weekend options.
+   * @param daySplitTime The time after which the end time will be shown on the
+   * next day. The time passed here should have the next day flag set.
+   */
+  hasWeekendOptions(daySplitTime: LocalTime): boolean {
+    return this.options.some(c => c.hasWeekendBlocks(daySplitTime));
+  }
+
+  /** Returns the time the earliest block of all the options starts. */
+  earliestStartTime(): LocalTime {
+    return LocalTime.earliest(...this.options.map(o => o.earliestStartTime()));
+  }
+
+  /** Returns the time the latest block of all the options ends. */
+  latestEndTime(): LocalTime {
+    return LocalTime.latest(...this.options.map(o => o.latestEndTime()));
   }
 }

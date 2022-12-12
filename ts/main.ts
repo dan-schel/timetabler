@@ -46,7 +46,7 @@ html.importButton.addEventListener("click", () => {
       }
       catch (err) {
         alert("That .json file was invalid.");
-        console.error(err);
+        console.warn(err);
         return null;
       }
     })();

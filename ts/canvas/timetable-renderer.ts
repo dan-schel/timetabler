@@ -26,6 +26,10 @@ export class TimetableRenderer {
   onTimetableUpdate(timetable: TimetableChoices) {
     // todo: figure out how to render the changes.
 
+    // Allow the gridlines to update the hour range and days of week being
+    // shown.
+    this._gridlines.onTimetableUpdate(timetable);
+
     this._canvas.draw(true);
   }
 

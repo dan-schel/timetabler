@@ -1,5 +1,7 @@
 import { areUnique, arraysMatch } from "schel-d-utils";
 import { z } from "zod";
+import { DayOfWeek } from "../time/day-of-week";
+import { LocalTime } from "../time/local-time";
 import { TimetableBlock } from "./timetable-block";
 import { TimetableError } from "./timetable-error";
 
@@ -72,5 +74,25 @@ export class TimetableOption {
    */
   toDisplayString(): string {
     return this.blocks.map(b => b.toDisplayString()).join(" & ");
+  }
+
+  /**
+   * Returns true if the timetable has classes with weekend options.
+   * @param daySplitTime The time after which the end time will be shown on the
+   * next day. The time passed here should have the next day flag set.
+   */
+  hasWeekendBlocks(daySplitTime: LocalTime): boolean {
+    return this.blocks.some(b => b.dayOfWeek.isWeekend ||
+      (b.dayOfWeek.equals(DayOfWeek.fri) && b.endTime.isAfter(daySplitTime)));
+  }
+
+  /** Returns the time the earliest block in this option starts. */
+  earliestStartTime(): LocalTime {
+    return LocalTime.earliest(...this.blocks.map(x => x.startTime));
+  }
+
+  /** Returns the time the latest block in this option ends. */
+  latestEndTime(): LocalTime {
+    return LocalTime.latest(...this.blocks.map(x => x.endTime));
   }
 }

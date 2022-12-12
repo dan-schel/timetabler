@@ -34,7 +34,7 @@ export class LocalTime {
    * 5:15am, 22 for 10:29pm.
    */
   get hour(): number {
-    return Math.floor(this.minuteOfDay / 60) % 24;
+    return this.hour48 % 24;
   }
 
   /**
@@ -54,6 +54,14 @@ export class LocalTime {
   }
 
   /**
+   * Returns an integer between 0-47 inclusive representing the hour which
+   * exceeds 24 for next day times.
+   */
+  get hour48(): number {
+    return Math.floor(this.minuteOfDay / 60);
+  }
+
+  /**
    * Returns a {@link LocalTime} constructed from a given hour, minute, and
    * optionally assigning next day.
    * @param hour The hour of the day (0 to 23 inclusive).
@@ -63,6 +71,16 @@ export class LocalTime {
    */
   static fromTime(hour: number, minute: number, nextDay = false): LocalTime {
     return new LocalTime((nextDay ? (hour + 24) : hour) * 60 + minute);
+  }
+
+  /**
+   * Returns a {@link LocalTime} constructed from a given hour and minute.
+   * @param hour The hour of the day (0 to 47 inclusive). Can exceed 24 for next
+   * day.
+   * @param minute The minute of the day (0 to 59 inclusive).
+   */
+  static fromHour48(hour48: number, minute: number): LocalTime {
+    return new LocalTime(hour48 * 60 + minute);
   }
 
   /**
@@ -130,11 +148,10 @@ export class LocalTime {
    * next day flag will be ignored.
    */
   to12HString(): string {
-    const suffix = this.hour < 12 ? "am" : "pm";
-    const hour12 = (this.hour + 11) % 12 + 1;
+    const hour12 = hour24To12(this.hour);
 
-    return `${hour12.toFixed()}:` +
-      `${this.minute.toFixed().padStart(2, "0")}${suffix}`;
+    return `${hour12.hour.toFixed()}:` +
+      `${this.minute.toFixed().padStart(2, "0")}${hour12.half}`;
   }
 
   /**
@@ -197,9 +214,59 @@ export class LocalTime {
   }
 
   /**
+   * Returns this time rounded down to the nearest hour (does nothing if the
+   * minute component is already 0).
+   */
+  startOfHour(): LocalTime {
+    return LocalTime.fromHour48(this.hour, 0);
+  }
+
+  /**
+   * Returns this time rounded up to the nearest hour (does nothing if the
+   * minute component is already 0).
+   */
+  endOfHour(): LocalTime {
+    if (this.minute == 0) { return this; }
+    return LocalTime.fromHour48(this.hour + 1, 0);
+  }
+
+  /**
    * Returns the local time that is set to 12:00am the next day.
    */
   static startOfTomorrow(): LocalTime {
     return new LocalTime(24 * 60);
   }
+
+  /**
+   * Returns whichever time is the earliest in the group.
+   * @param times The group of times.
+   */
+  static earliest(...times: LocalTime[]): LocalTime {
+    return new LocalTime(Math.min(...times.map(t => t.minuteOfDay)));
+  }
+
+  /**
+   * Returns whichever time is the latest in the group.
+   * @param times The group of times.
+   */
+  static latest(...times: LocalTime[]): LocalTime {
+    return new LocalTime(Math.max(...times.map(t => t.minuteOfDay)));
+  }
+}
+
+/** A 12-hour hour. */
+export type Hour12 = {
+  hour: number,
+  half: "am" | "pm"
+};
+
+/**
+ * Converts a 24-hour hour to a 12-hour hour.
+ * @param hour24 The 24-hour hour.
+ */
+export function hour24To12(hour24: number): Hour12 {
+  return {
+    hour: (hour24 + 11) % 12 + 1,
+    half: hour24 < 12 ? "am" : "pm"
+  };
 }
