@@ -19,6 +19,26 @@ export function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number,
   ctx.stroke();
 }
 
+export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
+  x1: number, y1: number, x2: number, y2: number, radius: number) {
+
+  ctx.fillStyle = "black";
+
+  ctx.beginPath();
+  ctx.moveTo(x1 + radius, y1);
+  ctx.lineTo(x2 - radius, y1);
+  ctx.quadraticCurveTo(x2, y1, x2, y1 + radius);
+  ctx.lineTo(x2, y2 - radius);
+  ctx.quadraticCurveTo(x2, y2, x2 - radius, y2);
+  ctx.lineTo(x1 + radius, y2);
+  ctx.quadraticCurveTo(x1, y2, x1, y2 - radius);
+  ctx.lineTo(x1, y1 + radius);
+  ctx.quadraticCurveTo(x1, y1, x1 + radius, y1);
+  ctx.closePath();
+
+  ctx.fill();
+}
+
 /**
  * Draws an icon to the canvas.
  * @param ctx The canvas context.
@@ -92,6 +112,6 @@ function createFontString(fontSizeRem: number,
  * Converts rem to pixels (multiply by 16).
  * @param rem Measurement in pixels.
  */
-export function toPx(rem: number): number {
+export function rem(rem: number): number {
   return rem * 16;
 }

@@ -58,7 +58,16 @@ export class LocalTime {
    * exceeds 24 for next day times.
    */
   get hour48(): number {
-    return Math.floor(this.minuteOfDay / 60);
+    return Math.floor(this.fractionalHour48);
+  }
+
+  /**
+   * Returns a (potentially decimal) number between 0-48 representing the number
+   * of hours (and fractional minutes) since midnight. Exceeds 24 hours for next
+   * day times.
+   */
+  get fractionalHour48(): number {
+    return this.minuteOfDay / 60;
   }
 
   /**

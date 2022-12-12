@@ -1,4 +1,5 @@
 import { TimetableChoices } from "../timetable/timetable-choices";
+import { BlocksRenderer } from "./blocks-renderer";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
 
@@ -7,7 +8,11 @@ export class TimetableRenderer {
   /** The canvas to draw to. */
   private readonly _canvas: CanvasController;
 
+  /** Draws the gridlines. */
   private readonly _gridlines: GridlinesRenderer;
+
+  /** Draws the timetable blocks. */
+  private readonly _blocks: BlocksRenderer;
 
   /**
    * Creates a {@link TimetableRenderer}.
@@ -17,6 +22,7 @@ export class TimetableRenderer {
     this._canvas = canvas;
 
     this._gridlines = new GridlinesRenderer(canvas);
+    this._blocks = new BlocksRenderer(canvas, this._gridlines);
   }
 
   /**
@@ -24,11 +30,12 @@ export class TimetableRenderer {
    * @param timetable The updated timetable.
    */
   onTimetableUpdate(timetable: TimetableChoices) {
-    // todo: figure out how to render the changes.
-
     // Allow the gridlines to update the hour range and days of week being
     // shown.
     this._gridlines.onTimetableUpdate(timetable);
+
+    // Rearrange blocks if needed.
+    this._blocks.onTimetableUpdate(timetable);
 
     this._canvas.draw(true);
   }
@@ -39,5 +46,6 @@ export class TimetableRenderer {
    */
   draw(ctx: CanvasRenderingContext2D) {
     this._gridlines.draw(ctx);
+    this._blocks.draw(ctx);
   }
 }
