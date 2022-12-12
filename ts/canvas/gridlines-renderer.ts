@@ -250,7 +250,7 @@ function determineHourRange(timetable: Timetable): HourRange {
   const latestHour = timetable.latestEndTime().endOfHour().hour48;
   const split = Math.min(earliestHour, latestDaySplitHour);
 
-  if (latestHour <= 24 || latestHour < split + 24) {
+  if (latestHour <= 24 || latestHour <= split + 24) {
     return {
       start: earliestHour,
       end: latestHour

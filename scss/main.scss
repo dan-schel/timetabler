@@ -1,7 +1,74 @@
 @use "css-template/import" as template;
 @use "controls";
 
-@include template.init();
+@include template.init(
+  $custom-colors: (
+    "accent-red-gradient-1": (
+      "light": #ff3500,
+      "dark": #ff3500,
+    ),
+    "accent-red-gradient-2": (
+      "light": #dc0057,
+      "dark": #dc0057,
+    ),
+    "accent-orange-gradient-1": (
+      "light": #ffa000,
+      "dark": #ffa000,
+    ),
+    "accent-orange-gradient-2": (
+      "light": #dc4200,
+      "dark": #dc4200,
+    ),
+    "accent-yellow-gradient-1": (
+      "light": #e8e500,
+      "dark": #e8e500,
+    ),
+    "accent-yellow-gradient-2": (
+      "light": #fea400,
+      "dark": #fea400,
+    ),
+    "accent-green-gradient-1": (
+      "light": #88db00,
+      "dark": #88db00,
+    ),
+    "accent-green-gradient-2": (
+      "light": #00a517,
+      "dark": #00a517,
+    ),
+    "accent-cyan-gradient-1": (
+      "light": #00ffa4,
+      "dark": #00ffa4,
+    ),
+    "accent-cyan-gradient-2": (
+      "light": #00c4c8,
+      "dark": #00c4c8,
+    ),
+    "accent-blue-gradient-1": (
+      "light": #00b0ff,
+      "dark": #00b0ff,
+    ),
+    "accent-blue-gradient-2": (
+      "light": #005ae4,
+      "dark": #005ae4,
+    ),
+    "accent-purple-gradient-1": (
+      "light": #a900ff,
+      "dark": #a900ff,
+    ),
+    "accent-purple-gradient-2": (
+      "light": #5c00e4,
+      "dark": #5c00e4,
+    ),
+    "accent-pink-gradient-1": (
+      "light": #ff0098,
+      "dark": #ff0098,
+    ),
+    "accent-pink-gradient-2": (
+      "light": #b600e4,
+      "dark": #b600e4,
+    ),
+  )
+);
 
 @font-face {
   font-family: "Atkinson Hyperlegible";

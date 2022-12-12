@@ -3,14 +3,18 @@ import { TimetableChoices } from "../timetable/timetable-choices";
 import { TimetableClass } from "../timetable/timetable-class";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
-import { cubicOut, Transition } from "./transition";
-import { drawGradientRoundedRect, rem } from "./utils";
+import { GhostVisualBlock, PrimaryVisualBlock } from "./visual-block";
 
-/** The duration of block transition animations. */
-const blockTransitionDuration = 0.2;
-
-/** The easing function used for block transition animations. */
-const blockTransitionEasing = cubicOut;
+/** Instructions for which visual blocks need to be created for a block. */
+export type VisualBlockMapping = {
+  block: TimetableBlock,
+  main: {
+    x: number, y1: number, y2: number
+  },
+  ghost: {
+    x: number, y1: number, y2: number
+  } | null
+};
 
 /** Handles rendering the timetable blocks to the canvas. */
 export class BlocksRenderer {
@@ -20,7 +24,11 @@ export class BlocksRenderer {
   /** The gridlines renderer to retrieve grid dimensions from. */
   private readonly _gridlines: GridlinesRenderer;
 
-  private readonly _blocks: VisualBlock[];
+  /** The primary visual blocks for each class. */
+  private readonly _primaryBlocks: PrimaryVisualBlock[];
+
+  /** The ghost visual blocks for each class (if appropriate). */
+  private readonly _ghostBlocks: GhostVisualBlock[];
 
   /**
    * Creates a {@link BlocksRenderer}.
@@ -30,7 +38,8 @@ export class BlocksRenderer {
   constructor(canvas: CanvasController, gridlines: GridlinesRenderer) {
     this._canvas = canvas;
     this._gridlines = gridlines;
-    this._blocks = [];
+    this._primaryBlocks = [];
+    this._ghostBlocks = [];
   }
 
   /**
@@ -38,58 +47,105 @@ export class BlocksRenderer {
    * @param timetable The updated timetable.
    */
   onTimetableUpdate(timetable: TimetableChoices) {
+    // For each choice (a.k.a. each timetable class, since there's guaranteed to
+    // be exactly one for each)...
     timetable.choices.forEach(c => {
+      // Todo: skip doing everything below if the choice hasn't changed.
+
+      // Get the class and an array of blocks required.
       const timetableClass = c.timetableClass;
-
-      // Find the blocks already being shown for this class.
-      const existingBlocks = this._blocks
-        .filter(b => b.timetableClass.equals(timetableClass));
-
       const timetableBlocks = c.option == null ? [] : c.option.blocks;
 
-      const blockCoordinates = timetableBlocks.map(b => {
+      // For each block, work out which visual blocks need to be created.
+      const newCoordinates: VisualBlockMapping[] = timetableBlocks.map(b => {
         const startLocation = this._gridlines.timeLocation(b.dayOfWeek, b.startTime);
         const endLocation = this._gridlines.timeLocation(b.dayOfWeek, b.endTime);
 
+        // Should never happen.
         if (startLocation == null || endLocation == null) { throw new Error(); }
 
-        const firstBlockEnd = endLocation.x == startLocation.x
+        // If the start and end columns are different, then a ghost block will
+        // be required. Work out where the end of the first block should go.
+        const firstBlockEnd = startLocation.x == endLocation.x
           ? endLocation.y
           : this._gridlines.endHour - this._gridlines.startHour;
 
+        // Work out where the ghost block should go (if appropriate).
+        let ghost = null;
+        if (startLocation.x != endLocation.x) {
+          ghost = {
+            x: endLocation.x,
+            y1: 0,
+            y2: endLocation.y
+          };
+        }
+
         return {
-          timetableBlock: b,
-          main: {
-            x: startLocation.x,
-            y1: startLocation.y,
-            y2: firstBlockEnd
-          },
-          ghost: null
+          block: b,
+          main: { x: startLocation.x, y1: startLocation.y, y2: firstBlockEnd },
+          ghost: ghost
         };
       });
 
-      existingBlocks.forEach((b, i) => {
-        if (blockCoordinates.length > i) {
-          const coordinates = blockCoordinates[i];
-          b.moveTo(
-            coordinates.timetableBlock, coordinates.main.x, coordinates.main.y1,
-            coordinates.main.y2
-          );
-        }
-        else {
-          this._blocks.splice(this._blocks.indexOf(b), 1);
+      // Animate/create/destroy the primary blocks for these new coordinates.
+      this.animatePrimaryBlocks(timetableClass, newCoordinates);
+
+      // Create ghost blocks from coordinates. Todo: animate in/out.
+      this._ghostBlocks.splice(0, this._ghostBlocks.length);
+      newCoordinates.forEach(b => {
+        if (b.ghost != null) {
+          this._ghostBlocks.push(new GhostVisualBlock(
+            this._canvas, this._gridlines, timetableClass, b.block,
+            b.ghost.x, b.ghost.y1, b.ghost.y2
+          ));
         }
       });
+    });
+  }
 
-      if (existingBlocks.length < blockCoordinates.length) {
-        blockCoordinates.slice(existingBlocks.length).forEach(b => {
-          this._blocks.push(new VisualBlock(
-            this._canvas, this._gridlines, timetableClass, b.timetableBlock,
-            b.main.x, b.main.y1, b.main.y2, false
-          ));
-        });
+  /**
+   * Animates the existing blocks for a particular class to new coordinates.
+   * Creates and destroys blocks if needed so the right amount are shown.
+   * @param timetableClass The class to create blocks for.
+   * @param newCoordinates The new coordinates to animate the blocks to.
+   */
+  animatePrimaryBlocks(timetableClass: TimetableClass,
+    newCoordinates: VisualBlockMapping[]) {
+
+    // Find the blocks already being shown for this class.
+    const existingBlocks = this._primaryBlocks
+      .filter(b => b.timetableClass.equals(timetableClass));
+
+    // For each existing block...
+    existingBlocks.forEach((b, i) => {
+      if (newCoordinates.length > i) {
+        // If there are enough new coordinates that this block can be
+        // repurposed, then animate it to a new location.
+        const coordinates = newCoordinates[i];
+        b.moveTo(
+          coordinates.block, coordinates.main.x, coordinates.main.y1,
+          coordinates.main.y2
+        );
+      }
+      else {
+        // If by the time this block is reached in the loop all the new
+        // coordinates have blocks assigned, then this block is extra, so delete
+        // it. Todo: animate it out!
+        this._primaryBlocks.splice(this._primaryBlocks.indexOf(b), 1);
       }
     });
+
+    // If there are more new coordinates than existing blocks, then we'll need
+    // to create some new blocks.
+    if (newCoordinates.length > existingBlocks.length) {
+      newCoordinates.slice(existingBlocks.length).forEach(b => {
+        // Todo: animate in the new block.
+        this._primaryBlocks.push(new PrimaryVisualBlock(
+          this._canvas, this._gridlines, timetableClass, b.block,
+          b.main.x, b.main.y1, b.main.y2
+        ));
+      });
+    }
   }
 
   /**
@@ -97,97 +153,7 @@ export class BlocksRenderer {
    * @param ctx The canvas context.
    */
   draw(ctx: CanvasRenderingContext2D) {
-    this._blocks.forEach(b => b.draw(ctx));
-  }
-}
-
-/** Handles drawing an allocated section of timetable. */
-export class VisualBlock {
-  /** The canvas to draw to. */
-  private readonly _canvas: CanvasController;
-
-  /** The gridlines renderer to retrieve grid dimensions from. */
-  private readonly _gridlines: GridlinesRenderer;
-
-  /** The class this block is for. */
-  readonly timetableClass: TimetableClass;
-
-  /** The timetable block being drawn for. */
-  timetableBlock: TimetableBlock;
-
-  /** The current value of the animating x-coordinate (day of week). */
-  xTransition: Transition;
-
-  /** The current value of the animating y1-coordinate (start time). */
-  y1Transition: Transition;
-
-  /** The current value of the animating y2-coordinate (end time). */
-  y2Transition: Transition;
-
-  /** Whether this block is marking a block overflowing to the next day. */
-  readonly ghost: boolean;
-
-  /**
-   * Creates a {@link VisualBlock}.
-   * @param canvas The canvas to draw to.
-   * @param gridlines The gridlines renderer to retrieve grid dimensions from.
-   * @param timetableClass The class this block is for.
-   * @param initialBlock The timetable block being drawn for.
-   * @param initialX The initial x-coordinate (day of week).
-   * @param initialY1 The initial y1-coordinate (start time).
-   * @param initialY2 The initial y2-coordinate (end time).
-   * @param isGhost Whether this block is marking a block overflowing to the
-   * next day.
-   */
-  constructor(canvas: CanvasController, gridlines: GridlinesRenderer,
-    timetableClass: TimetableClass, initialBlock: TimetableBlock,
-    initialX: number, initialY1: number, initialY2: number, isGhost: boolean) {
-
-    this._canvas = canvas;
-    this._gridlines = gridlines;
-
-    this.timetableClass = timetableClass;
-    this.timetableBlock = initialBlock;
-
-    this.xTransition = new Transition(
-      this._canvas, initialX, blockTransitionDuration, blockTransitionEasing
-    );
-    this.y1Transition = new Transition(
-      this._canvas, initialY1, blockTransitionDuration, blockTransitionEasing
-    );
-    this.y2Transition = new Transition(
-      this._canvas, initialY2, blockTransitionDuration, blockTransitionEasing
-    );
-
-    this.ghost = isGhost;
-  }
-
-  /**
-   * Animates the visual block moving to a new location.
-   * @param newBlock The new timetable block being drawn for.
-   * @param newX The new x-coordinate (day of week).
-   * @param newY1 The new y1-coordinate (start time).
-   * @param newY2 The new y2-coordinate (end time).
-   */
-  moveTo(newBlock: TimetableBlock, newX: number, newY1: number, newY2: number) {
-    this.timetableBlock = newBlock;
-    this.xTransition.animateTo(newX);
-    this.y1Transition.animateTo(newY1);
-    this.y2Transition.animateTo(newY2);
-  }
-
-  /**
-   * Draws the visual block.
-   * @param ctx The canvas context.
-   */
-  draw(ctx: CanvasRenderingContext2D) {
-    const { x1, y1, dayWidth, hourHeight } = this._gridlines.gridDimensions();
-
-    const blockX1 = x1 + dayWidth * this.xTransition.value();
-    const blockY1 = y1 + hourHeight * this.y1Transition.value();
-    const blockX2 = x1 + dayWidth * (this.xTransition.value() + 1);
-    const blockY2 = y1 + hourHeight * this.y2Transition.value();
-
-    drawGradientRoundedRect(ctx, blockX1, blockY1, blockX2, blockY2, rem(0.5));
+    this._primaryBlocks.forEach(b => b.draw(ctx));
+    this._ghostBlocks.forEach(b => b.draw(ctx));
   }
 }

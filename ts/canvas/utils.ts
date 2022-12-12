@@ -19,10 +19,51 @@ export function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number,
   ctx.stroke();
 }
 
-export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
-  x1: number, y1: number, x2: number, y2: number, radius: number) {
+/**
+ * Draws a rounded rectangle to the canvas.
+ * @param ctx The canvas context.
+ * @param x1 The x-coordinate of the top-left corner.
+ * @param y1 The y-coordinate of the top-left corner.
+ * @param x2 The x-coordinate of the bottom-right corner.
+ * @param y2 The y-coordinate of the bottom-right corner.
+ * @param radius The radius of each corner.
+ * @param fillStyle The fill style (color) of the rectangle.
+ */
+export function drawRoundedRect(ctx: CanvasRenderingContext2D,
+  x1: number, y1: number, x2: number, y2: number, radius: number,
+  fillStyle: string) {
 
-  ctx.fillStyle = "black";
+  ctx.fillStyle = fillStyle;
+  roundedRectPath(ctx, x1, y1, x2, y2, radius);
+  ctx.fill();
+}
+
+/**
+ * Draws a rounded rectangle to the canvas.
+ * @param ctx The canvas context.
+ * @param x1 The x-coordinate of the top-left corner.
+ * @param y1 The y-coordinate of the top-left corner.
+ * @param x2 The x-coordinate of the bottom-right corner.
+ * @param y2 The y-coordinate of the bottom-right corner.
+ * @param radius The radius of each corner.
+ * @param color1 The first color in the gradient.
+ * @param color2 The second color in the gradient.
+ */
+export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
+  x1: number, y1: number, x2: number, y2: number, radius: number,
+  color1: string, color2: string) {
+
+  const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+  gradient.addColorStop(0, color1);
+  gradient.addColorStop(1, color2);
+  ctx.fillStyle = gradient;
+
+  roundedRectPath(ctx, x1, y1, x2, y2, radius);
+  ctx.fill();
+}
+
+function roundedRectPath(ctx: CanvasRenderingContext2D, x1: number, y1: number,
+  x2: number, y2: number, radius: number) {
 
   ctx.beginPath();
   ctx.moveTo(x1 + radius, y1);
@@ -35,8 +76,6 @@ export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
   ctx.lineTo(x1, y1 + radius);
   ctx.quadraticCurveTo(x1, y1, x1 + radius, y1);
   ctx.closePath();
-
-  ctx.fill();
 }
 
 /**

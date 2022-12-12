@@ -227,7 +227,7 @@ export class LocalTime {
    * minute component is already 0).
    */
   startOfHour(): LocalTime {
-    return LocalTime.fromHour48(this.hour, 0);
+    return LocalTime.fromHour48(this.hour48, 0);
   }
 
   /**
@@ -236,7 +236,7 @@ export class LocalTime {
    */
   endOfHour(): LocalTime {
     if (this.minute == 0) { return this; }
-    return LocalTime.fromHour48(this.hour + 1, 0);
+    return LocalTime.fromHour48(this.hour48 + 1, 0);
   }
 
   /**
