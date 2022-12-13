@@ -119,6 +119,10 @@ body {
 
   overflow: hidden;
 
+  // Allow dragging blocks on the canvas, rather than the browser thinking it
+  // needs to pan the page.
+  touch-action: none;
+
   position: relative;
   #canvas {
     position: absolute;

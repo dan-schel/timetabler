@@ -121,14 +121,17 @@ export class CanvasController {
 
     this._renderer = new TimetableRenderer(this);
 
-    this._html.canvas.addEventListener("mousedown",
-      (e) => this._renderer.onMouseDown(e)
+    this._html.canvas.addEventListener("pointerdown",
+      (e) => this._renderer.onPointerDown(e)
     );
-    this._html.canvas.addEventListener("mouseup",
-      (e) => this._renderer.onMouseUp(e)
+    this._html.canvas.addEventListener("pointerup",
+      (e) => this._renderer.onPointerUp(e)
     );
-    this._html.canvas.addEventListener("mousemove",
-      (e) => this._renderer.onMouseMove(e)
+    this._html.canvas.addEventListener("pointerleave",
+      (e) => this._renderer.onPointerUp(e)
+    );
+    this._html.canvas.addEventListener("pointermove",
+      (e) => this._renderer.onPointerMove(e)
     );
   }
 

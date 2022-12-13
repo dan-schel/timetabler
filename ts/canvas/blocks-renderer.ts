@@ -1,9 +1,11 @@
+import { getCurrentTimetable, updateTimetable } from "../main";
 import { TimetableBlock } from "../timetable/timetable-block";
 import { TimetableChoices } from "../timetable/timetable-choices";
 import { TimetableClass } from "../timetable/timetable-class";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
-import { OverflowVisualBlock, PrimaryVisualBlock } from "./visual-block";
+import { OverflowVisualBlock, PrimaryVisualBlock, SuggestionVisualBlock }
+  from "./visual-block";
 
 /** Instructions for which visual blocks need to be created for a block. */
 export type VisualBlockMapping = {
@@ -33,6 +35,9 @@ export class BlocksRenderer {
   /** The block currently being dragged (if any). */
   private _draggingBlock: PrimaryVisualBlock | null;
 
+  /** The suggestion blocks being displayed while dragging (if any). */
+  private _suggestionBlocks: SuggestionVisualBlock[];
+
   /**
    * Creates a {@link BlocksRenderer}.
    * @param canvas The canvas to draw to.
@@ -44,6 +49,7 @@ export class BlocksRenderer {
     this._primaryBlocks = [];
     this._overflowBlocks = [];
     this._draggingBlock = null;
+    this._suggestionBlocks = [];
   }
 
   /**
@@ -51,6 +57,8 @@ export class BlocksRenderer {
    * @param timetable The updated timetable.
    */
   onTimetableUpdate(timetable: TimetableChoices) {
+    this._overflowBlocks.splice(0, this._overflowBlocks.length);
+
     // For each choice (a.k.a. each timetable class, since there's guaranteed to
     // be exactly one for each)...
     timetable.choices.forEach(c => {
@@ -61,42 +69,13 @@ export class BlocksRenderer {
       const timetableBlocks = c.option == null ? [] : c.option.blocks;
 
       // For each block, work out which visual blocks need to be created.
-      const newCoordinates: VisualBlockMapping[] = timetableBlocks.map(b => {
-        const startLocation = this._gridlines.timeLocation(b.dayOfWeek, b.startTime);
-        const endLocation = this._gridlines.timeLocation(b.dayOfWeek, b.endTime);
-
-        // Should never happen.
-        if (startLocation == null || endLocation == null) { throw new Error(); }
-
-        // If the start and end columns are different, then an overflow block
-        // will be required. Work out where the end of the first block should
-        // go.
-        const firstBlockEnd = startLocation.x == endLocation.x
-          ? endLocation.y
-          : this._gridlines.endHour - this._gridlines.startHour;
-
-        // Work out where the overflow block should go (if appropriate).
-        let overflow = null;
-        if (startLocation.x != endLocation.x) {
-          overflow = {
-            x: endLocation.x,
-            y1: 0,
-            y2: endLocation.y
-          };
-        }
-
-        return {
-          block: b,
-          main: { x: startLocation.x, y1: startLocation.y, y2: firstBlockEnd },
-          overflow: overflow
-        };
-      });
+      const newCoordinates: VisualBlockMapping[] =
+        timetableBlocks.map(b => this._determineVisualBlockMapping(b));
 
       // Animate/create/destroy the primary blocks for these new coordinates.
-      this.animatePrimaryBlocks(timetableClass, newCoordinates);
+      this._animatePrimaryBlocks(timetableClass, newCoordinates);
 
       // Create overflow blocks from coordinates. Todo: animate in/out.
-      this._overflowBlocks.splice(0, this._overflowBlocks.length);
       newCoordinates.forEach(b => {
         if (b.overflow != null) {
           this._overflowBlocks.push(new OverflowVisualBlock(
@@ -114,7 +93,7 @@ export class BlocksRenderer {
    * @param timetableClass The class to create blocks for.
    * @param newCoordinates The new coordinates to animate the blocks to.
    */
-  animatePrimaryBlocks(timetableClass: TimetableClass,
+  private _animatePrimaryBlocks(timetableClass: TimetableClass,
     newCoordinates: VisualBlockMapping[]) {
 
     // Find the blocks already being shown for this class.
@@ -154,45 +133,134 @@ export class BlocksRenderer {
   }
 
   /**
+   * Determines where visual blocks should be shown on the canvas for a given
+   * timetable block.
+   * @param b The timetable block.
+   */
+  private _determineVisualBlockMapping(b: TimetableBlock): VisualBlockMapping {
+    const start = this._gridlines.timeLocation(b.dayOfWeek, b.startTime);
+    const end = this._gridlines.timeLocation(b.dayOfWeek, b.endTime);
+
+    // Should never happen.
+    if (start == null || end == null) { throw new Error(); }
+
+    // If the start and end columns are different, then an overflow block
+    // will be required. Work out where the end of the first block should
+    // go.
+    const firstBlockEnd = start.x == end.x
+      ? end.y
+      : this._gridlines.endHour - this._gridlines.startHour;
+
+    // Work out where the overflow block should go (if appropriate).
+    let overflow = null;
+    if (start.x != end.x) {
+      overflow = {
+        x: end.x,
+        y1: 0,
+        y2: end.y
+      };
+    }
+
+    return {
+      block: b,
+      main: { x: start.x, y1: start.y, y2: firstBlockEnd },
+      overflow: overflow
+    };
+  }
+
+  /**
    * Draws the timetable to the canvas.
    * @param ctx The canvas context.
    */
   draw(ctx: CanvasRenderingContext2D) {
-    this._primaryBlocks.forEach(b => b.draw(ctx));
+    this._primaryBlocks.forEach(b => {
+      // We'll render the dragging block later (so it's on top).
+      if (b != this._draggingBlock) {
+        b.draw(ctx);
+      }
+    });
     this._overflowBlocks.forEach(b => b.draw(ctx));
+
+    this._suggestionBlocks.forEach(b => b.draw(ctx));
+    this._draggingBlock?.draw(ctx);
   }
 
   /**
-   * Called when the mouse is pressed on the canvas.
+   * Called when the mouse/touch is pressed on the canvas.
    * @param e The event details.
    */
-  onMouseDown(e: MouseEvent) {
-    const x = e.offsetX;
-    const y = e.offsetY;
-    this._draggingBlock = this._primaryBlocks.find(b => b.isWithin(x, y)) ?? null;
-  }
-
-  /**
-   * Called when the mouse is released on the canvas.
-   * @param e The event details.
-   */
-  onMouseUp(_e: MouseEvent) {
+  onPointerDown(e: MouseEvent) {
+    // Multi-touch devices allow a pointerdown to occur without a pointerup
+    // beforehand, so ditch the old block if that occurs.
     if (this._draggingBlock != null) {
       this._draggingBlock.cancelDrag();
     }
 
-    this._draggingBlock = null;
+    const x = e.offsetX;
+    const y = e.offsetY;
+    this._draggingBlock = this._primaryBlocks.find(b => b.isWithin(x, y)) ?? null;
+
+    if (this._draggingBlock != null) {
+      this._draggingBlock.dragTo(x, y);
+
+      const timetableClass = this._draggingBlock.timetableClass;
+      this._suggestionBlocks = [];
+      timetableClass.options.forEach((o, i) => {
+        this._suggestionBlocks.push(...o.blocks.map(b => {
+          const mapping = this._determineVisualBlockMapping(b);
+          return new SuggestionVisualBlock(
+            this._canvas, this._gridlines, timetableClass, o, b, mapping.main.x,
+            mapping.main.y1, mapping.main.y2, (i + 1).toFixed()
+          );
+        }));
+      });
+
+    }
+    else {
+      this._suggestionBlocks = [];
+    }
+
+    // todo: mark canvas as dirty (because now there's suggestion blocks!)
   }
 
   /**
-   * Called when the mouse moves on the canvas.
+   * Called when the mouse/touch is released on the canvas.
    * @param e The event details.
    */
-  onMouseMove(e: MouseEvent) {
+  onPointerUp(e: MouseEvent) {
+    if (this._draggingBlock != null) {
+      const x = e.offsetX;
+      const y = e.offsetY;
+
+      const newPosition = this._suggestionBlocks.find(b => b.isWithin(x, y));
+      if (newPosition != null) {
+        updateTimetable(getCurrentTimetable().withChoice(
+          this._draggingBlock.timetableClass, newPosition.option
+        ));
+      }
+      else {
+        this._draggingBlock.cancelDrag();
+      }
+    }
+
+    this._draggingBlock = null;
+    this._suggestionBlocks = [];
+  }
+
+  /**
+   * Called when the mouse/touch moves on the canvas.
+   * @param e The event details.
+   */
+  onPointerMove(e: MouseEvent) {
     if (this._draggingBlock != null) {
       const x = e.offsetX;
       const y = e.offsetY;
       this._draggingBlock.dragTo(x, y);
+
+      const hovered = this._suggestionBlocks.find(b => b.isWithin(x, y))?.option;
+      this._suggestionBlocks.forEach(
+        b => b.setHighlighted(hovered != null && b.option.equals(hovered))
+      );
     }
   }
 }

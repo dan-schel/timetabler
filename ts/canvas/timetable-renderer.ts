@@ -50,26 +50,26 @@ export class TimetableRenderer {
   }
 
   /**
-   * Called when the mouse is pressed on the canvas.
+   * Called when the mouse/touch is pressed on the canvas.
    * @param e The event details.
    */
-  onMouseDown(e: MouseEvent) {
-    this._blocks.onMouseDown(e);
+  onPointerDown(e: MouseEvent) {
+    this._blocks.onPointerDown(e);
   }
 
   /**
-   * Called when the mouse is released on the canvas.
+   * Called when the mouse/touch is released on the canvas.
    * @param e The event details.
    */
-  onMouseUp(e: MouseEvent) {
-    this._blocks.onMouseUp(e);
+  onPointerUp(e: MouseEvent) {
+    this._blocks.onPointerUp(e);
   }
 
   /**
-   * Called when the mouse moves on the canvas.
+   * Called when the mouse/touch moves on the canvas.
    * @param e The event details.
    */
-  onMouseMove(e: MouseEvent) {
-    this._blocks.onMouseMove(e);
+  onPointerMove(e: MouseEvent) {
+    this._blocks.onPointerMove(e);
   }
 }
