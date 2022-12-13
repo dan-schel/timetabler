@@ -145,7 +145,7 @@ export class PrimaryVisualBlock extends VisualBlock {
       y2: (canvasY - gridY1) / hourHeight + duration / 2,
     };
 
-    this._canvas.draw(true);
+    this._canvas.markDirty();
   }
 
   /** Clear the drag coordinates. Animate back to former position. */
@@ -340,6 +340,6 @@ export class SuggestionVisualBlock extends VisualBlock {
    */
   setHighlighted(highlighted: boolean) {
     this._highlighted = highlighted;
-    // Todo: mark canvas as dirty (for redraw).
+    this._canvas.markDirty();
   }
 }

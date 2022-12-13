@@ -44,16 +44,15 @@ export class CanvasController {
   private _ctx: CanvasRenderingContext2D;
 
   /**
-   * The value of Date.now in the last frame. Set to null when no animations are
-   * running.
+   * The value of Date.now in the last frame. Set to null initially.
    */
-  private _animationLastFrameTime: number | null;
+  private _lastFrameTime: number | null;
 
   /** The running animations. */
   private _animations: Animation[];
 
   /** True if requestAnimationFrame has already been called. */
-  private _isRedrawQueued = false;
+  private _dirty: boolean;
 
   /**
    * Creates a {@link CanvasController}.
@@ -64,6 +63,7 @@ export class CanvasController {
     this.width = 0;
     this.height = 0;
     this.dpiRatio = 1;
+
 
     // Retrieve the canvas context from the HTML element.
     this._ctx = (() => {
@@ -116,7 +116,7 @@ export class CanvasController {
       };
     })();
 
-    this._animationLastFrameTime = null;
+    this._lastFrameTime = null;
     this._animations = [];
 
     this._renderer = new TimetableRenderer(this);
@@ -133,6 +133,75 @@ export class CanvasController {
     this._html.canvas.addEventListener("pointermove",
       (e) => this._renderer.onPointerMove(e)
     );
+
+    this._dirty = true;
+    this._startDrawLoop();
+  }
+
+  /**
+   * Draw/redraw the content on the canvas if required. Only call this once upon
+   * creation.
+   */
+  private _startDrawLoop() {
+    // Make sure we draw again next frame (if needed).
+    requestAnimationFrame(() => this._startDrawLoop());
+
+    // Calculate how last since the last frame (used to animations) and store
+    // the current time for next time.
+    const now = Date.now();
+    const delta = (now - (this._lastFrameTime ?? now)) / 1000;
+    this._lastFrameTime = now;
+
+    // If there's nothing new to draw (and no animations running) then skip
+    // drawing.
+    if (!this._dirty && this._animations.length < 1) {
+      return;
+    }
+
+    // Otherwise, clear the dirty flag and draw.
+    this._dirty = false;
+    this._draw(delta);
+  }
+
+  private _draw(delta: number) {
+    // Scale the context based on the DPI ratio to ensure consistent sizing for
+    // high-DPI displays. Apply as a matrix so we don't need to do it for every
+    // measurement individually.
+    this._ctx.save();
+    this._ctx.clearRect(
+      0, 0, this.width * this.dpiRatio, this.height * this.dpiRatio
+    );
+    this._ctx.scale(this.dpiRatio, this.dpiRatio);
+
+    // If there are animations to process, do those.
+    if (this._animations.length > 0) {
+      const animationsToDelete: Animation[] = [];
+
+      // Run each animation. Add them to a list of animations to delete if done.
+      this._animations.forEach(a => {
+        a.run(delta);
+        if (a.isDone()) {
+          animationsToDelete.push(a);
+        }
+      });
+
+      // Remove all completed animations from the list.
+      animationsToDelete.forEach(a => {
+        this._animations.splice(this._animations.indexOf(a), 1);
+      });
+    }
+
+    // Do all drawing!
+    this._renderer.draw(this._ctx);
+
+    // Restore the canvas to the default transform once drawing is complete. This
+    // doesn't seem necessary.
+    this._ctx.restore();
+  }
+
+  /** Called when something wants a draw to occur on the next frame. */
+  markDirty() {
+    this._dirty = true;
   }
 
   /**
@@ -157,74 +226,7 @@ export class CanvasController {
     this._html.canvas.height = this.height * this.dpiRatio;
 
     // Now the size has changed, redraw everything.
-    this.draw(true);
-  }
-
-  /**
-   * Draw/redraw the content on the canvas.
-   * @param spontaneous True if this draw call is not a result of a request
-   * animation frame callback completing, but was caused by some other event.
-   */
-  draw(spontaneous: boolean) {
-    // If draw is going to be called in the next frame anyway, don't bother
-    // drawing now.
-    if (spontaneous && this._isRedrawQueued) {
-      return;
-    }
-
-    // Scale the context based on the DPI ratio to ensure consistent sizing for
-    // high-DPI displays. Apply as a matrix so we don't need to do it for every
-    // measurement individually.
-    this._ctx.save();
-    this._ctx.clearRect(0, 0, this.width * this.dpiRatio, this.height * this.dpiRatio);
-    this._ctx.scale(this.dpiRatio, this.dpiRatio);
-
-    // If there are animations to process, do those.
-    if (this._animations.length > 0) {
-      const animationsToDelete: Animation[] = [];
-
-      // Work out how much time has passed from the last frame. Delta will be
-      // zero if this is the first frame of the current batch of animations.
-      const now = Date.now();
-      const delta = (now - (this._animationLastFrameTime ?? now)) / 1000;
-      this._animationLastFrameTime = now;
-
-      // Run each animation. Add them to a list of animations to delete if done.
-      this._animations.forEach(a => {
-        a.run(delta);
-        if (a.isDone()) {
-          animationsToDelete.push(a);
-        }
-      });
-
-      // Remove all completed animations from the list.
-      animationsToDelete.forEach(a => {
-        this._animations.splice(this._animations.indexOf(a), 1);
-      });
-
-      // If all animations are done, clear the saved frame time. This is done
-      // because the next frame to render might be in the far future, so any
-      // animations started then shouldn't use this value to calculate the delta
-      // because it will be a time from way in the past (meaning the animations)
-      // will skip ahead by a ton!
-      if (this._animations.length < 1) {
-        this._animationLastFrameTime = null;
-      }
-    }
-
-    // Do all drawing!
-    this._renderer.draw(this._ctx);
-
-    // Restore the canvas to the default transform once drawing is complete. This
-    // doesn't seem necessary.
-    this._ctx.restore();
-
-    // If there are still animations running, make sure another frame is drawn
-    // in the very near future.
-    this._isRedrawQueued = this._animations.length > 0;
-    if (this._animations.length > 0) {
-      requestAnimationFrame(() => this.draw(false));
-    }
+    this.markDirty();
   }
 
   /**
@@ -233,7 +235,6 @@ export class CanvasController {
    */
   startAnimation(animation: Animation) {
     this._animations.push(animation);
-    this.draw(true);
   }
 
   /**

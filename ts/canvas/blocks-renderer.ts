@@ -220,7 +220,8 @@ export class BlocksRenderer {
       this._suggestionBlocks = [];
     }
 
-    // todo: mark canvas as dirty (because now there's suggestion blocks!)
+    // Suggestion blocks may have changed.
+    this._canvas.markDirty();
   }
 
   /**

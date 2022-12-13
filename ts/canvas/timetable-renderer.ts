@@ -37,7 +37,7 @@ export class TimetableRenderer {
     // Rearrange blocks if needed.
     this._blocks.onTimetableUpdate(timetable);
 
-    this._canvas.draw(true);
+    this._canvas.markDirty();
   }
 
   /**
