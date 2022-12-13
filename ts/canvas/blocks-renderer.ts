@@ -4,8 +4,9 @@ import { TimetableChoices } from "../timetable/timetable-choices";
 import { TimetableClass } from "../timetable/timetable-class";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
-import { OverflowVisualBlock, PrimaryVisualBlock, SuggestionVisualBlock }
-  from "./visual-block";
+import { OverflowVisualBlock } from "./overflow-visual-block";
+import { PrimaryVisualBlock } from "./primary-visual-block";
+import { SuggestionVisualBlock } from "./suggestion-visual-block";
 
 /** Instructions for which visual blocks need to be created for a block. */
 export type VisualBlockMapping = {
@@ -154,11 +155,7 @@ export class BlocksRenderer {
     // Work out where the overflow block should go (if appropriate).
     let overflow = null;
     if (start.x != end.x) {
-      overflow = {
-        x: end.x,
-        y1: 0,
-        y2: end.y
-      };
+      overflow = { x: end.x, y1: 0, y2: end.y };
     }
 
     return {
@@ -196,25 +193,35 @@ export class BlocksRenderer {
       this._draggingBlock.cancelDrag();
     }
 
+    // Find the first block that the pointer is within (if any).
     const x = e.offsetX;
     const y = e.offsetY;
     this._draggingBlock = this._primaryBlocks.find(b => b.isWithin(x, y)) ?? null;
 
     if (this._draggingBlock != null) {
+      // Move the block to be in the center of the pointer.
       this._draggingBlock.dragTo(x, y);
 
-      const timetableClass = this._draggingBlock.timetableClass;
+      // Build the suggestion blocks for this class.
       this._suggestionBlocks = [];
+      const timetableClass = this._draggingBlock.timetableClass;
+
+      // Only show labels on the suggestion blocks if there are options with
+      // multiple blocks.
+      const showLabels = timetableClass.options.some(o => o.blocks.length > 1);
+
       timetableClass.options.forEach((o, i) => {
         this._suggestionBlocks.push(...o.blocks.map(b => {
+          // Create a suggestion block in the place of where the primary visual
+          // block would be (don't create one for the overflow).
           const mapping = this._determineVisualBlockMapping(b);
+          const label = showLabels ? (i + 1).toFixed() : null;
           return new SuggestionVisualBlock(
             this._canvas, this._gridlines, timetableClass, o, b, mapping.main.x,
-            mapping.main.y1, mapping.main.y2, (i + 1).toFixed()
+            mapping.main.y1, mapping.main.y2, label
           );
         }));
       });
-
     }
     else {
       this._suggestionBlocks = [];
@@ -230,16 +237,20 @@ export class BlocksRenderer {
    */
   onPointerUp(e: MouseEvent) {
     if (this._draggingBlock != null) {
+      // Work out if the drag ends on top of a suggestion block.
       const x = e.offsetX;
       const y = e.offsetY;
-
       const newPosition = this._suggestionBlocks.find(b => b.isWithin(x, y));
+
       if (newPosition != null) {
+        // If so, make this option the suggestion represent the new choice for
+        // this class.
         updateTimetable(getCurrentTimetable().withChoice(
           this._draggingBlock.timetableClass, newPosition.option
         ));
       }
       else {
+        // Otherwise return the dragged block back to it's former position.
         this._draggingBlock.cancelDrag();
       }
     }
@@ -254,10 +265,13 @@ export class BlocksRenderer {
    */
   onPointerMove(e: MouseEvent) {
     if (this._draggingBlock != null) {
+      // Move the block we're dragging to the new pointer location.
       const x = e.offsetX;
       const y = e.offsetY;
       this._draggingBlock.dragTo(x, y);
 
+      // Highlight the suggestion block that we're hovering over (if any), and
+      // any others that represent the same option (would have the same label).
       const hovered = this._suggestionBlocks.find(b => b.isWithin(x, y))?.option;
       this._suggestionBlocks.forEach(
         b => b.setHighlighted(hovered != null && b.option.equals(hovered))

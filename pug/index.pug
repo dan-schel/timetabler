@@ -44,10 +44,12 @@ html(lang="en")
 
         #classes
 
+        //- +status#expanded-status
+
       #collapsed-content
         include timetabler-logo-svg.pug
         +timetabler-logo("logo2").wordmark
-        p [Todo collapsed view]
+        +status#expanded-status
 
       button#mobile-expander-button
         +iconify("uil:angle-down").down
@@ -55,3 +57,6 @@ html(lang="en")
 
     #canvas-container
       canvas#canvas
+
+//- mixin status()
+//-   .status-container&attributes(attributes)

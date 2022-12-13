@@ -22,15 +22,17 @@ export class CanvasController {
     colorInk10: string,
     colorInk30: string,
     colorInk80: string,
+    colorOnAccent: string,
+    colorPaper20: string,
     classColors: {
-      "red": { gradient1: string, gradient2: string },
-      "orange": { gradient1: string, gradient2: string },
-      "yellow": { gradient1: string, gradient2: string },
-      "green": { gradient1: string, gradient2: string },
-      "cyan": { gradient1: string, gradient2: string },
-      "blue": { gradient1: string, gradient2: string },
-      "purple": { gradient1: string, gradient2: string },
-      "pink": { gradient1: string, gradient2: string }
+      "red": { gradient1: string, gradient2: string, on: string },
+      "orange": { gradient1: string, gradient2: string, on: string },
+      "yellow": { gradient1: string, gradient2: string, on: string },
+      "green": { gradient1: string, gradient2: string, on: string },
+      "cyan": { gradient1: string, gradient2: string, on: string },
+      "blue": { gradient1: string, gradient2: string, on: string },
+      "purple": { gradient1: string, gradient2: string, on: string },
+      "pink": { gradient1: string, gradient2: string, on: string }
     }
   };
 
@@ -79,38 +81,48 @@ export class CanvasController {
         colorInk10: style.getPropertyValue("--color-ink-10"),
         colorInk30: style.getPropertyValue("--color-ink-30"),
         colorInk80: style.getPropertyValue("--color-ink-80"),
+        colorOnAccent: style.getPropertyValue("--color-on-accent"),
+        colorPaper20: style.getPropertyValue("--color-paper-20"),
         classColors: {
           "red": {
             gradient1: style.getPropertyValue("--color-accent-red-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-red-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-red"),
           },
           "orange": {
             gradient1: style.getPropertyValue("--color-accent-orange-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-orange-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-orange"),
           },
           "yellow": {
             gradient1: style.getPropertyValue("--color-accent-yellow-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-yellow-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-yellow"),
           },
           "green": {
             gradient1: style.getPropertyValue("--color-accent-green-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-green-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-green"),
           },
           "cyan": {
             gradient1: style.getPropertyValue("--color-accent-cyan-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-cyan-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-cyan"),
           },
           "blue": {
             gradient1: style.getPropertyValue("--color-accent-blue-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-blue-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-blue"),
           },
           "purple": {
             gradient1: style.getPropertyValue("--color-accent-purple-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-purple-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-purple"),
           },
           "pink": {
             gradient1: style.getPropertyValue("--color-accent-pink-gradient-1"),
             gradient2: style.getPropertyValue("--color-accent-pink-gradient-2"),
+            on: style.getPropertyValue("--color-on-accent-pink"),
           },
         }
       };

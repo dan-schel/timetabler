@@ -39,7 +39,28 @@ export function drawRoundedRect(ctx: CanvasRenderingContext2D,
 }
 
 /**
- * Draws a rounded rectangle to the canvas.
+ * Draws an outlined rounded rectangle to the canvas.
+ * @param ctx The canvas context.
+ * @param x1 The x-coordinate of the top-left corner.
+ * @param y1 The y-coordinate of the top-left corner.
+ * @param x2 The x-coordinate of the bottom-right corner.
+ * @param y2 The y-coordinate of the bottom-right corner.
+ * @param radius The radius of each corner.
+ * @param strokeStyle The stroke style (color) of the rectangle.
+ */
+export function drawOutlinedRoundedRect(ctx: CanvasRenderingContext2D,
+  x1: number, y1: number, x2: number, y2: number, radius: number,
+  strokeStyle: string) {
+
+  ctx.strokeStyle = strokeStyle;
+  ctx.lineWidth = 4;
+
+  roundedRectPath(ctx, x1 + 2, y1 + 2, x2 - 2, y2 - 2, radius);
+  ctx.stroke();
+}
+
+/**
+ * Draws a rounded rectangle to the canvas filled with a gradient.
  * @param ctx The canvas context.
  * @param x1 The x-coordinate of the top-left corner.
  * @param y1 The y-coordinate of the top-left corner.
@@ -53,15 +74,47 @@ export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
   x1: number, y1: number, x2: number, y2: number, radius: number,
   color1: string, color2: string) {
 
-  const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-  gradient.addColorStop(0, color1);
-  gradient.addColorStop(1, color2);
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = rectGradient(ctx, x1, y1, x2, y2, color1, color2, 2);
 
   roundedRectPath(ctx, x1, y1, x2, y2, radius);
   ctx.fill();
 }
 
+/**
+ * Draws a rounded rectangle to the canvas outlined with a gradient and filled
+ * with color.
+ * @param ctx The canvas context.
+ * @param x1 The x-coordinate of the top-left corner.
+ * @param y1 The y-coordinate of the top-left corner.
+ * @param x2 The x-coordinate of the bottom-right corner.
+ * @param y2 The y-coordinate of the bottom-right corner.
+ * @param radius The radius of each corner.
+ * @param color1 The first color in the gradient.
+ * @param color2 The second color in the gradient.
+ * @param fillStyle The fill style (color) of the rectangle.
+ */
+export function drawOutlinedGradientRoundedRect(ctx: CanvasRenderingContext2D,
+  x1: number, y1: number, x2: number, y2: number, radius: number,
+  color1: string, color2: string, fillStyle: string) {
+
+  ctx.strokeStyle = rectGradient(ctx, x1, y1, x2, y2, color1, color2, 1);
+  ctx.lineWidth = 4;
+  ctx.fillStyle = fillStyle;
+
+  roundedRectPath(ctx, x1 + 2, y1 + 2, x2 - 2, y2 - 2, radius);
+  ctx.fill();
+  ctx.stroke();
+}
+
+/**
+ * Creates the path for a rounded rectangle.
+ * @param ctx The canvas context.
+ * @param x1 The x-coordinate of the top-left corner.
+ * @param y1 The y-coordinate of the top-left corner.
+ * @param x2 The x-coordinate of the bottom-right corner.
+ * @param y2 The y-coordinate of the bottom-right corner.
+ * @param radius The radius of each corner.
+ */
 function roundedRectPath(ctx: CanvasRenderingContext2D, x1: number, y1: number,
   x2: number, y2: number, radius: number) {
 
@@ -76,6 +129,22 @@ function roundedRectPath(ctx: CanvasRenderingContext2D, x1: number, y1: number,
   ctx.lineTo(x1, y1 + radius);
   ctx.quadraticCurveTo(x1, y1, x1 + radius, y1);
   ctx.closePath();
+}
+
+function rectGradient(ctx: CanvasRenderingContext2D, x1: number, y1: number,
+  x2: number, y2: number, color1: string, color2: string, spread: number) {
+
+  const centerX = (x1 + x2) / 2;
+  const centerY = (y1 + y2) / 2;
+  const size = Math.max(x2 - x1, y2 - y1);
+
+  const gradient = ctx.createLinearGradient(
+    centerX - size * 0.5 * spread, centerY - size * 0.5 * spread,
+    centerX + size * 0.5 * spread, centerY + size * 0.5 * spread
+  );
+  gradient.addColorStop(0, color1);
+  gradient.addColorStop(1, color2);
+  return gradient;
 }
 
 /**
