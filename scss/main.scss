@@ -3,101 +3,105 @@
 
 @include template.init(
   $custom-colors: (
-    "accent-red-gradient-1": (
+    "red-gradient-1": (
       "light": #ff3500,
       "dark": #ff3500,
     ),
-    "accent-red-gradient-2": (
+    "red-gradient-2": (
       "light": #dc0057,
       "dark": #dc0057,
     ),
-    "on-accent-red": (
+    "on-red": (
       "light": #ffffff,
       "dark": #ffffff,
     ),
-    "accent-orange-gradient-1": (
+    "orange-gradient-1": (
       "light": #ffa000,
       "dark": #ffa000,
     ),
-    "accent-orange-gradient-2": (
+    "orange-gradient-2": (
       "light": #dc4200,
       "dark": #dc4200,
     ),
-    "on-accent-orange": (
+    "on-orange": (
       "light": #ffffff,
       "dark": #ffffff,
     ),
-    "accent-yellow-gradient-1": (
+    "yellow-gradient-1": (
       "light": #e8e500,
       "dark": #e8e500,
     ),
-    "accent-yellow-gradient-2": (
+    "yellow-gradient-2": (
       "light": #fea400,
       "dark": #fea400,
     ),
-    "on-accent-yellow": (
+    "on-yellow": (
       "light": #000000,
       "dark": #000000,
     ),
-    "accent-green-gradient-1": (
+    "green-gradient-1": (
       "light": #88db00,
       "dark": #88db00,
     ),
-    "accent-green-gradient-2": (
+    "green-gradient-2": (
       "light": #00a517,
       "dark": #00a517,
     ),
-    "on-accent-green": (
+    "on-green": (
       "light": #ffffff,
       "dark": #ffffff,
     ),
-    "accent-cyan-gradient-1": (
+    "cyan-gradient-1": (
       "light": #00ffa4,
       "dark": #00ffa4,
     ),
-    "accent-cyan-gradient-2": (
+    "cyan-gradient-2": (
       "light": #00c4c8,
       "dark": #00c4c8,
     ),
-    "on-accent-cyan": (
+    "on-cyan": (
       "light": #000000,
       "dark": #000000,
     ),
-    "accent-blue-gradient-1": (
+    "blue-gradient-1": (
       "light": #00b0ff,
       "dark": #00b0ff,
     ),
-    "accent-blue-gradient-2": (
+    "blue-gradient-2": (
       "light": #005ae4,
       "dark": #005ae4,
     ),
-    "on-accent-blue": (
+    "on-blue": (
       "light": #ffffff,
       "dark": #ffffff,
     ),
-    "accent-purple-gradient-1": (
+    "purple-gradient-1": (
       "light": #a900ff,
       "dark": #a900ff,
     ),
-    "accent-purple-gradient-2": (
+    "purple-gradient-2": (
       "light": #5c00e4,
       "dark": #5c00e4,
     ),
-    "on-accent-purple": (
+    "on-purple": (
       "light": #ffffff,
       "dark": #ffffff,
     ),
-    "accent-pink-gradient-1": (
+    "pink-gradient-1": (
       "light": #ff0098,
       "dark": #ff0098,
     ),
-    "accent-pink-gradient-2": (
+    "pink-gradient-2": (
       "light": #b600e4,
       "dark": #b600e4,
     ),
-    "on-accent-pink": (
+    "on-pink": (
       "light": #ffffff,
       "dark": #ffffff,
+    ),
+    "error": (
+      "light": #dc0f0f,
+      "dark": #ff5252,
     ),
   )
 );
@@ -203,10 +207,12 @@ body {
   }
 }
 @media screen and (max-width: 42.999rem) {
+  $collapsed-controls-height: 8.5rem;
+
   body {
     position: relative;
     #controls {
-      @include controls.controls-mobile;
+      @include controls.controls-mobile($collapsed-controls-height);
       position: absolute;
       left: 0.5rem;
       right: 0.5rem;
@@ -215,7 +221,7 @@ body {
     }
     #canvas-container {
       position: absolute;
-      top: 10rem;
+      top: $collapsed-controls-height + 1rem;
       left: 0.5rem;
       right: 0.5rem;
       bottom: 0.5rem;

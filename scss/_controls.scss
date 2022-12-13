@@ -18,11 +18,21 @@
     align-self: center;
     width: 10rem;
     height: auto;
-    margin-bottom: 1.5rem;
     margin-top: 0.5rem;
   }
 
   #expanded-content {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    flex-shrink: 1;
+    min-height: 0;
+    position: relative;
+    .wordmark {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  #expanded-scroller {
     padding: 1rem;
     overflow-y: auto;
     flex-shrink: 1;
@@ -30,6 +40,9 @@
 
   #collapsed-content {
     padding: 1rem;
+    .wordmark {
+      margin-bottom: 1rem;
+    }
   }
 
   #header-row {
@@ -114,6 +127,50 @@
     }
   }
 
+  .status-container {
+    @include template.row;
+    gap: 0.75rem;
+
+    .iconify {
+      font-size: 1.2rem;
+    }
+
+    &.error {
+      .no-error-icon {
+        @include template.gone;
+      }
+    }
+    &:not(.error) {
+      .error-icon {
+        @include template.gone;
+      }
+    }
+  }
+
+  #expanded-status {
+    background-color: var(--color-paper-10);
+    padding: 0.75rem 1rem;
+
+    &.error {
+      background-color: var(--color-error);
+      p,
+      .iconify {
+        color: var(--color-on-accent);
+      }
+    }
+  }
+  #collapsed-status {
+    &.error {
+      p,
+      .iconify {
+        color: var(--color-error);
+      }
+      p {
+        font-weight: bold;
+      }
+    }
+  }
+
   #mobile-expander-button {
     @include template.button-hover;
     @include template.content-text-icon;
@@ -124,11 +181,11 @@
   }
 }
 
-@mixin controls-mobile {
+@mixin controls-mobile($collapsed-controls-height) {
   grid-template-rows: 1fr 2rem;
 
   &.collapsed {
-    height: 9rem;
+    height: $collapsed-controls-height;
     #mobile-expander-button .up {
       @include template.gone;
     }
