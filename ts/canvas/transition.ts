@@ -14,7 +14,7 @@ export class Transition {
   private readonly _canvas: CanvasController;
 
   /** The final value once the animation is complete. */
-  private _target: number;
+  target: number;
 
   /** The duration of each created animation. */
   readonly duration: number;
@@ -41,7 +41,7 @@ export class Transition {
     easing?: EasingFunction) {
 
     this._canvas = canvas;
-    this._target = startValue;
+    this.target = startValue;
     this.duration = duration;
     this._animation = null;
     this._from = 0;
@@ -56,7 +56,7 @@ export class Transition {
    * True by default (will not restart animation).
    */
   animateTo(value: number, ignoreIfSameTarget?: boolean) {
-    if (this._target == value && ignoreIfSameTarget != false) { return; }
+    if (this.target == value && ignoreIfSameTarget != false) { return; }
 
     this._from = this.value();
 
@@ -64,7 +64,7 @@ export class Transition {
       this._canvas.cancelAnimation(this._animation);
     }
 
-    this._target = value;
+    this.target = value;
     this._animation = new LerpAnimation(this.duration, 0);
     this._canvas.startAnimation(this._animation);
   }
@@ -80,17 +80,17 @@ export class Transition {
     }
 
     this._animation = null;
-    this._target = value;
+    this.target = value;
   }
 
   /** Returns the animating/animated value. */
   value(): number {
     if (this._animation == null || this._animation.isDone()) {
-      return this._target;
+      return this.target;
     }
 
     const value = this._easing(this._animation.value());
-    return map(value, 0, 1, this._from, this._target);
+    return map(value, 0, 1, this._from, this.target);
   }
 }
 

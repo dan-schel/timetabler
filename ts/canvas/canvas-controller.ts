@@ -120,6 +120,16 @@ export class CanvasController {
     this._animations = [];
 
     this._renderer = new TimetableRenderer(this);
+
+    this._html.canvas.addEventListener("mousedown",
+      (e) => this._renderer.onMouseDown(e)
+    );
+    this._html.canvas.addEventListener("mouseup",
+      (e) => this._renderer.onMouseUp(e)
+    );
+    this._html.canvas.addEventListener("mousemove",
+      (e) => this._renderer.onMouseMove(e)
+    );
   }
 
   /**

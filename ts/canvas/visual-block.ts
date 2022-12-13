@@ -61,16 +61,19 @@ export abstract class VisualBlock {
   }
 }
 
-/** The primary visual block (not the ghost) for a timetable block. */
+/** The primary visual block (not the overflow block) for a timetable block. */
 export class PrimaryVisualBlock extends VisualBlock {
   /** The current value of the animating x-coordinate (day of week). */
-  xTransition: Transition;
+  private xTransition: Transition;
 
   /** The current value of the animating y1-coordinate (start time). */
-  y1Transition: Transition;
+  private y1Transition: Transition;
 
   /** The current value of the animating y2-coordinate (end time). */
-  y2Transition: Transition;
+  private y2Transition: Transition;
+
+  /** Override coords used when dragging. Null if not being dragged. */
+  private _dragCoords: { x: number, y1: number, y2: number } | null;
 
   /**
    * Creates a {@link PrimaryVisualBlock}.
@@ -97,16 +100,20 @@ export class PrimaryVisualBlock extends VisualBlock {
     this.y2Transition = new Transition(
       this._canvas, initialY2, blockTransitionDuration, blockTransitionEasing
     );
+    this._dragCoords = null;
   }
 
   /**
-   * Animates the visual block moving to a new location.
+   * Animates the visual block moving to a new location. Clears any drag
+   * coordinates being used.
    * @param newBlock The new timetable block being drawn for.
    * @param newX The new x-coordinate (day of week).
    * @param newY1 The new y1-coordinate (start time).
    * @param newY2 The new y2-coordinate (end time).
    */
-  moveTo(newBlock: TimetableBlock, newX: number, newY1: number, newY2: number) {
+  animateTo(newBlock: TimetableBlock, newX: number, newY1: number, newY2: number) {
+    this._dragCoords = null;
+
     this.timetableBlock = newBlock;
     this.xTransition.animateTo(newX);
     this.y1Transition.animateTo(newY1);
@@ -114,14 +121,55 @@ export class PrimaryVisualBlock extends VisualBlock {
   }
 
   /**
+   * Assigns drag coordinates using the given canvas coordinates (in pixels).
+   * @param canvasX The x coordinate on the canvas (in pixels).
+   * @param canvasY The y coordinate on the canvas (in pixels).
+   */
+  dragTo(canvasX: number, canvasY: number) {
+    const {
+      x1: gridX1, y1: gridY1, dayWidth, hourHeight
+    } = this._gridlines.gridDimensions();
+
+    const duration = this.y2Transition.target - this.y1Transition.target;
+
+    this._dragCoords = {
+      x: (canvasX - gridX1) / dayWidth - 0.5,
+      y1: (canvasY - gridY1) / hourHeight - duration / 2,
+      y2: (canvasY - gridY1) / hourHeight + duration / 2,
+    };
+
+    this._canvas.draw(true);
+  }
+
+  /** Clear the drag coordinates. Animate back to former position. */
+  cancelDrag() {
+    if (this._dragCoords == null) { return; }
+
+    const oldX = this.xTransition.target;
+    this.xTransition.jumpTo(this._dragCoords.x);
+    this.xTransition.animateTo(oldX);
+
+    const oldY1 = this.y1Transition.target;
+    this.y1Transition.jumpTo(this._dragCoords.y1);
+    this.y1Transition.animateTo(oldY1);
+
+    const oldY2 = this.y2Transition.target;
+    this.y2Transition.jumpTo(this._dragCoords.y2);
+    this.y2Transition.animateTo(oldY2);
+
+    this._dragCoords = null;
+  }
+
+  /**
    * Draws the visual block.
    * @param ctx The canvas context.
    */
   draw(ctx: CanvasRenderingContext2D) {
-    const { blockX1, blockY1, blockX2, blockY2 } = this.dimensions(
-      this.xTransition.value(), this.y1Transition.value(),
-      this.y2Transition.value()
-    );
+    const x = this._dragCoords?.x ?? this.xTransition.value();
+    const y1 = this._dragCoords?.y1 ?? this.y1Transition.value();
+    const y2 = this._dragCoords?.y2 ?? this.y2Transition.value();
+
+    const { blockX1, blockY1, blockX2, blockY2 } = this.dimensions(x, y1, y2);
     const colors = this._canvas.css.classColors[this.timetableClass.color];
 
     drawGradientRoundedRect(
@@ -129,10 +177,25 @@ export class PrimaryVisualBlock extends VisualBlock {
       colors.gradient2
     );
   }
+
+  /**
+   * Returns true if the given coordinates lie inside this visual block.
+   * @param x The x coordinate.
+   * @param y The y coordinate.
+   */
+  isWithin(x: number, y: number) {
+    // Ignore animations, use target values.
+    const { blockX1, blockY1, blockX2, blockY2 } = this.dimensions(
+      this.xTransition.target, this.y1Transition.target,
+      this.y2Transition.target
+    );
+
+    return x >= blockX1 && x <= blockX2 && y >= blockY1 && y <= blockY2;
+  }
 }
 
-/** The primary visual block (not the ghost) for a timetable block. */
-export class GhostVisualBlock extends VisualBlock {
+/** The overflow visual block (appears on next day) for a timetable block. */
+export class OverflowVisualBlock extends VisualBlock {
   /** The x-coordinate (day of week). */
   readonly x: number;
 
@@ -143,7 +206,7 @@ export class GhostVisualBlock extends VisualBlock {
   readonly y2: number;
 
   /**
-   * Creates a {@link GhostVisualBlock}.
+   * Creates a {@link OverflowVisualBlock}.
    * @param canvas The canvas to draw to.
    * @param gridlines The gridlines renderer to retrieve grid dimensions from.
    * @param timetableClass The class this block is for.

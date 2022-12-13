@@ -3,7 +3,7 @@ import { TimetableChoices } from "../timetable/timetable-choices";
 import { TimetableClass } from "../timetable/timetable-class";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
-import { GhostVisualBlock, PrimaryVisualBlock } from "./visual-block";
+import { OverflowVisualBlock, PrimaryVisualBlock } from "./visual-block";
 
 /** Instructions for which visual blocks need to be created for a block. */
 export type VisualBlockMapping = {
@@ -11,7 +11,7 @@ export type VisualBlockMapping = {
   main: {
     x: number, y1: number, y2: number
   },
-  ghost: {
+  overflow: {
     x: number, y1: number, y2: number
   } | null
 };
@@ -27,8 +27,11 @@ export class BlocksRenderer {
   /** The primary visual blocks for each class. */
   private readonly _primaryBlocks: PrimaryVisualBlock[];
 
-  /** The ghost visual blocks for each class (if appropriate). */
-  private readonly _ghostBlocks: GhostVisualBlock[];
+  /** The overflow visual blocks for each class (if appropriate). */
+  private readonly _overflowBlocks: OverflowVisualBlock[];
+
+  /** The block currently being dragged (if any). */
+  private _draggingBlock: PrimaryVisualBlock | null;
 
   /**
    * Creates a {@link BlocksRenderer}.
@@ -39,7 +42,8 @@ export class BlocksRenderer {
     this._canvas = canvas;
     this._gridlines = gridlines;
     this._primaryBlocks = [];
-    this._ghostBlocks = [];
+    this._overflowBlocks = [];
+    this._draggingBlock = null;
   }
 
   /**
@@ -64,16 +68,17 @@ export class BlocksRenderer {
         // Should never happen.
         if (startLocation == null || endLocation == null) { throw new Error(); }
 
-        // If the start and end columns are different, then a ghost block will
-        // be required. Work out where the end of the first block should go.
+        // If the start and end columns are different, then an overflow block
+        // will be required. Work out where the end of the first block should
+        // go.
         const firstBlockEnd = startLocation.x == endLocation.x
           ? endLocation.y
           : this._gridlines.endHour - this._gridlines.startHour;
 
-        // Work out where the ghost block should go (if appropriate).
-        let ghost = null;
+        // Work out where the overflow block should go (if appropriate).
+        let overflow = null;
         if (startLocation.x != endLocation.x) {
-          ghost = {
+          overflow = {
             x: endLocation.x,
             y1: 0,
             y2: endLocation.y
@@ -83,20 +88,20 @@ export class BlocksRenderer {
         return {
           block: b,
           main: { x: startLocation.x, y1: startLocation.y, y2: firstBlockEnd },
-          ghost: ghost
+          overflow: overflow
         };
       });
 
       // Animate/create/destroy the primary blocks for these new coordinates.
       this.animatePrimaryBlocks(timetableClass, newCoordinates);
 
-      // Create ghost blocks from coordinates. Todo: animate in/out.
-      this._ghostBlocks.splice(0, this._ghostBlocks.length);
+      // Create overflow blocks from coordinates. Todo: animate in/out.
+      this._overflowBlocks.splice(0, this._overflowBlocks.length);
       newCoordinates.forEach(b => {
-        if (b.ghost != null) {
-          this._ghostBlocks.push(new GhostVisualBlock(
+        if (b.overflow != null) {
+          this._overflowBlocks.push(new OverflowVisualBlock(
             this._canvas, this._gridlines, timetableClass, b.block,
-            b.ghost.x, b.ghost.y1, b.ghost.y2
+            b.overflow.x, b.overflow.y1, b.overflow.y2
           ));
         }
       });
@@ -122,7 +127,7 @@ export class BlocksRenderer {
         // If there are enough new coordinates that this block can be
         // repurposed, then animate it to a new location.
         const coordinates = newCoordinates[i];
-        b.moveTo(
+        b.animateTo(
           coordinates.block, coordinates.main.x, coordinates.main.y1,
           coordinates.main.y2
         );
@@ -154,6 +159,40 @@ export class BlocksRenderer {
    */
   draw(ctx: CanvasRenderingContext2D) {
     this._primaryBlocks.forEach(b => b.draw(ctx));
-    this._ghostBlocks.forEach(b => b.draw(ctx));
+    this._overflowBlocks.forEach(b => b.draw(ctx));
+  }
+
+  /**
+   * Called when the mouse is pressed on the canvas.
+   * @param e The event details.
+   */
+  onMouseDown(e: MouseEvent) {
+    const x = e.offsetX;
+    const y = e.offsetY;
+    this._draggingBlock = this._primaryBlocks.find(b => b.isWithin(x, y)) ?? null;
+  }
+
+  /**
+   * Called when the mouse is released on the canvas.
+   * @param e The event details.
+   */
+  onMouseUp(_e: MouseEvent) {
+    if (this._draggingBlock != null) {
+      this._draggingBlock.cancelDrag();
+    }
+
+    this._draggingBlock = null;
+  }
+
+  /**
+   * Called when the mouse moves on the canvas.
+   * @param e The event details.
+   */
+  onMouseMove(e: MouseEvent) {
+    if (this._draggingBlock != null) {
+      const x = e.offsetX;
+      const y = e.offsetY;
+      this._draggingBlock.dragTo(x, y);
+    }
   }
 }

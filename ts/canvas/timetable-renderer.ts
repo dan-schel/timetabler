@@ -48,4 +48,28 @@ export class TimetableRenderer {
     this._gridlines.draw(ctx);
     this._blocks.draw(ctx);
   }
+
+  /**
+   * Called when the mouse is pressed on the canvas.
+   * @param e The event details.
+   */
+  onMouseDown(e: MouseEvent) {
+    this._blocks.onMouseDown(e);
+  }
+
+  /**
+   * Called when the mouse is released on the canvas.
+   * @param e The event details.
+   */
+  onMouseUp(e: MouseEvent) {
+    this._blocks.onMouseUp(e);
+  }
+
+  /**
+   * Called when the mouse moves on the canvas.
+   * @param e The event details.
+   */
+  onMouseMove(e: MouseEvent) {
+    this._blocks.onMouseMove(e);
+  }
 }
