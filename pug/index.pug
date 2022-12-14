@@ -16,7 +16,7 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Timetabler &ndash; Visualise your uni timetable preferences
-    meta(name="description", content="A tool to help choose options on a timetable where there might be multiple classes running! Allows you to quickly select different time slots and checks for clashes for you as you go.")
+    meta(name="description", content="A tool to help choose options on a timetable where there might be multiple classes running! Allows you to select different preferences and checks for clashes for you as you go.")
     link(rel="shortcut icon", href="/favicon.svg", type="image/x-icon")
     link(rel="stylesheet", href="/main.css")
     script(src="/main.js", defer)
@@ -37,15 +37,18 @@ html(lang="en")
               +iconify("uil:export")
               p EXPORT
 
-          button#add-class-button
-            +iconify("uil:plus")
-            p Add class
+          //- button#add-class-button
+          //-   +iconify("uil:plus")
+          //-   p Add class
 
           #expanded-empty-message
             p
               | Start by adding your classes, which will then show up here.
+
+            //- When add class UI finished, change this to start with:
+            //- "If you prefer, ..."
             p
-              | If you'd prefer, you can provide your classes by writing a .json
+              | You can provide your classes by writing a .json
               | file and clicking "import" above. An
               | <a class="link" href="/example.json" download>example .json file</a>
               | and

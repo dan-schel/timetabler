@@ -15,7 +15,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of the subject"
+            "description": "The name of the class"
           },
           "type": {
             "type": "string",
@@ -37,19 +37,19 @@
           },
           "options": {
             "type": "array",
-            "description": "An array containing each possible scheduling option. Can contain strings, or arrays of strings if multiple time slots come as a group. Strings must be in the format 'day time duration [online?]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'.",
+            "description": "An array containing each possible scheduling option/preference. Can contain strings, or arrays of strings if multiple time blocks come as a group. Strings must be in the format '<day> <time> <duration> [online]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'.",
             "items": {
               "anyOf": [
                 {
                   "type": "string",
-                  "description": "Details about this time option. Strings must be in the format 'day time duration [online?]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'."
+                  "description": "Details about this time option. Strings must be in the format '<day> <time> <duration> [online]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'."
                 },
                 {
                   "type": "array",
-                  "description": "An array containing each slot in this group. Strings must be in the format 'day time duration [online?]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'.",
+                  "description": "An array containing each block in this group. Strings must be in the format '<day> <time> <duration> [online]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'.",
                   "items": {
                     "type": "string",
-                    "description": "Details about this time slot in this group. Strings must be in the format 'day time duration [online?]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'."
+                    "description": "Details about this time block in this group. Strings must be in the format '<day> <time> <duration> [online]', e.g. 'mon 13:00 2h' or 'fri 8pm 90m online'."
                   },
                   "minItems": 1
                 }
@@ -59,7 +59,7 @@
           },
           "optional": {
             "type": "boolean",
-            "description": "True, if not adding the class to the timetable is an option. Defaults to false if not provided."
+            "description": "True, if this class isn't required to be on the timetable for it to be considered valid. Defaults to false if not provided."
           }
         },
         "required": [
