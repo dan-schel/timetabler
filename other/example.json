@@ -10,7 +10,8 @@
         "mon 13:00 2h online",
         "tue 14:30 2h",
         "fri 08:00 2h"
-      ]
+      ],
+      "optional": true
     },
     {
       "name": "Advanced Tin Opening",
@@ -22,8 +23,8 @@
           "fri 09:30 90m"
         ],
         [
-          "thu 12:00 30m",
-          "fri 14:00 90m"
+          "thu 12:00 30m online",
+          "fri 14:00 90m online"
         ],
         [
           "sat 10:00 30m",

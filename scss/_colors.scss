@@ -1,4 +1,12 @@
 $custom-colors: (
+  "red": (
+    "light": #ed1a2c,
+    "dark": #ed1a2c,
+  ),
+  "on-red": (
+    "light": #ffffff,
+    "dark": #ffffff,
+  ),
   "red-gradient-1": (
     "light": #ff3500,
     "dark": #ff3500,
@@ -7,7 +15,11 @@ $custom-colors: (
     "light": #dc0057,
     "dark": #dc0057,
   ),
-  "on-red": (
+  "orange": (
+    "light": #ee7100,
+    "dark": #ee7100,
+  ),
+  "on-orange": (
     "light": #ffffff,
     "dark": #ffffff,
   ),
@@ -19,9 +31,13 @@ $custom-colors: (
     "light": #dc4200,
     "dark": #dc4200,
   ),
-  "on-orange": (
-    "light": #ffffff,
-    "dark": #ffffff,
+  "yellow": (
+    "light": #f3c500,
+    "dark": #f3c500,
+  ),
+  "on-yellow": (
+    "light": #000000,
+    "dark": #000000,
   ),
   "yellow-gradient-1": (
     "light": #e8e500,
@@ -31,9 +47,13 @@ $custom-colors: (
     "light": #fea400,
     "dark": #fea400,
   ),
-  "on-yellow": (
-    "light": #000000,
-    "dark": #000000,
+  "green": (
+    "light": #47c10b,
+    "dark": #47c10b,
+  ),
+  "on-green": (
+    "light": #ffffff,
+    "dark": #ffffff,
   ),
   "green-gradient-1": (
     "light": #88db00,
@@ -43,9 +63,13 @@ $custom-colors: (
     "light": #00a517,
     "dark": #00a517,
   ),
-  "on-green": (
-    "light": #ffffff,
-    "dark": #ffffff,
+  "cyan": (
+    "light": #00e2b6,
+    "dark": #00e2b6,
+  ),
+  "on-cyan": (
+    "light": #000000,
+    "dark": #000000,
   ),
   "cyan-gradient-1": (
     "light": #00ffa4,
@@ -55,9 +79,13 @@ $custom-colors: (
     "light": #00c4c8,
     "dark": #00c4c8,
   ),
-  "on-cyan": (
-    "light": #000000,
-    "dark": #000000,
+  "blue": (
+    "light": #0084f1,
+    "dark": #0084f1,
+  ),
+  "on-blue": (
+    "light": #ffffff,
+    "dark": #ffffff,
   ),
   "blue-gradient-1": (
     "light": #00b0ff,
@@ -67,7 +95,11 @@ $custom-colors: (
     "light": #005ae4,
     "dark": #005ae4,
   ),
-  "on-blue": (
+  "purple": (
+    "light": #8200f1,
+    "dark": #8200f1,
+  ),
+  "on-purple": (
     "light": #ffffff,
     "dark": #ffffff,
   ),
@@ -79,7 +111,11 @@ $custom-colors: (
     "light": #5c00e4,
     "dark": #5c00e4,
   ),
-  "on-purple": (
+  "pink": (
+    "light": #db00be,
+    "dark": #db00be,
+  ),
+  "on-pink": (
     "light": #ffffff,
     "dark": #ffffff,
   ),
@@ -91,12 +127,51 @@ $custom-colors: (
     "light": #b600e4,
     "dark": #b600e4,
   ),
-  "on-pink": (
-    "light": #ffffff,
-    "dark": #ffffff,
-  ),
   "error": (
     "light": #dc0f0f,
     "dark": #ff5252,
   ),
 );
+
+@mixin css-classes {
+  &.accent-red,
+  .accent-red {
+    --color-accent: var(--color-red);
+    --color-on-accent: var(--color-on-red);
+  }
+  &.accent-orange,
+  .accent-orange {
+    --color-accent: var(--color-orange);
+    --color-on-accent: var(--color-on-orange);
+  }
+  &.accent-yellow,
+  .accent-yellow {
+    --color-accent: var(--color-yellow);
+    --color-on-accent: var(--color-on-yellow);
+  }
+  &.accent-green,
+  .accent-green {
+    --color-accent: var(--color-green);
+    --color-on-accent: var(--color-on-green);
+  }
+  &.accent-cyan,
+  .accent-cyan {
+    --color-accent: var(--color-cyan);
+    --color-on-accent: var(--color-on-cyan);
+  }
+  &.accent-blue,
+  .accent-blue {
+    --color-accent: var(--color-blue);
+    --color-on-accent: var(--color-on-blue);
+  }
+  &.accent-purple,
+  .accent-purple {
+    --color-accent: var(--color-purple);
+    --color-on-accent: var(--color-on-purple);
+  }
+  &.accent-pink,
+  .accent-pink {
+    --color-accent: var(--color-pink);
+    --color-on-accent: var(--color-on-pink);
+  }
+}

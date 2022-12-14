@@ -79,6 +79,11 @@ export class ClassUIController {
     // The class name label (wrapped in a one-line).
     const $type = document.createElement("h4");
     $type.textContent = classData.type.toUpperCase();
+
+    if (classData.optional) {
+      $type.textContent += " - OPTIONAL";
+    }
+
     const $typeOL = document.createElement("div");
     $typeOL.className = "one-line";
     $typeOL.append($type);
@@ -139,7 +144,7 @@ export class ClassUIController {
 
     // The parent div.
     const $div = document.createElement("div");
-    $div.className = "class";
+    $div.classList.add("class", `accent-${classData.color}`);
     $div.append($nameOL, $typeOL, $options);
 
     const optionRadios = optionUIs.map(o => {
