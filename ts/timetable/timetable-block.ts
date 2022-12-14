@@ -138,4 +138,49 @@ export class TimetableBlock {
     const onlineSuffix = this.online ? " online" : "";
     return `${dow} ${this.startTime.to12HString()}${onlineSuffix}`;
   }
+
+  /**
+   * Returns true if the given timetable block occurs in overlapping time to
+   * this one.
+   * @param other The block to check against.
+   */
+  clashesWith(other: TimetableBlock): boolean {
+    // They don't overlap if one starts before the other ends.
+    const rangesOverlap =
+      (aStart: number, aEnd: number, bStart: number, bEnd: number) =>
+        !(aEnd <= bStart || bEnd <= aStart);
+
+    if (this.dayOfWeek.equals(other.dayOfWeek)) {
+      return rangesOverlap(
+        this.startTime.minuteOfDay,
+        this.endTime.minuteOfDay,
+        other.startTime.minuteOfDay,
+        other.endTime.minuteOfDay
+      );
+    }
+    if (this.dayOfWeek.equals(other.dayOfWeek.yesterday())) {
+      // If this class is the day before, then from it's point of view the other
+      // class's times happen 60 * 24 minutes in the future.
+      return rangesOverlap(
+        this.startTime.minuteOfDay,
+        this.endTime.minuteOfDay,
+        other.startTime.minuteOfDay + 60 * 24,
+        other.endTime.minuteOfDay + 60 * 24
+      );
+    }
+    if (this.dayOfWeek.equals(other.dayOfWeek.tomorrow())) {
+      // If this class is the day after, then from the other one's point of view
+      // the this class's times happen 60 * 24 minutes in the future.
+      return rangesOverlap(
+        this.startTime.minuteOfDay + 60 * 24,
+        this.endTime.minuteOfDay + 60 * 24,
+        other.startTime.minuteOfDay,
+        other.endTime.minuteOfDay
+      );
+    }
+
+    // A block can only cross one day border at most, so by this point they
+    // definitely don't clash.
+    return false;
+  }
 }

@@ -12,7 +12,8 @@ const html = {
   mobileExpanderButton: finder.button("mobile-expander-button"),
   importButton: finder.button("import-button"),
   exportButton: finder.button("export-button"),
-  classes: finder.div("classes")
+  classes: finder.div("classes"),
+  statusContainerClass: "status-container"
 };
 
 // Used by other files to refer to the above html object.

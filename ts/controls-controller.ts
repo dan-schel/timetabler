@@ -68,6 +68,18 @@ export class ControlsController {
       classUI.select(ch.option);
     });
 
+    // Update the statuses (the expanded one and the collapsed one).
+    const selector = `.${this._html.statusContainerClass}`;
+    document.querySelectorAll(selector).forEach(e => {
+      const hasClashes = timetable.clashingBlocks().length > 0;
+      const hasUnallocated = timetable.unallocatedMandatoryClasses().length > 0;
+
+      // Only add the .unallocated class if there are no clashes (they take
+      // priority).
+      e.classList.toggle("clash", hasClashes);
+      e.classList.toggle("unallocated", hasUnallocated && !hasClashes);
+    });
+
     this._prevTimetable = timetable;
   }
 }

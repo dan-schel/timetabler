@@ -8,13 +8,18 @@
     font-size: 1.2rem;
   }
 
-  &.error {
-    .no-error-icon {
+  &.clash {
+    > :not(.when-clash) {
       @include template.gone;
     }
   }
-  &:not(.error) {
-    .error-icon {
+  &.unallocated {
+    > :not(.when-unallocated) {
+      @include template.gone;
+    }
+  }
+  &:not(.clash):not(.unallocated) {
+    > :not(.when-valid) {
       @include template.gone;
     }
   }
@@ -25,7 +30,9 @@
   background-color: var(--color-paper-10);
   padding: 0.75rem 1rem;
 
-  &.error {
+  border-top: 1px solid var(--color-ink-10);
+
+  &.clash {
     background-color: var(--color-error);
     p,
     .iconify {
@@ -34,9 +41,14 @@
   }
 }
 
+@mixin expanded-mobile {
+  border-bottom: 1px solid var(--color-ink-10);
+}
+
 @mixin collapsed {
   @include common;
-  &.error {
+
+  &.clash {
     p,
     .iconify {
       color: var(--color-error);

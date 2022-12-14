@@ -1,9 +1,13 @@
 import { areUnique, arraysMatch } from "schel-d-utils";
 import { z } from "zod";
 import { Timetable, version } from "./timetable";
+import { TimetableBlock } from "./timetable-block";
 import { TimetableClass } from "./timetable-class";
 import { TimetableError } from "./timetable-error";
 import { TimetableOption } from "./timetable-option";
+
+/** A mapping between a block and a choice. */
+export type ClashingBlock = { block: TimetableBlock, choice: TimetableChoice };
 
 /**
  * Stores the timetable as well as the currently selected choices for each class
@@ -133,6 +137,44 @@ export class TimetableChoices {
     });
 
     return new TimetableChoices(this.timetable, choices);
+  }
+
+  /** Returns a list of all blocks that are part of clashes. */
+  clashingBlocks(): ClashingBlock[] {
+    const result: ClashingBlock[] = [];
+
+    this.choices.forEach(ch => {
+      // It can't clash if nothing's been chosen.
+      if (ch.option == null) { return; }
+
+      // Work out which blocks from this class clash with other choices.
+      const clashingBlocks = ch.option.blocks.filter(b =>
+        this.choices.some(other => {
+          // We only want to compare with other choices in the list (so skip
+          // this one) that have options chosen (so skip nulls).
+          if (other == ch || other.option == null) { return false; }
+
+          // If any block from this choice clashes this block, it's a clash.
+          return other.option.blocks.some(otherB => otherB.clashesWith(b));
+        })
+      );
+
+      clashingBlocks.forEach(b => {
+        result.push({ block: b, choice: ch });
+      });
+    });
+
+    return result;
+  }
+
+  /**
+   * Returns a list of all classes that aren't optional, but have no option
+   * chosen.
+   */
+  unallocatedMandatoryClasses(): TimetableClass[] {
+    return this.choices
+      .filter(x => !x.timetableClass.optional && x.option == null)
+      .map(x => x.timetableClass);
   }
 }
 

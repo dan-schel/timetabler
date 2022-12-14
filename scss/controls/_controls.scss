@@ -92,6 +92,10 @@
       @include template.gone;
     }
   }
+
+  #expanded-content {
+    @include expanded.mobile;
+  }
 }
 
 // Applied by media query when the screen is wide enough.

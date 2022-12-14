@@ -1,10 +1,13 @@
 include iconify.pug
 
 mixin status()
-  .status-container.error&attributes(attributes)
-    +iconify("uil:check").no-error-icon
-    +iconify("uil:exclamation-circle").error-icon
-    p Some classes clash
+  .status-container&attributes(attributes)
+    +iconify("uil:check").when-valid
+    p.when-valid No timetable clashes
+    +iconify("uil:eye-slash").when-unallocated
+    p.when-unallocated Some classes unallocated
+    +iconify("uil:exclamation-circle").when-clash
+    p.when-clash Some choices clash
 
 doctype html
 html(lang="en")
