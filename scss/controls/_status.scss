@@ -1,0 +1,60 @@
+@use "../css-template/import" as template;
+
+@mixin common {
+  @include template.row;
+  gap: 0.75rem;
+
+  .iconify {
+    font-size: 1.2rem;
+  }
+
+  &.clash {
+    > :not(.when-clash) {
+      @include template.gone;
+    }
+  }
+  &.unallocated {
+    > :not(.when-unallocated) {
+      @include template.gone;
+    }
+  }
+  &:not(.clash):not(.unallocated) {
+    > :not(.when-valid) {
+      @include template.gone;
+    }
+  }
+}
+
+@mixin expanded {
+  @include common;
+  background-color: var(--color-paper-10);
+  padding: 0.75rem 1rem;
+
+  border-top: 1px solid var(--color-ink-10);
+
+  &.clash {
+    background-color: var(--color-error);
+    p,
+    .iconify {
+      color: var(--color-on-accent);
+    }
+  }
+}
+
+@mixin expanded-mobile {
+  border-bottom: 1px solid var(--color-ink-10);
+}
+
+@mixin collapsed {
+  @include common;
+
+  &.clash {
+    p,
+    .iconify {
+      color: var(--color-error);
+    }
+    p {
+      font-weight: bold;
+    }
+  }
+}

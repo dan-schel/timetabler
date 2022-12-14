@@ -1,0 +1,41 @@
+@use "../css-template/import" as template;
+@use "status";
+@use "wordmark";
+
+@mixin main {
+  padding: 1rem;
+
+  // Ensures the collapsed content doesn't exceed the length the #controls div
+  // assigns it if the content is too large.
+  min-height: 0;
+
+  .wordmark {
+    @include wordmark.main;
+    align-self: center;
+    margin-top: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  #collapsed-empty-message {
+    text-align: center;
+  }
+
+  #collapsed-status {
+    @include status.collapsed;
+  }
+}
+
+// Applied when the ".non-empty" class is applied to the "#controls".
+@mixin non-empty {
+  // Hide the intro message when there's class to display there instead.
+  #collapsed-empty-message {
+    @include template.gone;
+  }
+}
+
+// Applied when the ".non-empty" class is NOT applied to the "#controls".
+@mixin empty {
+  #collapsed-status {
+    @include template.gone;
+  }
+}

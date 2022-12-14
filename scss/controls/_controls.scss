@@ -1,0 +1,115 @@
+@use "../css-template/import" as template;
+@use "expanded";
+@use "collapsed";
+@use "status";
+
+@mixin main {
+  // Use grid layout to separate the expanded/collapsed content from the mobile
+  // expander button.
+  display: grid;
+  grid-template-rows: 1fr 2rem;
+
+  // Show the controls as an elevated "surface" with a subtle border and shadow.
+  background-color: var(--color-paper-20);
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-ink-10);
+  box-shadow: 0px 2px 4px var(--color-shadow-10);
+
+  // Hide overflow from mobile-expander-button and the status (clashes message).
+  // Scrolling done inside #expanded-content.
+  overflow: hidden;
+
+  #expanded-content {
+    @include expanded.main;
+  }
+
+  #collapsed-content {
+    @include collapsed.main;
+  }
+
+  // When the currently loaded timetable has at least one class, the
+  // ".non-empty" class is applied to the #controls div.
+  &.non-empty {
+    #expanded-content {
+      @include expanded.non-empty;
+    }
+    #collapsed-content {
+      @include collapsed.non-empty;
+    }
+  }
+  &:not(.non-empty) {
+    #expanded-content {
+      @include expanded.empty;
+    }
+    #collapsed-content {
+      @include collapsed.empty;
+    }
+  }
+
+  #mobile-expander-button {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    --button-rounding: 0;
+    --content-color: var(--color-accent);
+    gap: 0.2rem;
+    .iconify {
+      font-size: 1.5rem;
+    }
+    p {
+      font-weight: bold;
+    }
+  }
+}
+
+// Applied by media query when the screen too narrow.
+@mixin mobile($collapsed-controls-height) {
+  // Clicking the mobile expander button toggles the ".collapsed" class on the
+  // #controls div. If the class is present, enable collapsed view.
+  &.collapsed {
+    // Lock the height to a predetermined value. This makes it sit just above
+    // the canvas container (both #controls and #canvas-container are absolute
+    // positioned on mobile view).
+    height: $collapsed-controls-height;
+
+    #expanded-content {
+      @include template.gone;
+    }
+
+    // Make the icon on the expander button a down arrow (hide the "up" arrow).
+    #mobile-expander-button .when-expanded {
+      @include template.gone;
+    }
+  }
+
+  // If the class is NOT present, enable the expanded view.
+  &:not(.collapsed) {
+    #collapsed-content {
+      @include template.gone;
+    }
+
+    // Make the icon on the expander button an up arrow (hide the "down" arrow).
+    #mobile-expander-button .when-collapsed {
+      @include template.gone;
+    }
+  }
+
+  #expanded-content {
+    @include expanded.mobile;
+  }
+}
+
+// Applied by media query when the screen is wide enough.
+@mixin desktop {
+  // For desktop view, the mobile expander button is hidden and the row
+  // dedicated to it in the #controls div can be removed.
+  grid-template-rows: 1fr;
+  #mobile-expander-button {
+    @include template.gone;
+  }
+
+  // Collapsed view is never used in the desktop layout regardless of whether
+  // the ".collapsed" class is present on the #controls div or not.
+  #collapsed-content {
+    @include template.gone;
+  }
+}

@@ -1,0 +1,76 @@
+include iconify.pug
+
+mixin status()
+  .status-container&attributes(attributes)
+    +iconify("uil:check").when-valid
+    p.when-valid No timetable clashes
+    +iconify("uil:eye-slash").when-unallocated
+    p.when-unallocated Some classes unallocated
+    +iconify("uil:exclamation-circle").when-clash
+    p.when-clash Some choices clash
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Timetabler &ndash; Visualise your uni timetable preferences
+    meta(name="description", content="A tool to help choose options on a timetable where there might be multiple classes running! Allows you to select different preferences and checks for clashes for you as you go.")
+    link(rel="shortcut icon", href="/favicon.svg", type="image/x-icon")
+    link(rel="stylesheet", href="/main.css")
+    script(src="/main.js", defer)
+  body
+    section#controls
+      #expanded-content
+        #expanded-scroller
+          include timetabler-logo-svg.pug
+          +timetabler-logo("logo1").wordmark
+
+          #header-row
+            h2 My classes
+            .flex-grow
+            button#import-button
+              +iconify("uil:import")
+              p IMPORT
+            button#export-button
+              +iconify("uil:export")
+              p EXPORT
+
+          //- button#add-class-button
+          //-   +iconify("uil:plus")
+          //-   p Add class
+
+          #expanded-empty-message
+            p
+              | Start by adding your classes, which will then show up here.
+
+            //- When add class UI finished, change this to start with:
+            //- "If you prefer, ..."
+            p
+              | You can provide your classes by writing a .json
+              | file and clicking "import" above. An
+              | <a class="link" href="/example.json" download>example .json file</a>
+              | and
+              | <a class="link" href="https://github.com/schel-d/timetabler">guide</a>
+              | are available to get you started.
+
+          #classes
+
+        +status#expanded-status
+
+      #collapsed-content
+        include timetabler-logo-svg.pug
+        +timetabler-logo("logo2").wordmark
+        +status#collapsed-status
+
+        p#collapsed-empty-message No classes yet - try adding some first
+
+      button#mobile-expander-button
+        +iconify("uil:angle-down").when-collapsed
+        p.when-collapsed Edit classes
+        +iconify("uil:angle-up").when-expanded
+        p.when-expanded Show timetable
+
+    #canvas-container
+      canvas#canvas

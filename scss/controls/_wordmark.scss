@@ -1,0 +1,8 @@
+@mixin main {
+  // The color of the "Timetabler" text (should adapt to light/dark mode). The
+  // actual logo colors are fixed and look fine either way.
+  color: var(--color-ink-100);
+
+  width: 10rem;
+  height: auto;
+}

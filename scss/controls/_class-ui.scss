@@ -1,0 +1,39 @@
+@use "../css-template/import" as template;
+@use "../colors";
+
+@mixin main {
+  @include colors.css-classes;
+
+  h3 {
+    margin-bottom: 0.5rem;
+  }
+  h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+  .options {
+    @include template.picker-pills("button");
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .option {
+      min-width: 0;
+      flex-shrink: 1;
+    }
+    .button {
+      --button-rounding: 0.75rem;
+      height: 1.5rem;
+      padding: 0rem 0.75rem;
+      .one-line {
+        align-self: stretch;
+      }
+      p {
+        font-size: 0.75rem;
+        color: var(--content-color);
+        transition: color var(--content-color-transition);
+      }
+    }
+  }
+}

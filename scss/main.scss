@@ -1,81 +1,113 @@
-@use "css-template/css-template";
-@use "timetable";
-@use "schel-d_applet";
+@use "css-template/import" as template;
+@use "controls/controls";
+@use "colors";
+@use "fonts";
+@use "canvas";
+
+// Initialize the css template with the custom colors.
+@include template.init($custom-colors: colors.$custom-colors);
+
+// Load the fonts and set them as the default.
+@include fonts.setup;
 
 body {
-    height: 100vh;
-}
-main {
-    flex-shrink: 1;
-}
-#content {
-    flex-direction: row;
-    flex-grow: 1;
-    flex-shrink: 1;
-    height: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background-color: var(--color-paper-0);
 }
 
-.load-config {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    text-align: center;
-    margin-left: 16px;
-    margin-right: 16px;
-}
-.load-config.gone {
-    display: none;
-}
-.load-config h1 {
-    margin-bottom: 8px;
-    font-size: 1.5rem;
-}
-.load-config p {
-    margin-bottom: 8px;
-}
-.load-config button {
-    margin-top: 16px;
+#controls {
+  @include controls.main;
 }
 
-.options {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 300px;
-    padding: 24px 16px 8px 16px;
-    overflow-y: auto;
-    flex-shrink: 0;
+#canvas-container {
+  @include canvas.main;
 }
-.options.gone {
-    display: none;
+
+// Create css classes for common utils from the template.
+.gone {
+  @include template.gone;
 }
-.options select {
-    width: 100%;
+.flex-grow {
+  @include template.flex-grow;
 }
-.options h1 {
-    margin-bottom: 8px;
-    font-size: 1.2rem;
+.link {
+  @include template.link;
 }
-.options #timetable-status-clash {
-    font-weight: bold;
-    margin-top: 16px;
+.one-line {
+  @include template.one-line;
 }
-.options p {
-    font-weight: normal;
-    margin-bottom: 8px;
+
+// Screens that are 43rem or wider use the desktop layout.
+@media screen and (min-width: 43rem) {
+  body {
+    display: grid;
+
+    // The centering margins are unused until the page is 64rem wide.
+    // [Centering margin] [Controls] [Gap] [Canvas] [Centering margin]
+    grid-template-columns: 0 20rem 1rem 2fr 0;
+
+    padding: 1rem;
+  }
+  #controls {
+    @include controls.desktop;
+    grid-column: 2;
+    min-height: 0;
+  }
+  #canvas-container {
+    grid-column: 4;
+  }
 }
-.options .subjects {
-    margin-top: 8px;
+
+// Screens that are 64rem or wider still use the desktop layout, but instead of
+// growing wider it centers itself in the middle of the page.
+@media screen and (min-width: 64rem) {
+  body {
+    // Lock the canvas at 41rem, now allow the centering margins to expand.
+    // [Centering margin] [Controls] [Gap] [Canvas] [Centering margin]
+    grid-template-columns: 1fr 20rem 1rem 41rem 1fr;
+  }
 }
-.options .subject {
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-.timetable {
-    flex-grow: 1;
-    flex-shrink: 1;
-    overflow: auto;
-    height: 100%;
+
+// Screens that are less than 43rem wide use the mobile layout.
+@media screen and (max-width: 42.999rem) {
+  $collapsed-controls-height: 8.5rem;
+
+  body {
+    // The controls will be placed on top of the canvas when expanded, so they
+    // will need to use absolute positioning.
+    position: relative;
+  }
+  #controls {
+    @include controls.mobile($collapsed-controls-height);
+
+    // Use absolute positioning so the controls can be shown above the canvas
+    // if needed. In desktop view the padding is 1rem, for mobile view we'll
+    // slim it down to 0.5rem.
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 0.5rem;
+
+    // Like doing "bottom: 0.5rem;" but it only does anything if the controls
+    // get long enough that restricting their height is required. Means they
+    // won't take up the full vertical space unless they need to.
+    max-height: calc(100% - 1rem);
+
+    // Show above the canvas container (it has "z-index: 0;").
+    z-index: 1;
+  }
+  #canvas-container {
+    // Use absolute positioning so the controls can be shown behind the canvas
+    // if needed.
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: $collapsed-controls-height + 1rem;
+    bottom: 0.5rem;
+
+    // Show behind the controls (they have "z-index: 1;").
+    z-index: 0;
+  }
 }
