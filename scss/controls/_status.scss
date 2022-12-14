@@ -1,0 +1,48 @@
+@use "../css-template/import" as template;
+
+@mixin common {
+  @include template.row;
+  gap: 0.75rem;
+
+  .iconify {
+    font-size: 1.2rem;
+  }
+
+  &.error {
+    .no-error-icon {
+      @include template.gone;
+    }
+  }
+  &:not(.error) {
+    .error-icon {
+      @include template.gone;
+    }
+  }
+}
+
+@mixin expanded {
+  @include common;
+  background-color: var(--color-paper-10);
+  padding: 0.75rem 1rem;
+
+  &.error {
+    background-color: var(--color-error);
+    p,
+    .iconify {
+      color: var(--color-on-accent);
+    }
+  }
+}
+
+@mixin collapsed {
+  @include common;
+  &.error {
+    p,
+    .iconify {
+      color: var(--color-error);
+    }
+    p {
+      font-weight: bold;
+    }
+  }
+}

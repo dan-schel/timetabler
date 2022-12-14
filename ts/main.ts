@@ -29,6 +29,9 @@ const canvas = new CanvasController(html);
 canvas.fitCanvas();
 window.addEventListener("resize", () => canvas.fitCanvas());
 
+// Redraw the canvas when the webfonts have loaded.
+document.fonts.ready.then(() => canvas.markDirty());
+
 // Toggle the "collapsed" class on the controls when the expander button is
 // clicked (only appears when the screen is too small to keep it permanently
 // open).

@@ -25,7 +25,7 @@ html(lang="en")
           +timetabler-logo("logo1").wordmark
 
           #header-row
-            h2 My Classes
+            h2 My classes
             .flex-grow
             button#import-button
               +iconify("uil:import")
@@ -38,7 +38,7 @@ html(lang="en")
             +iconify("uil:plus")
             p Add class
 
-          #empty-classes-message
+          #expanded-empty-message
             p
               | Start by adding your classes, which will then show up here.
             p
@@ -58,9 +58,13 @@ html(lang="en")
         +timetabler-logo("logo2").wordmark
         +status#collapsed-status
 
+        p#collapsed-empty-message No classes yet - try adding some first
+
       button#mobile-expander-button
-        +iconify("uil:angle-down").down
-        +iconify("uil:angle-up").up
+        +iconify("uil:angle-down").when-collapsed
+        p.when-collapsed Edit classes
+        +iconify("uil:angle-up").when-expanded
+        p.when-expanded Show timetable
 
     #canvas-container
       canvas#canvas

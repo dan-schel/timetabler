@@ -461,56 +461,43 @@ body {
 
 #controls {
   display: grid;
-  grid-template-rows: 1fr;
-  border: 1px solid var(--color-ink-10);
+  grid-template-rows: 1fr 2rem;
   background-color: var(--color-paper-20);
-  box-shadow: 0px 2px 4px var(--color-shadow-10);
   border-radius: 0.75rem;
+  border: 1px solid var(--color-ink-10);
+  box-shadow: 0px 2px 4px var(--color-shadow-10);
   overflow: hidden;
-  z-index: 1;
-  min-width: 0;
-  flex-shrink: 1;
-}
-#controls .wordmark {
-  color: var(--color-ink-100);
-  align-self: center;
-  width: 10rem;
-  height: auto;
-  margin-top: 0.5rem;
 }
 #controls #expanded-content {
   display: grid;
   grid-template-rows: 1fr auto;
-  flex-shrink: 1;
   min-height: 0;
   position: relative;
 }
-#controls #expanded-content .wordmark {
-  margin-bottom: 1.5rem;
-}
-#controls #expanded-scroller {
+#controls #expanded-content #expanded-scroller {
   padding: 1rem;
   overflow-y: auto;
-  flex-shrink: 1;
 }
-#controls #collapsed-content {
-  padding: 1rem;
+#controls #expanded-content #expanded-scroller .wordmark {
+  color: var(--color-ink-100);
+  width: 10rem;
+  height: auto;
+  align-self: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
-#controls #collapsed-content .wordmark {
-  margin-bottom: 1rem;
-}
-#controls #header-row {
+#controls #expanded-content #expanded-scroller #header-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 1rem;
 }
-#controls #header-row h2 {
+#controls #expanded-content #expanded-scroller #header-row h2 {
   font-size: 1rem;
   font-weight: bold;
   color: var(--color-ink-100);
 }
-#controls #header-row button {
+#controls #expanded-content #expanded-scroller #header-row button {
   position: relative;
   --content-color: var(--color-ink-80);
   display: flex;
@@ -521,10 +508,10 @@ body {
   height: 1.5rem;
   gap: 0.25rem;
 }
-#controls #header-row button > * {
+#controls #expanded-content #expanded-scroller #header-row button > * {
   z-index: 1;
 }
-#controls #header-row button::before {
+#controls #expanded-content #expanded-scroller #header-row button::before {
   z-index: 0;
   content: "";
   position: absolute;
@@ -534,31 +521,31 @@ body {
   bottom: 0;
   border-radius: var(--button-rounding);
 }
-#controls #header-row button:disabled > *, #controls #header-row button[disabled] > * {
+#controls #expanded-content #expanded-scroller #header-row button:disabled > *, #controls #expanded-content #expanded-scroller #header-row button[disabled] > * {
   opacity: 50%;
 }
-#controls #header-row button::before {
+#controls #expanded-content #expanded-scroller #header-row button::before {
   transition: background-color 0.05s;
 }
-#controls #header-row button:hover::before, #controls #header-row button:focus-visible::before {
+#controls #expanded-content #expanded-scroller #header-row button:hover::before, #controls #expanded-content #expanded-scroller #header-row button:focus-visible::before {
   background-color: var(--color-ink-10);
 }
-#controls #header-row button:active::before {
+#controls #expanded-content #expanded-scroller #header-row button:active::before {
   background-color: var(--color-ink-20);
 }
-#controls #header-row button:disabled::before, #controls #header-row button[disabled]::before {
+#controls #expanded-content #expanded-scroller #header-row button:disabled::before, #controls #expanded-content #expanded-scroller #header-row button[disabled]::before {
   background-color: transparent;
 }
-#controls #header-row button > p,
-#controls #header-row button > .iconify {
+#controls #expanded-content #expanded-scroller #header-row button > p,
+#controls #expanded-content #expanded-scroller #header-row button > .iconify {
   color: var(--content-color);
   transition: color var(--content-color-transition);
 }
-#controls #header-row button p {
+#controls #expanded-content #expanded-scroller #header-row button p {
   font-size: 0.75rem;
   font-weight: bold;
 }
-#controls #add-class-button {
+#controls #expanded-content #expanded-scroller #add-class-button {
   position: relative;
   --content-color: var(--color-ink-80);
   --content-color: var(--color-on-accent);
@@ -570,10 +557,10 @@ body {
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
-#controls #add-class-button > * {
+#controls #expanded-content #expanded-scroller #add-class-button > * {
   z-index: 1;
 }
-#controls #add-class-button::before {
+#controls #expanded-content #expanded-scroller #add-class-button::before {
   z-index: 0;
   content: "";
   position: absolute;
@@ -583,54 +570,51 @@ body {
   bottom: 0;
   border-radius: var(--button-rounding);
 }
-#controls #add-class-button:disabled > *, #controls #add-class-button[disabled] > * {
+#controls #expanded-content #expanded-scroller #add-class-button:disabled > *, #controls #expanded-content #expanded-scroller #add-class-button[disabled] > * {
   opacity: 50%;
 }
-#controls #add-class-button::before {
+#controls #expanded-content #expanded-scroller #add-class-button::before {
   transition: opacity 0.05s;
   background-color: var(--color-accent);
   opacity: 80%;
 }
-#controls #add-class-button:hover::before, #controls #add-class-button:focus-visible::before {
+#controls #expanded-content #expanded-scroller #add-class-button:hover::before, #controls #expanded-content #expanded-scroller #add-class-button:focus-visible::before {
   opacity: 100%;
 }
-#controls #add-class-button:active::before {
+#controls #expanded-content #expanded-scroller #add-class-button:active::before {
   opacity: 60%;
 }
-#controls #add-class-button:disabled, #controls #add-class-button[disabled] {
+#controls #expanded-content #expanded-scroller #add-class-button:disabled, #controls #expanded-content #expanded-scroller #add-class-button[disabled] {
   --content-color: var(--color-ink-80);
 }
-#controls #add-class-button:disabled::before, #controls #add-class-button[disabled]::before {
+#controls #expanded-content #expanded-scroller #add-class-button:disabled::before, #controls #expanded-content #expanded-scroller #add-class-button[disabled]::before {
   opacity: 100%;
   background-color: transparent;
   border: var(--button-outline) solid var(--color-ink-10);
 }
-#controls #add-class-button > p,
-#controls #add-class-button > .iconify {
+#controls #expanded-content #expanded-scroller #add-class-button > p,
+#controls #expanded-content #expanded-scroller #add-class-button > .iconify {
   color: var(--content-color);
   transition: color var(--content-color-transition);
 }
-#controls #add-class-button .iconify {
+#controls #expanded-content #expanded-scroller #add-class-button .iconify {
   font-size: 1.2rem;
 }
-#controls #empty-classes-message {
+#controls #expanded-content #expanded-scroller #expanded-empty-message {
   gap: 1rem;
 }
-#controls.non-empty #empty-classes-message {
-  display: none !important;
-}
-#controls #classes {
+#controls #expanded-content #expanded-scroller #classes {
   gap: 1rem;
 }
-#controls .class h3 {
+#controls #expanded-content #expanded-scroller #classes .class h3 {
   margin-bottom: 0.5rem;
 }
-#controls .class h4 {
+#controls #expanded-content #expanded-scroller #classes .class h4 {
   margin-bottom: 0.75rem;
   font-size: 0.75rem;
   font-weight: bold;
 }
-#controls .class .options {
+#controls #expanded-content #expanded-scroller #classes .class .options {
   user-select: none;
   -webkit-user-select: none;
   display: flex;
@@ -641,89 +625,133 @@ body {
   flex-wrap: wrap;
   gap: 0.25rem;
 }
-#controls .class .options > label {
+#controls #expanded-content #expanded-scroller #classes .class .options > label {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 }
-#controls .class .options > label > input[type=radio] {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio] {
   position: fixed;
   opacity: 0;
   pointer-events: none;
 }
-#controls .class .options > label > input[type=radio] + .button {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio] + .button {
   --content-color: var(--color-ink-80);
   --content-color-transition: 0.1s;
 }
-#controls .class .options > label > input[type=radio] + .button {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio] + .button {
   align-items: center;
   justify-content: center;
   background-color: var(--color-ink-10);
   transition: background-color 0.1s;
   border-radius: var(--button-rounding);
 }
-#controls .class .options > label > input[type=radio]:hover + .button,
-#controls .class .options > label > input[type=radio]:focus-visible + .button {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio]:hover + .button,
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio]:focus-visible + .button {
   background-color: var(--color-ink-20);
 }
-#controls .class .options > label > input[type=radio]:active + .button {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio]:active + .button {
   background-color: var(--color-ink-30);
 }
-#controls .class .options > label > input[type=radio]:checked + .button {
+#controls #expanded-content #expanded-scroller #classes .class .options > label > input[type=radio]:checked + .button {
   background-color: var(--color-accent);
   --content-color: var(--color-on-accent);
 }
-#controls .class .options .option {
+#controls #expanded-content #expanded-scroller #classes .class .options .option {
   min-width: 0;
   flex-shrink: 1;
 }
-#controls .class .options .button {
+#controls #expanded-content #expanded-scroller #classes .class .options .button {
   --button-rounding: 0.75rem;
   height: 1.5rem;
   padding: 0rem 0.75rem;
 }
-#controls .class .options .button .one-line {
+#controls #expanded-content #expanded-scroller #classes .class .options .button .one-line {
   align-self: stretch;
 }
-#controls .class .options .button p {
+#controls #expanded-content #expanded-scroller #classes .class .options .button p {
   font-size: 0.75rem;
   color: var(--content-color);
   transition: color var(--content-color-transition);
 }
-#controls .status-container {
+#controls #expanded-content #expanded-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--color-paper-10);
+  padding: 0.75rem 1rem;
+}
+#controls #expanded-content #expanded-status .iconify {
+  font-size: 1.2rem;
+}
+#controls #expanded-content #expanded-status.error .no-error-icon {
+  display: none !important;
+}
+#controls #expanded-content #expanded-status:not(.error) .error-icon {
+  display: none !important;
+}
+#controls #expanded-content #expanded-status.error {
+  background-color: var(--color-error);
+}
+#controls #expanded-content #expanded-status.error p,
+#controls #expanded-content #expanded-status.error .iconify {
+  color: var(--color-on-accent);
+}
+#controls #collapsed-content {
+  padding: 1rem;
+  min-height: 0;
+}
+#controls #collapsed-content .wordmark {
+  color: var(--color-ink-100);
+  width: 10rem;
+  height: auto;
+  align-self: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+#controls #collapsed-content #collapsed-empty-message {
+  margin-top: 0.3rem;
+  text-align: center;
+}
+#controls #collapsed-content #collapsed-status {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.75rem;
 }
-#controls .status-container .iconify {
+#controls #collapsed-content #collapsed-status .iconify {
   font-size: 1.2rem;
 }
-#controls .status-container.error .no-error-icon {
+#controls #collapsed-content #collapsed-status.error .no-error-icon {
   display: none !important;
 }
-#controls .status-container:not(.error) .error-icon {
+#controls #collapsed-content #collapsed-status:not(.error) .error-icon {
   display: none !important;
 }
-#controls #expanded-status {
-  background-color: var(--color-paper-10);
-  padding: 0.75rem 1rem;
-}
-#controls #expanded-status.error {
-  background-color: var(--color-error);
-}
-#controls #expanded-status.error p,
-#controls #expanded-status.error .iconify {
-  color: var(--color-on-accent);
-}
-#controls #collapsed-status.error p,
-#controls #collapsed-status.error .iconify {
+#controls #collapsed-content #collapsed-status.error p,
+#controls #collapsed-content #collapsed-status.error .iconify {
   color: var(--color-error);
 }
-#controls #collapsed-status.error p {
+#controls #collapsed-content #collapsed-status.error p {
   font-weight: bold;
+}
+#controls.non-empty #expanded-content #expanded-empty-message {
+  display: none !important;
+}
+#controls.non-empty #collapsed-content #collapsed-empty-message {
+  display: none !important;
+}
+#controls:not(.non-empty) #expanded-content {
+  grid-template-rows: 1fr;
+}
+#controls:not(.non-empty) #expanded-content #expanded-status {
+  display: none !important;
+}
+#controls:not(.non-empty) #collapsed-content #collapsed-status {
+  display: none !important;
 }
 #controls #mobile-expander-button {
   position: relative;
@@ -733,6 +761,8 @@ body {
   align-items: center;
   justify-content: center;
   --button-rounding: 0;
+  --content-color: var(--color-accent);
+  gap: 0.2rem;
 }
 #controls #mobile-expander-button > * {
   z-index: 1;
@@ -768,11 +798,13 @@ body {
   transition: color var(--content-color-transition);
 }
 #controls #mobile-expander-button .iconify {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+}
+#controls #mobile-expander-button p {
+  font-weight: bold;
 }
 
 #canvas-container {
-  z-index: 0;
   border: 1px solid var(--color-ink-10);
   background-color: var(--color-paper-10);
   box-shadow: 0px 2px 4px var(--color-shadow-10);
@@ -824,70 +856,68 @@ body {
 
 @media screen and (min-width: 43rem) {
   body {
-    padding: 1rem;
     display: grid;
-    grid-template-columns: 20rem 1rem 2fr;
+    grid-template-columns: 0 20rem 1rem 2fr 0;
+    padding: 1rem;
   }
-  body #controls {
-    grid-column: 1;
+
+  #controls {
+    grid-template-rows: 1fr;
+    grid-column: 2;
     min-height: 0;
   }
-  body #controls #mobile-expander-button {
+  #controls #mobile-expander-button {
     display: none !important;
   }
-  body #controls #collapsed-content {
+  #controls #collapsed-content {
     display: none !important;
   }
-  body #canvas-container {
-    grid-column: 3;
+
+  #canvas-container {
+    grid-column: 4;
   }
 }
 @media screen and (min-width: 64rem) {
   body {
     grid-template-columns: 1fr 20rem 1rem 41rem 1fr;
   }
-  body #controls {
-    grid-column: 2;
-  }
-  body #canvas-container {
-    grid-column: 4;
-  }
 }
 @media screen and (max-width: 42.999rem) {
   body {
     position: relative;
   }
-  body #controls {
-    grid-template-rows: 1fr 2rem;
+
+  #controls {
     position: absolute;
     left: 0.5rem;
     right: 0.5rem;
     top: 0.5rem;
     max-height: calc(100% - 1rem);
+    z-index: 1;
   }
-  body #controls.collapsed {
+  #controls.collapsed {
     height: 8.5rem;
   }
-  body #controls.collapsed #mobile-expander-button .up {
+  #controls.collapsed #expanded-content {
     display: none !important;
   }
-  body #controls.collapsed #expanded-content {
+  #controls.collapsed #mobile-expander-button .when-expanded {
     display: none !important;
   }
-  body #controls:not(.collapsed) #mobile-expander-button .down {
+  #controls:not(.collapsed) #collapsed-content {
     display: none !important;
   }
-  body #controls:not(.collapsed) #collapsed-content {
+  #controls:not(.collapsed) #mobile-expander-button .when-collapsed {
     display: none !important;
   }
-  body #canvas-container {
+
+  #canvas-container {
     position: absolute;
-    top: 9.5rem;
     left: 0.5rem;
     right: 0.5rem;
+    top: 9.5rem;
     bottom: 0.5rem;
-    width: auto;
-    height: auto;
+    z-index: 0;
   }
 }
 

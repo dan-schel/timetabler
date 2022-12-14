@@ -1,136 +1,14 @@
 @use "css-template/import" as template;
-@use "controls";
+@use "controls/controls";
+@use "colors";
+@use "fonts";
+@use "canvas";
 
-@include template.init(
-  $custom-colors: (
-    "red-gradient-1": (
-      "light": #ff3500,
-      "dark": #ff3500,
-    ),
-    "red-gradient-2": (
-      "light": #dc0057,
-      "dark": #dc0057,
-    ),
-    "on-red": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "orange-gradient-1": (
-      "light": #ffa000,
-      "dark": #ffa000,
-    ),
-    "orange-gradient-2": (
-      "light": #dc4200,
-      "dark": #dc4200,
-    ),
-    "on-orange": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "yellow-gradient-1": (
-      "light": #e8e500,
-      "dark": #e8e500,
-    ),
-    "yellow-gradient-2": (
-      "light": #fea400,
-      "dark": #fea400,
-    ),
-    "on-yellow": (
-      "light": #000000,
-      "dark": #000000,
-    ),
-    "green-gradient-1": (
-      "light": #88db00,
-      "dark": #88db00,
-    ),
-    "green-gradient-2": (
-      "light": #00a517,
-      "dark": #00a517,
-    ),
-    "on-green": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "cyan-gradient-1": (
-      "light": #00ffa4,
-      "dark": #00ffa4,
-    ),
-    "cyan-gradient-2": (
-      "light": #00c4c8,
-      "dark": #00c4c8,
-    ),
-    "on-cyan": (
-      "light": #000000,
-      "dark": #000000,
-    ),
-    "blue-gradient-1": (
-      "light": #00b0ff,
-      "dark": #00b0ff,
-    ),
-    "blue-gradient-2": (
-      "light": #005ae4,
-      "dark": #005ae4,
-    ),
-    "on-blue": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "purple-gradient-1": (
-      "light": #a900ff,
-      "dark": #a900ff,
-    ),
-    "purple-gradient-2": (
-      "light": #5c00e4,
-      "dark": #5c00e4,
-    ),
-    "on-purple": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "pink-gradient-1": (
-      "light": #ff0098,
-      "dark": #ff0098,
-    ),
-    "pink-gradient-2": (
-      "light": #b600e4,
-      "dark": #b600e4,
-    ),
-    "on-pink": (
-      "light": #ffffff,
-      "dark": #ffffff,
-    ),
-    "error": (
-      "light": #dc0f0f,
-      "dark": #ff5252,
-    ),
-  )
-);
+// Initialize the css template with the custom colors.
+@include template.init($custom-colors: colors.$custom-colors);
 
-@font-face {
-  font-family: "Atkinson Hyperlegible";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/ah-400.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
-}
-@font-face {
-  font-family: "Atkinson Hyperlegible";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/ah-700.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
-}
-
-:root {
-  --font-default: "Atkinson Hyperlegible", sans-serif;
-  --line-spacing: 0.3em;
-}
+// Load the fonts and set them as the default.
+@include fonts.setup;
 
 body {
   height: 100vh;
@@ -140,33 +18,14 @@ body {
 }
 
 #controls {
-  @include controls.controls;
-  z-index: 1;
-  min-width: 0;
-  flex-shrink: 1;
+  @include controls.main;
 }
+
 #canvas-container {
-  z-index: 0;
-
-  border: 1px solid var(--color-ink-10);
-  background-color: var(--color-paper-10);
-  box-shadow: 0px 2px 4px var(--color-shadow-10);
-  border-radius: 0.75rem;
-
-  overflow: hidden;
-
-  // Allow dragging blocks on the canvas, rather than the browser thinking it
-  // needs to pan the page.
-  touch-action: none;
-
-  position: relative;
-  #canvas {
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
+  @include canvas.main;
 }
 
+// Create css classes for common utils from the template.
 .gone {
   @include template.gone;
 }
@@ -180,53 +39,75 @@ body {
   @include template.one-line;
 }
 
+// Screens that are 43rem or wider use the desktop layout.
 @media screen and (min-width: 43rem) {
   body {
-    padding: 1rem;
     display: grid;
-    grid-template-columns: 20rem 1rem 2fr;
-    #controls {
-      @include controls.controls-desktop;
-      grid-column: 1;
-      min-height: 0;
-    }
-    #canvas-container {
-      grid-column: 3;
-    }
+
+    // The centering margins are unused until the page is 64rem wide.
+    // [Centering margin] [Controls] [Gap] [Canvas] [Centering margin]
+    grid-template-columns: 0 20rem 1rem 2fr 0;
+
+    padding: 1rem;
+  }
+  #controls {
+    @include controls.desktop;
+    grid-column: 2;
+    min-height: 0;
+  }
+  #canvas-container {
+    grid-column: 4;
   }
 }
+
+// Screens that are 64rem or wider still use the desktop layout, but instead of
+// growing wider it centers itself in the middle of the page.
 @media screen and (min-width: 64rem) {
   body {
+    // Lock the canvas at 41rem, now allow the centering margins to expand.
+    // [Centering margin] [Controls] [Gap] [Canvas] [Centering margin]
     grid-template-columns: 1fr 20rem 1rem 41rem 1fr;
-    #controls {
-      grid-column: 2;
-    }
-    #canvas-container {
-      grid-column: 4;
-    }
   }
 }
+
+// Screens that are less than 43rem wide use the mobile layout.
 @media screen and (max-width: 42.999rem) {
   $collapsed-controls-height: 8.5rem;
 
   body {
+    // The controls will be placed on top of the canvas when expanded, so they
+    // will need to use absolute positioning.
     position: relative;
-    #controls {
-      @include controls.controls-mobile($collapsed-controls-height);
-      position: absolute;
-      left: 0.5rem;
-      right: 0.5rem;
-      top: 0.5rem;
-      max-height: calc(100% - 1rem);
-    }
-    #canvas-container {
-      position: absolute;
-      top: $collapsed-controls-height + 1rem;
-      left: 0.5rem;
-      right: 0.5rem;
-      bottom: 0.5rem;
-      width: auto;
-      height: auto;
-    }
+  }
+  #controls {
+    @include controls.mobile($collapsed-controls-height);
+
+    // Use absolute positioning so the controls can be shown above the canvas
+    // if needed. In desktop view the padding is 1rem, for mobile view we'll
+    // slim it down to 0.5rem.
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 0.5rem;
+
+    // Like doing "bottom: 0.5rem;" but it only does anything if the controls
+    // get long enough that restricting their height is required. Means they
+    // won't take up the full vertical space unless they need to.
+    max-height: calc(100% - 1rem);
+
+    // Show above the canvas container (it has "z-index: 0;").
+    z-index: 1;
+  }
+  #canvas-container {
+    // Use absolute positioning so the controls can be shown behind the canvas
+    // if needed.
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: $collapsed-controls-height + 1rem;
+    bottom: 0.5rem;
+
+    // Show behind the controls (they have "z-index: 1;").
+    z-index: 0;
   }
 }

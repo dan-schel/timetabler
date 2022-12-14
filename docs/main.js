@@ -4778,6 +4778,7 @@
   var canvas2 = new CanvasController(html);
   canvas2.fitCanvas();
   window.addEventListener("resize", () => canvas2.fitCanvas());
+  document.fonts.ready.then(() => canvas2.markDirty());
   html.mobileExpanderButton.addEventListener("click", () => {
     html.controls.classList.toggle("collapsed");
   });
