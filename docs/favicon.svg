@@ -5,11 +5,11 @@
     <rect id="Artboard21" serif:id="Artboard2" x="0" y="0" width="16" height="16" />
   </clipPath>
   <g clip-path="url(#_clip1)">
-    <path d="M16,6C16,4.344 14.656,3 13,3L9,3L9,13C9,14.656 10.344,16 12,16L13,16C14.656,16 16,14.656 16,13L16,6Z" style="fill:url(#_Linear2);" />
+    <path d="M16,7C16,5.344 14.656,4 13,4L9,4L9,13C9,14.656 10.344,16 12,16L13,16C14.656,16 16,14.656 16,13L16,7Z" style="fill:url(#_Linear2);" />
     <path d="M8,3L8,12L3,12C1.344,12 -0,10.656 -0,9L-0,3C-0,1.344 1.344,0 3,0L5,0C6.656,0 8,1.344 8,3ZM6,3C6,2.448 5.552,2 5,2L3,2C2.448,2 2,2.448 2,3L2,9C2,9.552 2.448,10 3,10L5,10C5.552,10 6,9.552 6,9L6,3Z" style="fill:url(#_Linear3);" />
   </g>
   <defs>
-    <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(7,13,-24.1429,13,9,3)">
+    <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="0.0343937" gradientUnits="userSpaceOnUse" gradientTransform="matrix(7,12,-24.1429,12,9,4)">
       <stop offset="0" style="stop-color:rgb(255,53,0);stop-opacity:1" />
       <stop offset="1" style="stop-color:rgb(220,0,87);stop-opacity:1" />
     </linearGradient>
