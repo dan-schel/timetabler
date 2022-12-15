@@ -1,5 +1,7 @@
+import { download, openFileDialog } from "schel-d-utils-browser";
 import { ClassUIController } from "./class-ui-controller";
-import { Html } from "./main";
+import { EditClassController } from "./edit-class-controller";
+import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableChoices } from "./timetable/timetable-choices";
 
 /** Manages the controls UI (the side-panel). */
@@ -13,7 +15,11 @@ export class ControlsController {
    */
   private _prevTimetable: TimetableChoices | null;
 
+  /** The currently active class UIs. */
   private _classUIs: ClassUIController[];
+
+  /** The logic in charge of the edit class menu. */
+  private _editClassController: EditClassController;
 
   /**
    * Creates a {@link ControlsController}.
@@ -23,6 +29,51 @@ export class ControlsController {
     this._html = html;
     this._prevTimetable = null;
     this._classUIs = [];
+    this._editClassController = new EditClassController(html);
+
+    this.attachEvents();
+  }
+
+  /** Sets up event handlers. */
+  attachEvents() {
+    // Toggle the "collapsed" class on the controls when the expander button is
+    // clicked (only appears when the screen is too small to keep it permanently
+    // open).
+    this._html.mobileExpanderButton.addEventListener("click", () => {
+      this._html.controls.classList.toggle("collapsed");
+    });
+
+    // Import a timetable.
+    this._html.importButton.addEventListener("click", () => {
+      openFileDialog(".json", (file: string) => {
+        const newTimetable = (() => {
+          try {
+            const json = JSON.parse(file);
+            return TimetableChoices.json.parse(json);
+          }
+          catch (err) {
+            alert("That .json file was invalid.");
+            console.warn(err);
+            return null;
+          }
+        })();
+
+        if (newTimetable != null) {
+          updateTimetable(newTimetable);
+        }
+      });
+    });
+
+    // Export the timetable.
+    this._html.exportButton.addEventListener("click", () => {
+      const text = JSON.stringify(getCurrentTimetable().toJSON());
+      download(text, "timetable.json");
+    });
+
+    // Open the edit class menu when "Add class" button clicked.
+    this._html.addClassButton.addEventListener("click", () => {
+      this._editClassController.open();
+    });
   }
 
   /**

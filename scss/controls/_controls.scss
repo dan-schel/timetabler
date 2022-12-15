@@ -46,6 +46,16 @@
     }
   }
 
+  &.edit-class {
+    #expanded-content {
+      @include expanded.show-edit-class-menu;
+    }
+  }
+  &:not(.edit-class) {
+    #expanded-content {
+      @include expanded.show-main-menu;
+    }
+  }
   #mobile-expander-button {
     @include template.button-hover;
     @include template.content-text-icon;

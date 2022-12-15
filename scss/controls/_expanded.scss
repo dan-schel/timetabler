@@ -1,7 +1,8 @@
 @use "../css-template/import" as template;
 @use "status";
 @use "wordmark";
-@use "class-ui";
+@use "main-menu";
+@use "edit-class-menu";
 
 @mixin main {
   // Use grid layout to separate the scrolling content from the status, so the
@@ -19,7 +20,21 @@
   // Contains everything within the expanded controls, except the status
   // message.
   #expanded-scroller {
-    @include content;
+    // The Timetabler logo.
+    .wordmark {
+      @include wordmark.main;
+      align-self: center;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #main-menu {
+      @include main-menu.main;
+    }
+
+    #edit-class-menu {
+      @include edit-class-menu.main;
+    }
 
     padding: 1rem;
 
@@ -32,69 +47,19 @@
   }
 }
 
-// Responsible for styling everything inside the scrolling section of the
-// expanded content.
-@mixin content {
-  // The Timetabler logo.
-  .wordmark {
-    @include wordmark.main;
-    align-self: center;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+// Applied when the ".edit-class" class is applied to the "#controls".
+@mixin show-edit-class-menu {
+  @include hide-status;
+
+  #main-menu {
+    @include template.gone;
   }
+}
 
-  // Arranges the "My classes" title, import, and export buttons in a row.
-  #header-row {
-    @include template.row;
-
-    // The "My classes" title.
-    h2 {
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--color-ink-100);
-    }
-
-    // The import/export button styles.
-    button {
-      @include template.button-hover;
-      @include template.content-text-icon;
-      padding: 0rem 0.5rem;
-      height: 1.5rem;
-      gap: 0.25rem;
-
-      p {
-        font-size: 0.75rem;
-        font-weight: bold;
-      }
-    }
-    margin-bottom: 1rem;
-  }
-
-  // The "Add class" button.
-  #add-class-button {
-    @include template.button-filled;
-    @include template.content-text-icon;
-    height: 2.5rem;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    .iconify {
-      font-size: 1.2rem;
-    }
-  }
-
-  // The message which shows when the timetable has no classes.
-  #expanded-empty-message {
-    // Add space between the paragraphs in the message.
-    gap: 1rem;
-  }
-
-  #classes {
-    // Add space between each class's UI.
-    gap: 1rem;
-
-    .class {
-      @include class-ui.main;
-    }
+// Applied when the ".edit-class" class is NOT applied to the "#controls".
+@mixin show-main-menu {
+  #edit-class-menu {
+    @include template.gone;
   }
 }
 
@@ -115,6 +80,11 @@
 
 // Applied when the ".non-empty" class is NOT applied to the "#controls".
 @mixin empty {
+  @include hide-status;
+}
+
+// Hides the expanded status and removes the row from the grid for it.
+@mixin hide-status {
   grid-template-rows: 1fr;
 
   #expanded-status {

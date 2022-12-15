@@ -1,0 +1,29 @@
+@use "../css-template/import" as template;
+
+@mixin main {
+  // The "Back" button.
+  #edit-class-back-button {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    padding: 0rem 0.5rem;
+    height: 1.5rem;
+    gap: 0.25rem;
+    align-self: flex-start;
+    margin-bottom: 1rem;
+
+    p {
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    .iconify {
+      margin-left: -0.15rem;
+    }
+  }
+
+  // The "Edit/add class" title.
+  h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+}

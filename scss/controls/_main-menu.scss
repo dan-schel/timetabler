@@ -1,0 +1,58 @@
+@use "../css-template/import" as template;
+@use "class-ui";
+
+@mixin main {
+  // Arranges the "My classes" title, import, and export buttons in a row.
+  #header-row {
+    @include template.row;
+
+    // The "My classes" title.
+    h2 {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--color-ink-100);
+    }
+
+    // The import/export button styles.
+    button {
+      @include template.button-hover;
+      @include template.content-text-icon;
+      padding: 0rem 0.5rem;
+      height: 1.5rem;
+      gap: 0.25rem;
+
+      p {
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+    }
+    margin-bottom: 1rem;
+  }
+
+  // The "Add class" button.
+  #add-class-button {
+    @include template.button-filled;
+    @include template.content-text-icon;
+    height: 2.5rem;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    .iconify {
+      font-size: 1.2rem;
+    }
+  }
+
+  // The message which shows when the timetable has no classes.
+  #expanded-empty-message {
+    // Add space between the paragraphs in the message.
+    gap: 1rem;
+  }
+
+  #classes {
+    // Add space between each class's UI.
+    gap: 1rem;
+
+    .class {
+      @include class-ui.main;
+    }
+  }
+}

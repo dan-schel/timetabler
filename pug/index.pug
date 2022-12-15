@@ -27,35 +27,40 @@ html(lang="en")
           include timetabler-logo-svg.pug
           +timetabler-logo("logo1").wordmark
 
-          #header-row
-            h2 My classes
-            .flex-grow
-            button#import-button
-              +iconify("uil:import")
-              p IMPORT
-            button#export-button
-              +iconify("uil:export")
-              p EXPORT
+          #main-menu
+            #header-row
+              h2 My classes
+              .flex-grow
+              button#import-button
+                +iconify("uil:import")
+                p IMPORT
+              button#export-button
+                +iconify("uil:export")
+                p EXPORT
 
-          //- button#add-class-button
-          //-   +iconify("uil:plus")
-          //-   p Add class
+            button#add-class-button
+              +iconify("uil:plus")
+              p Add class
 
-          #expanded-empty-message
-            p
-              | Start by adding your classes, which will then show up here.
+            #expanded-empty-message
+              p
+                | Start by adding your classes, which will then show up here.
+              p
+                | If you prefer, you can provide your classes by writing a .json
+                | file and clicking "import" above. An
+                | <a class="link" href="/example.json" download>example .json file</a>
+                | and
+                | <a class="link" href="https://github.com/schel-d/timetabler">guide</a>
+                | are available to get you started.
 
-            //- When add class UI finished, change this to start with:
-            //- "If you prefer, ..."
-            p
-              | You can provide your classes by writing a .json
-              | file and clicking "import" above. An
-              | <a class="link" href="/example.json" download>example .json file</a>
-              | and
-              | <a class="link" href="https://github.com/schel-d/timetabler">guide</a>
-              | are available to get you started.
+            #classes
 
-          #classes
+          #edit-class-menu
+            button#edit-class-back-button
+              +iconify("uil:angle-left-b")
+              p BACK
+
+            h2 Edit class
 
         +status#expanded-status
 
