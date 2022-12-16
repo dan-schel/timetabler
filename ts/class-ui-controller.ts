@@ -2,6 +2,7 @@ import { TimetableClass } from "./timetable/timetable-class";
 import { v4 as uuidv4 } from "uuid";
 import { TimetableOption } from "./timetable/timetable-option";
 import { getCurrentTimetable, updateTimetable } from "./main";
+import { iconify } from "./iconify";
 
 export type OptionRadioMapping = {
   option: TimetableOption,
@@ -142,10 +143,38 @@ export class ClassUIController {
     })();
     $options.append(noChoiceOptionUI.$label, ...optionUIs.map(o => o.$label));
 
+    // The edit/delete menu button and dropdown.
+    const $menuButton = document.createElement("button");
+    $menuButton.className = "dropdown-button";
+    $menuButton.title = "More options";
+    $menuButton.append(iconify("uil:ellipsis-v"));
+    const $editP = document.createElement("p");
+    $editP.textContent = "Edit";
+    const $editButton = document.createElement("button");
+    $editButton.append($editP);
+    const $deleteP = document.createElement("p");
+    $deleteP.textContent = "Delete";
+    const $deleteButton = document.createElement("button");
+    $deleteButton.append($deleteP);
+    const $dropdownContent = document.createElement("div");
+    $dropdownContent.className = "dropdown-content";
+    $dropdownContent.append($editButton, $deleteButton);
+    const $dropdownBackground = document.createElement("div");
+    $dropdownBackground.className = "dropdown-background";
+    const $dropdown = document.createElement("div");
+    $dropdown.className = "dropdown";
+    $dropdown.append($dropdownBackground, $dropdownContent);
+    const $dropdownContainer = document.createElement("div");
+    $dropdownContainer.className = "dropdown-container";
+    $dropdownContainer.append($menuButton, $dropdown);
+    $menuButton.addEventListener("click", () => {
+      $dropdownContainer.classList.toggle("open");
+    });
+
     // The parent div.
     const $div = document.createElement("div");
     $div.classList.add("class", `accent-${classData.color}`);
-    $div.append($nameOL, $typeOL, $options);
+    $div.append($nameOL, $typeOL, $options, $dropdownContainer);
 
     const optionRadios = optionUIs.map(o => {
       return { option: o.option, $radio: o.$input };
