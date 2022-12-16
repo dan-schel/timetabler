@@ -27,7 +27,7 @@ export class TimetableError extends Error {
     return typeof obj == "object"
       && obj != null
       && "name" in obj
-      && obj.name == "TimetableError";
+      && (obj as TimetableError).name == "TimetableError";
   }
 
   /** A class's name cannot be empty. */

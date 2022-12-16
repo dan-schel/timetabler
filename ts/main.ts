@@ -23,6 +23,8 @@ const html = {
   editClassTypeInput: finder.input("edit-class-type-input"),
   editClassColorPicker: finder.div("edit-class-color-picker"),
   editClassOptionalSwitch: finder.input("edit-class-optional-switch"),
+  editClassAddOptionButton: finder.button("edit-class-add-option-button"),
+  editClassOptions: finder.div("edit-class-options"),
   editClassSubmitButton: finder.button("edit-class-submit-button"),
 };
 

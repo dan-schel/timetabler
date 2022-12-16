@@ -86,18 +86,85 @@ export class ClassUIController {
     // The class name label (wrapped in a one-line).
     const $type = document.createElement("h4");
     $type.textContent = classData.type.toUpperCase();
-
     if (classData.optional) {
       $type.textContent += " - OPTIONAL";
     }
-
     const $typeOL = document.createElement("div");
     $typeOL.className = "one-line";
     $typeOL.append($type);
 
+    const $namesStack = document.createElement("div");
+    $namesStack.className = "names-stack";
+    $namesStack.append($nameOL, $typeOL);
+
+    // The edit/delete menu button.
+    const $menuButton = document.createElement("button");
+    $menuButton.className = "dropdown-button";
+    $menuButton.title = "More options";
+    $menuButton.append(iconify("uil:ellipsis-v"));
+
+    // The menu dropdown.
+    const $menuDropdownEditP = document.createElement("p");
+    $menuDropdownEditP.textContent = "Edit";
+    const $menuDropdownEditButton = document.createElement("button");
+    $menuDropdownEditButton.append($menuDropdownEditP);
+    const $menuDropdownDeleteP = document.createElement("p");
+    $menuDropdownDeleteP.textContent = "Delete";
+    const $menuDropdownDeleteButton = document.createElement("button");
+    $menuDropdownDeleteButton.append($menuDropdownDeleteP);
+    const $menuDropdownContent = document.createElement("div");
+    $menuDropdownContent.className = "dropdown-content";
+    $menuDropdownContent.append($menuDropdownEditButton, $menuDropdownDeleteButton);
+    const $menuDropdownBackground = document.createElement("div");
+    $menuDropdownBackground.className = "dropdown-background";
+    const $menuDropdown = document.createElement("div");
+    $menuDropdown.classList.add("dropdown", "menu-dropdown");
+    $menuDropdown.append($menuDropdownBackground, $menuDropdownContent);
+
+    // The delete confirm dropdown.
+    const $deleteDropdownMessage = document.createElement("p");
+    $deleteDropdownMessage.textContent = "Are you sure?";
+    const $deleteDropdownDeleteP = document.createElement("p");
+    $deleteDropdownDeleteP.textContent = "Delete";
+    const $deleteDropdownDeleteButton = document.createElement("button");
+    $deleteDropdownDeleteButton.append($deleteDropdownDeleteP);
+    const $deleteDropdownContent = document.createElement("div");
+    $deleteDropdownContent.className = "dropdown-content";
+    $deleteDropdownContent.append($deleteDropdownMessage, $deleteDropdownDeleteButton);
+    const $deleteDropdownBackground = document.createElement("div");
+    $deleteDropdownBackground.className = "dropdown-background";
+    const $deleteDropdown = document.createElement("div");
+    $deleteDropdown.classList.add("dropdown", "delete-dropdown");
+    $deleteDropdown.append($deleteDropdownBackground, $deleteDropdownContent);
+
+    // The container holding both dropdowns.
+    const $dropdownContainer = document.createElement("div");
+    $dropdownContainer.className = "dropdown-container";
+    $dropdownContainer.append($menuButton, $menuDropdown, $deleteDropdown);
+
+    // The logic behind the menu buttons (edit/delete/confirmation).
+    $menuButton.addEventListener("click", () => {
+      dropdowns.toggle($menuDropdown, $dropdownContainer);
+    });
+    $menuDropdownEditButton.addEventListener("click", () => {
+      dropdowns.close();
+      onEditClicked();
+    });
+    $menuDropdownDeleteButton.addEventListener("click", () => {
+      dropdowns.open($deleteDropdown, $dropdownContainer);
+    });
+    $deleteDropdownDeleteButton.addEventListener("click", () => {
+      dropdowns.close();
+      onDeleteClicked();
+    });
+
+    const $nameRow = document.createElement("div");
+    $nameRow.className = "name-row";
+    $nameRow.append($namesStack, $dropdownContainer);
+
     // The options container.
     const $options = document.createElement("div");
-    $options.className = "options";
+    $options.classList.add("options", `accent-${classData.color}`);
 
     // The option labels.
     const radiosName = uuidv4();
@@ -149,70 +216,10 @@ export class ClassUIController {
     })();
     $options.append(noChoiceOptionUI.$label, ...optionUIs.map(o => o.$label));
 
-    // The edit/delete menu button and dropdown.
-    const $menuButton = document.createElement("button");
-    $menuButton.className = "dropdown-button";
-    $menuButton.title = "More options";
-    $menuButton.append(iconify("uil:ellipsis-v"));
-
-    // The menu dropdown.
-    const $menuDropdownEditP = document.createElement("p");
-    $menuDropdownEditP.textContent = "Edit";
-    const $menuDropdownEditButton = document.createElement("button");
-    $menuDropdownEditButton.append($menuDropdownEditP);
-    const $menuDropdownDeleteP = document.createElement("p");
-    $menuDropdownDeleteP.textContent = "Delete";
-    const $menuDropdownDeleteButton = document.createElement("button");
-    $menuDropdownDeleteButton.append($menuDropdownDeleteP);
-    const $menuDropdownContent = document.createElement("div");
-    $menuDropdownContent.className = "dropdown-content";
-    $menuDropdownContent.append($menuDropdownEditButton, $menuDropdownDeleteButton);
-    const $menuDropdownBackground = document.createElement("div");
-    $menuDropdownBackground.className = "dropdown-background";
-    const $menuDropdown = document.createElement("div");
-    $menuDropdown.classList.add("dropdown", "menu-dropdown");
-    $menuDropdown.append($menuDropdownBackground, $menuDropdownContent);
-
-    // The delete confirm dropdown.
-    const $deleteDropdownMessage = document.createElement("p");
-    $deleteDropdownMessage.textContent = "Are you sure?";
-    const $deleteDropdownDeleteP = document.createElement("p");
-    $deleteDropdownDeleteP.textContent = "Delete";
-    const $deleteDropdownDeleteButton = document.createElement("button");
-    $deleteDropdownDeleteButton.append($deleteDropdownDeleteP);
-    const $deleteDropdownContent = document.createElement("div");
-    $deleteDropdownContent.className = "dropdown-content";
-    $deleteDropdownContent.append($deleteDropdownMessage, $deleteDropdownDeleteButton);
-    const $deleteDropdownBackground = document.createElement("div");
-    $deleteDropdownBackground.className = "dropdown-background";
-    const $deleteDropdown = document.createElement("div");
-    $deleteDropdown.classList.add("dropdown", "delete-dropdown");
-    $deleteDropdown.append($deleteDropdownBackground, $deleteDropdownContent);
-
-    // The container holding both dropdowns.
-    const $dropdownContainer = document.createElement("div");
-    $dropdownContainer.className = "dropdown-container";
-    $dropdownContainer.append($menuButton, $menuDropdown, $deleteDropdown);
-
-    $menuButton.addEventListener("click", () => {
-      dropdowns.toggle($menuDropdown, $dropdownContainer);
-    });
-    $menuDropdownEditButton.addEventListener("click", () => {
-      dropdowns.close();
-      onEditClicked();
-    });
-    $menuDropdownDeleteButton.addEventListener("click", () => {
-      dropdowns.open($deleteDropdown, $dropdownContainer);
-    });
-    $deleteDropdownDeleteButton.addEventListener("click", () => {
-      dropdowns.close();
-      onDeleteClicked();
-    });
-
     // The parent div.
     const $div = document.createElement("div");
-    $div.classList.add("class", `accent-${classData.color}`);
-    $div.append($nameOL, $typeOL, $options, $dropdownContainer);
+    $div.className = "class";
+    $div.append($nameRow, $options);
 
     const optionRadios = optionUIs.map(o => {
       return { option: o.option, $radio: o.$input };

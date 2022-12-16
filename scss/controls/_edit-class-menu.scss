@@ -54,7 +54,7 @@
     @include template.row;
     margin-top: 0.5rem;
     border: 2px solid var(--color-error);
-    border-radius: 0.75rem;
+    border-radius: 0.5rem;
     padding: 0.5rem 0.5rem;
     gap: 0.5rem;
 
@@ -93,12 +93,12 @@
   #edit-class-color-picker {
     @include picker-swatches.swatches($content-class: "picker-content");
     @include colors.gradient-classes($direction: "to bottom right");
-    margin-bottom: 1rem;
 
     // The swatch only fill 80% of their diameter on a good day, to move them
     // over a smidge to line up with the edge better.
     margin-left: -0.2rem;
     margin-right: -0.2rem;
+    margin-bottom: -0.2rem;
 
     .picker-content {
       width: 2rem;
@@ -112,6 +112,7 @@
       $graphic-class: "switch-graphic",
       $content-class: "switch-content"
     );
+    margin-bottom: 1rem;
 
     .switch-content {
       @include template.content-text;
@@ -126,6 +127,7 @@
     height: 1.5rem;
     gap: 0.25rem;
     align-self: flex-start;
+    margin-bottom: 1rem;
 
     p {
       font-size: 0.75rem;
@@ -136,6 +138,26 @@
   #edit-class-options {
     flex-grow: 1;
     margin-bottom: 1rem;
+    gap: 0.5rem;
+
+    .option {
+      border: 2px solid var(--color-ink-30);
+      border-radius: 0.5rem;
+      overflow: hidden;
+
+      .blocks {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+
+      .add-block-button {
+        @include template.button-filled-neutral;
+        @include template.content-text-icon;
+        --button-rounding: 0;
+        padding: 0rem 0.5rem;
+        height: 1.5rem;
+      }
+    }
   }
 
   #edit-class-submit-button {

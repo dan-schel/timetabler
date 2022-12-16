@@ -24,19 +24,19 @@ mixin edit-class-menu
     p.label Colour
     #edit-class-color-picker
 
-    label.switch
-      input#edit-class-optional-switch(type="checkbox", autocomplete="off")
-      div
-        .switch-graphic
-        .switch-content
-          p Class is optional
-
     p.label Options
     button#edit-class-add-option-button
       +iconify("uil:plus")
       p ADD OPTION
 
     #edit-class-options
+
+    label.switch
+      input#edit-class-optional-switch(type="checkbox", autocomplete="off")
+      div
+        .switch-graphic
+        .switch-content
+          p Class is optional
 
     button#edit-class-submit-button
       +iconify("uil:check")

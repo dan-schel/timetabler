@@ -128,15 +128,25 @@ export class TimetableBlock {
   }
 
   /**
-   * Converts this timetable block to a simple human-friendly string. The string
-   * returned doesn't include the duration.
+   * Converts this timetable block to a simple human-friendly string.
+   * @param includeDuration Whether or not to include the duration in the
+   * returned string.
    */
-  toDisplayString(): string {
+  toDisplayString(includeDuration: boolean): string {
     // Like the codename, but with a starting capital letter.
     const dow = this.dayOfWeek.name.substring(0, 3);
 
-    const onlineSuffix = this.online ? " online" : "";
-    return `${dow} ${this.startTime.to12HString()}${onlineSuffix}`;
+    // Use hours for duration if possible.
+    const duration = this.durationMins % 60 == 0
+      ? ` ${this.durationMins / 60}${this.durationMins / 60 == 1 ? "hr" : "hrs"}`
+      : ` ${this.durationMins}${this.durationMins == 1 ? "min" : "mins"}`;
+
+    const onlineSuffix = this.online
+      ? (includeDuration ? " (online)" : " online")
+      : "";
+
+    return `${dow} ${this.startTime.to12HString()}`
+      + `${includeDuration ? duration : ""}${onlineSuffix}`;
   }
 
   /**

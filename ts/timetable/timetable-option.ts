@@ -73,7 +73,7 @@ export class TimetableOption {
    * string returned doesn't include the durations of the blocks.
    */
   toDisplayString(): string {
-    return this.blocks.map(b => b.toDisplayString()).join(" & ");
+    return this.blocks.map(b => b.toDisplayString(false)).join(" & ");
   }
 
   /**
