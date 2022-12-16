@@ -50,6 +50,13 @@
     #expanded-content {
       @include expanded.show-edit-class-menu;
     }
+
+    // If somehow you made it to collapsed view while inside the edit class
+    // menu, allow us to escape, but otherwise hide the mobile expander button
+    // when in the edit class menu.
+    &:not(.collapsed) {
+      @include hide-mobile-expander-button;
+    }
   }
   &:not(.edit-class) {
     #expanded-content {
@@ -110,16 +117,20 @@
 
 // Applied by media query when the screen is wide enough.
 @mixin desktop {
-  // For desktop view, the mobile expander button is hidden and the row
-  // dedicated to it in the #controls div can be removed.
-  grid-template-rows: 1fr;
-  #mobile-expander-button {
-    @include template.gone;
-  }
+  @include hide-mobile-expander-button;
 
   // Collapsed view is never used in the desktop layout regardless of whether
   // the ".collapsed" class is present on the #controls div or not.
   #collapsed-content {
+    @include template.gone;
+  }
+}
+
+@mixin hide-mobile-expander-button {
+  // The mobile expander button is hidden and the row dedicated to it in the
+  // #controls div can be removed.
+  grid-template-rows: 1fr;
+  #mobile-expander-button {
     @include template.gone;
   }
 }

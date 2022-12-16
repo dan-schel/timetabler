@@ -1,0 +1,44 @@
+include iconify.pug
+
+mixin edit-class-menu
+  div&attributes(attributes).new
+    button#edit-class-back-button
+      +iconify("uil:angle-left-b")
+      p BACK
+
+    h2.when-new Add class
+    h2.when-edit Edit class
+
+    #edit-class-error-ui.when-error
+      +iconify("uil:exclamation-circle")
+      p#edit-class-error-text Name can't be empty
+
+    label.text-input
+      p.label Name
+      input#edit-class-name-input(type="text", autocomplete="off", placeholder="e.g. Advanced Tin Opening")
+    label.text-input
+      p.label Type
+      input#edit-class-type-input(type="text", autocomplete="off", placeholder="e.g. Lecture")
+
+
+    p.label Colour
+    #edit-class-color-picker
+
+    label.switch
+      input#edit-class-optional-switch(type="checkbox", autocomplete="off")
+      div
+        .switch-graphic
+        .switch-content
+          p Class is optional
+
+    p.label Options
+    button#edit-class-add-option-button
+      +iconify("uil:plus")
+      p ADD OPTION
+
+    #edit-class-options
+
+    button#edit-class-submit-button
+      +iconify("uil:check")
+      p.when-new Add to timetable
+      p.when-edit Save changes

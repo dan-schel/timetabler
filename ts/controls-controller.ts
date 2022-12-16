@@ -72,7 +72,7 @@ export class ControlsController {
 
     // Open the edit class menu when "Add class" button clicked.
     this._html.addClassButton.addEventListener("click", () => {
-      this._editClassController.open();
+      this._editClassController.open(null);
     });
   }
 

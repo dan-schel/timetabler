@@ -7,7 +7,7 @@ import { TimetableChoices } from "./timetable/timetable-choices";
 // Retrieve the HTML elements from the page.
 const html = {
   controls: finder.any("controls"),
-  canvasContainer: finder.div("canvas-container"),
+  canvasContainer: finder.any("canvas-container"),
   canvas: finder.canvas("canvas"),
   mobileExpanderButton: finder.button("mobile-expander-button"),
   importButton: finder.button("import-button"),
@@ -15,7 +15,14 @@ const html = {
   addClassButton: finder.button("add-class-button"),
   classes: finder.div("classes"),
   statusContainerClass: "status-container",
-  editClassBackButton: finder.button("edit-class-back-button")
+  editClassMenu: finder.div("edit-class-menu"),
+  editClassErrorText: finder.any("edit-class-error-text"),
+  editClassBackButton: finder.button("edit-class-back-button"),
+  editClassNameInput: finder.input("edit-class-name-input"),
+  editClassTypeInput: finder.input("edit-class-type-input"),
+  editClassColorPicker: finder.div("edit-class-color-picker"),
+  editClassOptionalSwitch: finder.input("edit-class-optional-switch"),
+  editClassSubmitButton: finder.button("edit-class-submit-button"),
 };
 
 // Used by other files to refer to the above html object.

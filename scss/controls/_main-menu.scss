@@ -5,6 +5,7 @@
   // Arranges the "My classes" title, import, and export buttons in a row.
   #header-row {
     @include template.row;
+    gap: 0.5rem;
 
     // The "My classes" title.
     h2 {
@@ -15,7 +16,7 @@
 
     // The import/export button styles.
     button {
-      @include template.button-hover;
+      @include template.button-filled-neutral;
       @include template.content-text-icon;
       padding: 0rem 0.5rem;
       height: 1.5rem;

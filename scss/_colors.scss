@@ -133,7 +133,7 @@ $custom-colors: (
   ),
 );
 
-@mixin css-classes {
+@mixin accent-classes {
   &.accent-red,
   .accent-red {
     --color-accent: var(--color-red);
@@ -172,6 +172,80 @@ $custom-colors: (
   &.accent-pink,
   .accent-pink {
     --color-accent: var(--color-pink);
+    --color-on-accent: var(--color-on-pink);
+  }
+}
+@mixin gradient-classes($direction) {
+  &.gradient-red,
+  .gradient-red {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-red-gradient-1),
+      var(--color-red-gradient-2)
+    );
+    --color-on-accent: var(--color-on-red);
+  }
+  &.gradient-orange,
+  .gradient-orange {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-orange-gradient-1),
+      var(--color-orange-gradient-2)
+    );
+    --color-on-accent: var(--color-on-orange);
+  }
+  &.gradient-yellow,
+  .gradient-yellow {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-yellow-gradient-1),
+      var(--color-yellow-gradient-2)
+    );
+    --color-on-accent: var(--color-on-yellow);
+  }
+  &.gradient-green,
+  .gradient-green {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-green-gradient-1),
+      var(--color-green-gradient-2)
+    );
+    --color-on-accent: var(--color-on-green);
+  }
+  &.gradient-cyan,
+  .gradient-cyan {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-cyan-gradient-1),
+      var(--color-cyan-gradient-2)
+    );
+    --color-on-accent: var(--color-on-cyan);
+  }
+  &.gradient-blue,
+  .gradient-blue {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-blue-gradient-1),
+      var(--color-blue-gradient-2)
+    );
+    --color-on-accent: var(--color-on-blue);
+  }
+  &.gradient-purple,
+  .gradient-purple {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-purple-gradient-1),
+      var(--color-purple-gradient-2)
+    );
+    --color-on-accent: var(--color-on-purple);
+  }
+  &.gradient-pink,
+  .gradient-pink {
+    --gradient: linear-gradient(
+      #{$direction},
+      var(--color-pink-gradient-1),
+      var(--color-pink-gradient-2)
+    );
     --color-on-accent: var(--color-on-pink);
   }
 }

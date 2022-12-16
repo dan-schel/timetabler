@@ -1,9 +1,13 @@
 @use "../css-template/import" as template;
+@use "picker-swatches";
+@use "../colors";
 
 @mixin main {
+  flex-grow: 1;
+
   // The "Back" button.
   #edit-class-back-button {
-    @include template.button-hover;
+    @include template.button-filled-neutral;
     @include template.content-text-icon;
     padding: 0rem 0.5rem;
     height: 1.5rem;
@@ -15,8 +19,20 @@
       font-size: 0.75rem;
       font-weight: bold;
     }
-    .iconify {
-      margin-left: -0.15rem;
+  }
+
+  // Only show .when-edit html when the .new class is NOT on the
+  // #edit-class-menu.
+  &.new {
+    .when-edit {
+      @include template.gone;
+    }
+  }
+
+  // Only show .when-new html when the .new class is on the #edit-class-menu.
+  &:not(.new) {
+    .when-new {
+      @include template.gone;
     }
   }
 
@@ -25,5 +41,110 @@
     font-size: 1rem;
     font-weight: bold;
     color: var(--color-ink-100);
+  }
+
+  // Only show error UI when the .error class is on the #edit-class-menu.
+  &:not(.error) {
+    .when-error {
+      @include template.gone;
+    }
+  }
+
+  #edit-class-error-ui {
+    @include template.row;
+    margin-top: 0.5rem;
+    border: 2px solid var(--color-error);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.5rem;
+    gap: 0.5rem;
+
+    .iconify {
+      color: var(--color-error);
+      font-size: 1.2rem;
+    }
+    p {
+      flex-shrink: 1;
+    }
+  }
+
+  p.label {
+    @include template.no-select;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  label.text-input {
+    // Prevents the whitespace above the label being considered part of the
+    // textbox's hitbox.
+    margin-top: 1rem;
+    cursor: text;
+    .label {
+      margin-top: 0rem;
+      margin-bottom: 0.25rem;
+    }
+
+    input[type="text"] {
+      @include template.input-filled-neutral;
+      height: 2rem;
+      padding: 0rem 1rem;
+    }
+  }
+
+  #edit-class-color-picker {
+    @include picker-swatches.swatches($content-class: "picker-content");
+    @include colors.gradient-classes($direction: "to bottom right");
+    margin-bottom: 1rem;
+
+    // The swatch only fill 80% of their diameter on a good day, to move them
+    // over a smidge to line up with the edge better.
+    margin-left: -0.2rem;
+    margin-right: -0.2rem;
+
+    .picker-content {
+      width: 2rem;
+      height: 2rem;
+      --background: var(--gradient);
+    }
+  }
+
+  .switch {
+    @include template.checkbox-switch(
+      $graphic-class: "switch-graphic",
+      $content-class: "switch-content"
+    );
+
+    .switch-content {
+      @include template.content-text;
+      margin-left: 1rem;
+    }
+  }
+
+  #edit-class-add-option-button {
+    @include template.button-filled-neutral;
+    @include template.content-text-icon;
+    padding: 0rem 0.5rem;
+    height: 1.5rem;
+    gap: 0.25rem;
+    align-self: flex-start;
+
+    p {
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+  }
+
+  #edit-class-options {
+    flex-grow: 1;
+    margin-bottom: 1rem;
+  }
+
+  #edit-class-submit-button {
+    @include template.button-filled;
+    @include template.content-text-icon;
+    height: 2.5rem;
+    gap: 0.5rem;
+    .iconify {
+      font-size: 1.2rem;
+    }
   }
 }

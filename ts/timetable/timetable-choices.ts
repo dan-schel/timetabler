@@ -139,6 +139,30 @@ export class TimetableChoices {
     return new TimetableChoices(this.timetable, choices);
   }
 
+  /**
+   * Returns a new {@link TimetableChoices} that is identical, except with the
+   * given class added.
+   * @param newClass The new class to add.
+   * @param replace The old class to replace (if any). If this class is not
+   * found within the timetable, then nothing will change.
+   */
+  withClass(newClass: TimetableClass, replace?: TimetableClass): TimetableChoices {
+    const newTimetable = this.timetable.withClass(newClass, replace);
+
+    const newChoices = (() => {
+      if (replace != null) {
+        // Find the choice for the old class and change it to the new class.
+        return this.choices.map(ch => ch.timetableClass.equals(newClass)
+          ? new TimetableChoice(newClass, null)
+          : ch
+        );
+      }
+      return [...this.choices, new TimetableChoice(newClass, null)];
+    })();
+
+    return new TimetableChoices(newTimetable, newChoices);
+  }
+
   /** Returns a list of all blocks that are part of clashes. */
   clashingBlocks(): ClashingBlock[] {
     const result: ClashingBlock[] = [];
