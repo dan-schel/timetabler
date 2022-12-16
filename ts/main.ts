@@ -1,6 +1,7 @@
 import { finder } from "schel-d-utils-browser";
 import { CanvasController } from "./canvas/canvas-controller";
 import { ControlsController } from "./controls-controller";
+import { DropdownCoordinator } from "./dropdown-coordinator";
 import { Timetable } from "./timetable/timetable";
 import { TimetableChoices } from "./timetable/timetable-choices";
 
@@ -41,6 +42,8 @@ window.addEventListener("resize", () => canvas.fitCanvas());
 
 // Redraw the canvas when the webfonts have loaded.
 document.fonts.ready.then(() => canvas.markDirty());
+
+export const dropdowns = new DropdownCoordinator();
 
 /**
  * Modifies the timetable/choices being displayed with a new one.

@@ -97,7 +97,13 @@ export class ControlsController {
         // each class.
         if (choice == null) { throw new Error(); }
 
-        const ui = ClassUIController.create(cl);
+        const onEditClicked = () => {
+          this._editClassController.open(cl);
+        };
+        const onDeleteClicked = () => {
+          updateTimetable(getCurrentTimetable().withoutClass(cl));
+        };
+        const ui = ClassUIController.create(cl, onEditClicked, onDeleteClicked);
         ui.select(choice.option);
 
         return ui;

@@ -163,6 +163,19 @@ export class TimetableChoices {
     return new TimetableChoices(newTimetable, newChoices);
   }
 
+  /**
+   * Returns a new {@link TimetableChoices} that is identical, except with the
+   * given class removed.
+   * @param oldClass The class to remove.
+   */
+  withoutClass(oldClass: TimetableClass): TimetableChoices {
+    const newTimetable = this.timetable.withoutClass(oldClass);
+    const newChoices = this.choices.filter(
+      c => !c.timetableClass.equals(oldClass)
+    );
+    return new TimetableChoices(newTimetable, newChoices);
+  }
+
   /** Returns a list of all blocks that are part of clashes. */
   clashingBlocks(): ClashingBlock[] {
     const result: ClashingBlock[] = [];
