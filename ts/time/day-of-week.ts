@@ -120,6 +120,19 @@ export class DayOfWeek {
     if (num == null) { return null; }
     return new DayOfWeek(num);
   }
+
+  /** Returns all the days of the week. */
+  static all(): DayOfWeek[] {
+    return [
+      DayOfWeek.mon,
+      DayOfWeek.tue,
+      DayOfWeek.wed,
+      DayOfWeek.thu,
+      DayOfWeek.fri,
+      DayOfWeek.sat,
+      DayOfWeek.sun,
+    ];
+  }
 }
 
 /** The names and codenames for each possible {@link DayOfWeekNumber}. */
