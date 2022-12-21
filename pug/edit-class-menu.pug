@@ -1,16 +1,16 @@
-include iconify.pug
+include icons.pug
 
 mixin edit-class-menu
   div&attributes(attributes).new
     button#edit-class-back-button
-      +iconify("uil:angle-left-b")
+      +icon("uil:angle-left-b")
       p BACK
 
     h2.when-new Add class
     h2.when-edit Edit class
 
     #edit-class-error-ui.when-error
-      +iconify("uil:exclamation-circle")
+      +icon("uil:exclamation-circle")
       p#edit-class-error-text Name can't be empty
 
     label.text-input
@@ -26,7 +26,7 @@ mixin edit-class-menu
 
     p.label Options
     button#edit-class-add-option-button
-      +iconify("uil:plus")
+      +icon("uil:plus")
       p ADD OPTION
 
     #edit-class-options
@@ -39,6 +39,6 @@ mixin edit-class-menu
           p Class is optional
 
     button#edit-class-submit-button
-      +iconify("uil:check")
+      +icon("uil:check")
       p.when-new Add to timetable
       p.when-edit Save changes

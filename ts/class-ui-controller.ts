@@ -2,7 +2,8 @@ import { TimetableClass } from "./timetable/timetable-class";
 import { v4 as uuidv4 } from "uuid";
 import { TimetableOption } from "./timetable/timetable-option";
 import { dropdowns, getCurrentTimetable, updateTimetable } from "./main";
-import { iconify } from "./iconify";
+import { icons } from "./icons";
+import { make } from "schel-d-utils-browser";
 
 export type OptionRadioMapping = {
   option: TimetableOption,
@@ -101,7 +102,7 @@ export class ClassUIController {
     const $menuButton = document.createElement("button");
     $menuButton.className = "dropdown-button";
     $menuButton.title = "More options";
-    $menuButton.append(iconify("uil:ellipsis-v"));
+    $menuButton.append(make.icon("uil:ellipsis-v", icons, {}));
 
     // The menu dropdown.
     const $menuDropdownEditP = document.createElement("p");

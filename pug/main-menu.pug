@@ -1,17 +1,19 @@
+include icons.pug
+
 mixin main-menu
   div&attributes(attributes)
     #header-row
       h2 My classes
       .flex-grow
       button#import-button
-        +iconify("uil:import")
+        +icon("uil:import")
         p IMPORT
       button#export-button
-        +iconify("uil:export")
+        +icon("uil:export")
         p EXPORT
 
     button#add-class-button
-      +iconify("uil:plus")
+      +icon("uil:plus")
       p Add class
 
     #expanded-empty-message

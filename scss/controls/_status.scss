@@ -4,7 +4,7 @@
   @include template.row;
   gap: 0.75rem;
 
-  .iconify {
+  .icon {
     font-size: 1.2rem;
   }
 
@@ -35,7 +35,7 @@
   &.clash {
     background-color: var(--color-error);
     p,
-    .iconify {
+    .icon {
       color: var(--color-on-accent);
     }
   }
@@ -50,7 +50,7 @@
 
   &.clash {
     p,
-    .iconify {
+    .icon {
       color: var(--color-error);
     }
     p {

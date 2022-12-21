@@ -1,4 +1,4 @@
-import { finder } from "schel-d-utils-browser";
+import { find } from "schel-d-utils-browser";
 import { CanvasController } from "./canvas/canvas-controller";
 import { ControlsController } from "./controls-controller";
 import { DropdownCoordinator } from "./dropdown-coordinator";
@@ -7,25 +7,25 @@ import { TimetableChoices } from "./timetable/timetable-choices";
 
 // Retrieve the HTML elements from the page.
 const html = {
-  controls: finder.any("controls"),
-  canvasContainer: finder.any("canvas-container"),
-  canvas: finder.canvas("canvas"),
-  mobileExpanderButton: finder.button("mobile-expander-button"),
-  importButton: finder.button("import-button"),
-  exportButton: finder.button("export-button"),
-  addClassButton: finder.button("add-class-button"),
-  classes: finder.div("classes"),
+  controls: find.any("controls"),
+  canvasContainer: find.any("canvas-container"),
+  canvas: find.canvas("canvas"),
+  mobileExpanderButton: find.button("mobile-expander-button"),
+  importButton: find.button("import-button"),
+  exportButton: find.button("export-button"),
+  addClassButton: find.button("add-class-button"),
+  classes: find.div("classes"),
   statusContainerClass: "status-container",
-  editClassMenu: finder.div("edit-class-menu"),
-  editClassErrorText: finder.any("edit-class-error-text"),
-  editClassBackButton: finder.button("edit-class-back-button"),
-  editClassNameInput: finder.input("edit-class-name-input"),
-  editClassTypeInput: finder.input("edit-class-type-input"),
-  editClassColorPicker: finder.div("edit-class-color-picker"),
-  editClassOptionalSwitch: finder.input("edit-class-optional-switch"),
-  editClassAddOptionButton: finder.button("edit-class-add-option-button"),
-  editClassOptions: finder.div("edit-class-options"),
-  editClassSubmitButton: finder.button("edit-class-submit-button"),
+  editClassMenu: find.div("edit-class-menu"),
+  editClassErrorText: find.any("edit-class-error-text"),
+  editClassBackButton: find.button("edit-class-back-button"),
+  editClassNameInput: find.input("edit-class-name-input"),
+  editClassTypeInput: find.input("edit-class-type-input"),
+  editClassColorPicker: find.div("edit-class-color-picker"),
+  editClassOptionalSwitch: find.input("edit-class-optional-switch"),
+  editClassAddOptionButton: find.button("edit-class-add-option-button"),
+  editClassOptions: find.div("edit-class-options"),
+  editClassSubmitButton: find.button("edit-class-submit-button"),
 };
 
 // Used by other files to refer to the above html object.

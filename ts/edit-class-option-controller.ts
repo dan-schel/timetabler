@@ -1,8 +1,9 @@
-import { iconify } from "./iconify";
+import { icons } from "./icons";
 import { DayOfWeek } from "./time/day-of-week";
 import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableOption } from "./timetable/timetable-option";
 import { v4 as uuidv4 } from "uuid";
+import { make } from "schel-d-utils-browser";
 
 /** Handles the UI for timetable option within the edit class menu. */
 export class EditClassOptionController {
@@ -61,7 +62,7 @@ export class EditClassOptionController {
     $blocksDiv.className = "blocks";
 
     // "Add another block to this option" button.
-    const $plusIcon = iconify("uil:plus");
+    const $plusIcon = make.icon("uil:plus", icons, {});
     const $addBlockButton = document.createElement("button");
     $addBlockButton.classList.add("add-block-button");
     $addBlockButton.title = "Add another block to this option";
@@ -158,13 +159,13 @@ export class EditClassOptionController {
     const $cancelButton = document.createElement("button");
     $cancelButton.className = "cancel-button";
     $cancelButton.title = "Cancel";
-    $cancelButton.append(iconify("uil:times"));
+    $cancelButton.append(make.icon("uil:times", icons, {}));
 
     // Submit button.
     const $submitButton = document.createElement("button");
     $submitButton.className = "submit-button";
     $submitButton.title = "Create timetable block";
-    $submitButton.append(iconify("uil:check"));
+    $submitButton.append(make.icon("uil:check", icons, {}));
 
     // Bottom row consists of the online switch, cancel, and submit buttons.
     const $bottomRow = document.createElement("div");
