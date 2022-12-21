@@ -76,6 +76,7 @@ export class EditClassOptionPageController {
 
       this.setBlocks([...this._blocks, newBlock]);
       this.resetAddTimeBlockUI();
+      this.showError(null);
     }
     catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {

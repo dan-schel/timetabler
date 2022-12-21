@@ -51,14 +51,15 @@ export type Html = typeof html;
 
 const controls = new ControlsController(html);
 
-// Initially, start with an empty timetable.
-let timetable = new TimetableChoices(new Timetable([]), []);
-
 // Set the canvas size and draw. Also have the canvas resize itself when the
 // window size changes.
 const canvas = new CanvasController(html);
 canvas.fitCanvas();
 window.addEventListener("resize", () => canvas.fitCanvas());
+
+// Initially, start with an empty timetable.
+let timetable = new TimetableChoices(new Timetable([]), []);
+updateTimetable(timetable);
 
 // Redraw the canvas when the webfonts have loaded.
 document.fonts.ready.then(() => canvas.markDirty());

@@ -66,7 +66,10 @@ export class ControlsController {
 
     // Export the timetable.
     this._html.exportButton.addEventListener("click", () => {
-      const text = JSON.stringify(getCurrentTimetable().toJSON());
+      const timetable = getCurrentTimetable();
+      if (timetable.timetable.classes.length < 1) { return; }
+
+      const text = JSON.stringify(timetable.toJSON());
       download(text, "timetable.json");
     });
 
@@ -114,6 +117,9 @@ export class ControlsController {
       });
 
       this._html.classes.replaceChildren(...this._classUIs.map(u => u.$div));
+
+      // Disable export for empty timetables.
+      this._html.exportButton.disabled = timetable.timetable.classes.length < 1;
     }
 
     // Update the selected options regardless.
