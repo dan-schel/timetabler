@@ -44,9 +44,8 @@
     "rimraf": "^3.0.2",
     "sass": "^1.56.2",
     "schel-d-utils": "^2.3.0",
-    "schel-d-utils-browser": "^2.0.0",
+    "schel-d-utils-browser": "^2.1.2",
     "typescript": "^4.8.4",
-    "uuid": "^9.0.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {

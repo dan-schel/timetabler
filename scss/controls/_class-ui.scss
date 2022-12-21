@@ -95,7 +95,7 @@
   }
 
   .options {
-    @include template.picker-pills("button");
+    @include template.picker-pills("picker-content");
     flex-direction: row;
     flex-wrap: wrap;
     gap: 0.25rem;
@@ -104,7 +104,7 @@
       min-width: 0;
       flex-shrink: 1;
     }
-    .button {
+    .picker-content {
       --button-rounding: 0.75rem;
       height: 1.5rem;
       padding: 0rem 0.75rem;

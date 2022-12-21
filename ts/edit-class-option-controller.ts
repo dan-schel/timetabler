@@ -62,7 +62,7 @@ export class EditClassOptionController {
     $blocksDiv.className = "blocks";
 
     // "Add another block to this option" button.
-    const $plusIcon = make.icon("uil:plus", icons, {});
+    const $plusIcon = make.icon("uil:plus", icons, {}).$element;
     const $addBlockButton = document.createElement("button");
     $addBlockButton.classList.add("add-block-button");
     $addBlockButton.title = "Add another block to this option";
@@ -159,13 +159,13 @@ export class EditClassOptionController {
     const $cancelButton = document.createElement("button");
     $cancelButton.className = "cancel-button";
     $cancelButton.title = "Cancel";
-    $cancelButton.append(make.icon("uil:times", icons, {}));
+    $cancelButton.append(make.icon("uil:times", icons, {}).$element);
 
     // Submit button.
     const $submitButton = document.createElement("button");
     $submitButton.className = "submit-button";
     $submitButton.title = "Create timetable block";
-    $submitButton.append(make.icon("uil:check", icons, {}));
+    $submitButton.append(make.icon("uil:check", icons, {}).$element);
 
     // Bottom row consists of the online switch, cancel, and submit buttons.
     const $bottomRow = document.createElement("div");

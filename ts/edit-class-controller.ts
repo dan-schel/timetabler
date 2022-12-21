@@ -54,9 +54,6 @@ export class EditClassController {
         );
       }
     });
-    this._html.editClassDialog.addEventListener("close", () => {
-      this.reset();
-    });
   }
 
   /** Fills in the class colors into the color picker. */
@@ -127,6 +124,7 @@ export class EditClassController {
    * if we're creating a new class.
    */
   open(existingClass: TimetableClass | null) {
+    this.reset();
     this._existingClass = existingClass;
 
     this._html.editClassDialog.showModal();
@@ -150,7 +148,7 @@ export class EditClassController {
     this._html.editClassDialog.close();
   }
 
-  /** Called when the dialog has closed. Clears the fields in the UI. */
+  /** Called when the dialog is about to open. Clears any old values. */
   reset() {
     this._html.editClassNameInput.value = "";
     this._html.editClassTypeInput.value = "";
