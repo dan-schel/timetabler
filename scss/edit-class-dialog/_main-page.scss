@@ -1,25 +1,27 @@
-@use "../../css-template/import" as template;
+@use "../css-template/import" as template;
 @use "picker-swatches";
-@use "../../colors";
+@use "../colors";
 
 // The styles applied to the edit class menu.
 @mixin main {
   flex-grow: 1;
   padding: 1rem;
 
-  // The "Back" button.
-  #edit-class-back-button {
-    @include template.button-filled-neutral;
-    @include template.content-text-icon;
-    padding: 0rem 0.5rem;
-    height: 1.5rem;
-    gap: 0.25rem;
-    align-self: flex-start;
-    margin-bottom: 1rem;
+  // To position the close button.
+  position: relative;
 
-    p {
-      font-size: 0.75rem;
-      font-weight: bold;
+  // The close button.
+  #edit-class-close-button {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    --button-rounding: 0.5rem;
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    .icon {
+      font-size: 1.2rem;
     }
   }
 
@@ -40,9 +42,10 @@
 
   // The "Edit/add class" title.
   h2 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: var(--color-ink-100);
+    margin-top: 0.5rem;
   }
 
   // Only show error UI when the .error class is on the #edit-class-menu.
@@ -166,77 +169,6 @@
       }
 
       .block-editor {
-        padding: 0.5rem;
-        gap: 0.5rem;
-        background-color: var(--color-paper-30);
-        min-width: 0;
-
-        > div {
-          @include template.row;
-          gap: 0.5rem;
-        }
-
-        .select-wrapper {
-          @include template.select-filled-neutral(
-            $highlight-class: "select-highlight",
-            $arrow-class: "select-arrow"
-          );
-          width: 6rem;
-          flex-shrink: 2;
-          min-width: 0;
-          select {
-            height: 2rem;
-            padding: 0 1.75rem 0 1rem;
-            width: 100%;
-          }
-        }
-        input[type="text"] {
-          @include template.input-filled-neutral;
-          height: 2rem;
-          width: 6rem;
-          padding: 0 1rem;
-          flex-shrink: 2;
-          min-width: 0;
-        }
-        .duration-ui {
-          @include template.row;
-          gap: 0.5rem;
-          flex-shrink: 1;
-          min-width: 0;
-
-          input[type="text"] {
-            width: 4rem;
-            min-width: 0;
-          }
-          .unit-picker {
-            @include template.picker-subtle($content-class: "picker-content");
-            @include template.row;
-            .picker-content {
-              @include template.content-text;
-            }
-            > p {
-              color: var(--color-ink-50);
-            }
-          }
-        }
-        .switch-content {
-          margin-left: 0.5rem;
-        }
-        .cancel-button {
-          @include template.button-filled-neutral;
-        }
-        .submit-button {
-          @include template.button-filled;
-        }
-        .cancel-button,
-        .submit-button {
-          @include template.content-text-icon;
-          height: 2rem;
-          width: 3rem;
-          .icon {
-            font-size: 1.2rem;
-          }
-        }
       }
 
       &.editing {
@@ -261,32 +193,4 @@
       font-size: 1.2rem;
     }
   }
-}
-
-// The styles applied to the dialog element that the menu sits inside.
-@mixin dialog {
-  @include template.dialog;
-  border-radius: 0.75rem;
-
-  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-  opacity: 1;
-  visibility: visible;
-  display: block;
-
-  width: min(calc(100% - 2rem), 50rem);
-  min-width: calc(var(--min-page-width) - 1rem);
-  max-height: calc(100% - 2rem);
-  z-index: 2;
-
-  &:not([open]) {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translate(-50%, calc(1rem - 50%));
-    min-width: 0;
-  }
-}
-@mixin dialog-mobile {
-  width: min(calc(100% - 1rem), 60rem);
-  max-height: calc(100% - 1rem);
 }

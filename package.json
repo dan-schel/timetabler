@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/schel-d/timetabler#readme",
   "dependencies": {
-    "@types/uuid": "^9.0.0",
     "concurrently": "^7.5.0",
     "copyfiles": "^2.4.1",
     "esbuild": "^0.15.12",

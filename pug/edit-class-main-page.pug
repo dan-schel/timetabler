@@ -1,0 +1,43 @@
+include icons.pug
+
+mixin edit-class-main-page
+  div&attributes(attributes)
+    button#edit-class-close-button
+      +icon("uil:times")
+
+    h2.when-new Add class
+    h2.when-edit Edit class
+
+    #edit-class-error-ui.when-error
+      +icon("uil:exclamation-circle")
+      p#edit-class-error-text Name can't be empty
+
+    #edit-class-ntc-wrap
+      label.text-input
+        p.label Name
+        input#edit-class-name-input(type="text", autocomplete="off", placeholder="e.g. Advanced Tin Opening")
+      label.text-input
+        p.label Type
+        input#edit-class-type-input(type="text", autocomplete="off", placeholder="e.g. Lecture")
+      p.label Colour
+      #edit-class-color-picker
+
+    p.label Options
+    button#edit-class-add-option-button
+      +icon("uil:plus")
+      p ADD OPTION
+
+    #edit-class-options
+
+    #edit-class-footer-wrap
+      label#edit-class-optional-switch-label.switch
+        input#edit-class-optional-switch(type="checkbox", autocomplete="off")
+        div
+          .switch-graphic
+          .switch-content
+            p Class is optional
+
+      button#edit-class-submit-button
+        +icon("uil:check")
+        p.when-new Add to timetable
+        p.when-edit Save changes

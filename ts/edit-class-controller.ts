@@ -1,3 +1,4 @@
+import { make } from "schel-d-utils-browser";
 import { EditClassOptionController } from "./edit-class-option-controller";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableClass } from "./timetable/timetable-class";
@@ -40,7 +41,7 @@ export class EditClassController {
 
   /** Sets up event handlers. */
   attachEvents() {
-    this._html.editClassBackButton.addEventListener("click", () => {
+    this._html.editClassCloseButton.addEventListener("click", () => {
       this.close();
     });
     this._html.editClassSubmitButton.addEventListener("click", () => {
@@ -59,20 +60,13 @@ export class EditClassController {
   /** Fills in the class colors into the color picker. */
   static createColorSwatches(div: HTMLDivElement) {
     const pickers = TimetableColors.map(c => {
-      const $radio = document.createElement("input");
-      $radio.type = "radio";
-      $radio.name = "edit-class-color-picker";
-
-      const $content = document.createElement("div");
-      $content.className = "picker-content";
-
-      const $label = document.createElement("label");
-      $label.title = timetableColorDisplayName(c);
-      $label.classList.add(`gradient-${c}`);
-      $label.append($radio, $content);
+      const dom = make.cssTemplate.pickerButton({}, {});
+      dom.$element.classList.add(`gradient-${c}`);
+      dom.radio.$element.name = "edit-class-color-picker";
+      dom.radio.$element.autocomplete = "off";
 
       return {
-        color: c, $label: $label, $radio: $radio
+        color: c, $label: dom.$element, $radio: dom.radio.$element
       };
     });
 
@@ -128,7 +122,7 @@ export class EditClassController {
     this._existingClass = existingClass;
 
     this._html.editClassDialog.showModal();
-    this._html.editClassMenu.classList.toggle("new", existingClass == null);
+    this._html.editClassMainPage.classList.toggle("new", existingClass == null);
 
     if (existingClass != null) {
       this._html.editClassNameInput.value = existingClass.name;
@@ -172,7 +166,7 @@ export class EditClassController {
    * @param message The message to show, or null to clear the message.
    */
   showError(message: string | null) {
-    this._html.editClassMenu.classList.toggle("error", message != null);
+    this._html.editClassMainPage.classList.toggle("error", message != null);
     this._html.editClassErrorText.textContent = message;
   }
 }

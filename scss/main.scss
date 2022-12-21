@@ -3,7 +3,7 @@
 @use "colors";
 @use "fonts";
 @use "canvas";
-@use "controls/edit-class-menu/edit-class-menu";
+@use "edit-class-dialog/edit-class-dialog";
 
 // Initialize the css template with the custom colors.
 @include template.init($custom-colors: colors.$custom-colors);
@@ -27,10 +27,7 @@ body {
 }
 
 #edit-class-dialog {
-  @include edit-class-menu.dialog;
-  #edit-class-menu {
-    @include edit-class-menu.main;
-  }
+  @include edit-class-dialog.main;
 }
 
 // Create css classes for common utils from the template.
@@ -119,6 +116,6 @@ body {
     z-index: 0;
   }
   #edit-class-dialog {
-    @include edit-class-menu.dialog-mobile;
+    @include edit-class-dialog.mobile;
   }
 }
