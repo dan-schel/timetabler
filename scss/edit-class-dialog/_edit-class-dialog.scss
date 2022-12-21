@@ -6,15 +6,16 @@
   @include template.dialog;
   border-radius: 0.75rem;
 
-  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-  opacity: 1;
-  visibility: visible;
-
   width: min(calc(100% - 2rem), 50rem);
   height: min(calc(100% - 2rem), 40rem);
   min-width: calc(var(--min-page-width) - 1rem);
   max-height: calc(100% - 2rem);
   z-index: 2;
+
+  // For the open/close animation.
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  opacity: 1;
+  visibility: visible;
 
   &:not([open]) {
     opacity: 0;
@@ -27,10 +28,26 @@
     display: flex;
   }
 
+  // The close button.
+  #edit-class-close-button {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    --button-rounding: 0.5rem;
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+
   #edit-class-main-page {
     @include main-page.main;
   }
 }
+
 @mixin mobile {
   width: min(calc(100% - 1rem), 60rem);
   max-height: calc(100% - 1rem);

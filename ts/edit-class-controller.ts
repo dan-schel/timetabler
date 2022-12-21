@@ -2,8 +2,7 @@ import { make } from "schel-d-utils-browser";
 import { EditClassOptionController } from "./edit-class-option-controller";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableClass } from "./timetable/timetable-class";
-import { TimetableColor, timetableColorDisplayName, TimetableColors }
-  from "./timetable/timetable-class-color";
+import { TimetableColor, TimetableColors } from "./timetable/timetable-class-color";
 import { TimetableError } from "./timetable/timetable-error";
 
 /** Manages the edit class menu. */
@@ -144,6 +143,9 @@ export class EditClassController {
 
   /** Called when the dialog is about to open. Clears any old values. */
   reset() {
+    // Todo: go back to the main page.
+    this._html.editClassMainPage.classList.remove("new");
+
     this._html.editClassNameInput.value = "";
     this._html.editClassTypeInput.value = "";
     this._colorRadios.forEach(r => r.$radio.checked = false);

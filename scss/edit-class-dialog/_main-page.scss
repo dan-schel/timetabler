@@ -7,24 +7,6 @@
   flex-grow: 1;
   padding: 1rem;
 
-  // To position the close button.
-  position: relative;
-
-  // The close button.
-  #edit-class-close-button {
-    @include template.button-hover;
-    @include template.content-text-icon;
-    --button-rounding: 0.5rem;
-    position: absolute;
-    height: 2rem;
-    width: 2rem;
-    top: 0.5rem;
-    right: 0.5rem;
-    .icon {
-      font-size: 1.2rem;
-    }
-  }
-
   // Only show .when-edit html when the .new class is NOT on the
   // #edit-class-menu.
   &.new {
@@ -55,7 +37,7 @@
     }
   }
 
-  #edit-class-error-ui {
+  #edit-class-main-page-error-ui {
     @include template.row;
     margin-top: 0.5rem;
     border: 2px solid var(--color-error);
@@ -95,7 +77,7 @@
     }
   }
 
-  #edit-class-color-picker {
+  #edit-class-main-page-color-picker {
     @include picker-swatches.swatches($content-class: "picker-content");
     @include colors.gradient-classes($direction: "to bottom right");
 
@@ -123,11 +105,11 @@
       margin-left: 1rem;
     }
   }
-  #edit-class-optional-switch-label {
+  #edit-class-main-page-optional-switch-label {
     margin-bottom: 1rem;
   }
 
-  #edit-class-add-option-button {
+  #edit-class-main-page-add-option-button {
     @include template.button-filled-neutral;
     @include template.content-text-icon;
     padding: 0rem 0.5rem;
@@ -142,7 +124,7 @@
     }
   }
 
-  #edit-class-options {
+  #edit-class-main-page-options {
     flex-grow: 1;
     margin-bottom: 1rem;
     gap: 0.5rem;
@@ -167,24 +149,10 @@
         padding: 0rem 0.5rem;
         height: 1.5rem;
       }
-
-      .block-editor {
-      }
-
-      &.editing {
-        .add-block-button {
-          @include template.gone;
-        }
-      }
-      &:not(.editing) {
-        .block-editor {
-          @include template.gone;
-        }
-      }
     }
   }
 
-  #edit-class-submit-button {
+  #edit-class-main-page-submit-button {
     @include template.button-filled;
     @include template.content-text-icon;
     height: 2.5rem;

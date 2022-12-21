@@ -9,16 +9,7 @@ export function createEditOptionDom() {
       title: "Add another block to this option"
     }, {
       icon: make.icon("uil:plus", icons, {})
-    }),
-    blockEditor: createBlockEditor()
-  });
-
-  return dom;
-}
-
-function createBlockEditor() {
-  const dom = make.div({ classes: ["block-editor"] }, {
-
+    })
   });
 
   return dom;

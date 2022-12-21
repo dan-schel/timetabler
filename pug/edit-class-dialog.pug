@@ -1,5 +1,9 @@
+include icons.pug
 
 mixin edit-class-dialog
   dialog&attributes(attributes)
+    button#edit-class-close-button
+      +icon("uil:times")
+
     include edit-class-main-page.pug
     +edit-class-main-page#edit-class-main-page
