@@ -74,7 +74,15 @@ export class TimetableError extends Error {
   static optionDuplicateBlocks(): TimetableError {
     return new TimetableError(
       `An option cannot have duplicate time blocks`,
-      "Some options have the same time block twice"
+      null
+    );
+  }
+
+  /** An option cannot have duplicate time blocks. */
+  static optionInternalClash(): TimetableError {
+    return new TimetableError(
+      `An option clashes with itself`,
+      null
     );
   }
 
@@ -90,7 +98,7 @@ export class TimetableError extends Error {
   static classDuplicateOptions(): TimetableError {
     return new TimetableError(
       `A class cannot have duplicate options`,
-      "Some options are identical"
+      null
     );
   }
 

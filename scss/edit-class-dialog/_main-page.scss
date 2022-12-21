@@ -1,11 +1,13 @@
 @use "../css-template/import" as template;
 @use "picker-swatches";
 @use "../colors";
+@use "dialog-common";
 
 // The styles applied to the edit class menu.
 @mixin main {
   flex-grow: 1;
   padding: 1rem;
+  padding-top: 1.5rem;
 
   // Only show .when-edit html when the .new class is NOT on the
   // #edit-class-menu.
@@ -27,6 +29,10 @@
     font-size: 1.2rem;
     font-weight: bold;
     color: var(--color-ink-100);
+  }
+
+  #edit-class-main-page-error-ui {
+    @include dialog-common.error-ui;
     margin-top: 0.5rem;
   }
 
@@ -34,23 +40,6 @@
   &:not(.error) {
     .when-error {
       @include template.gone;
-    }
-  }
-
-  #edit-class-main-page-error-ui {
-    @include template.row;
-    margin-top: 0.5rem;
-    border: 2px solid var(--color-error);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
-    gap: 0.5rem;
-
-    .icon {
-      color: var(--color-error);
-      font-size: 1.2rem;
-    }
-    p {
-      flex-shrink: 1;
     }
   }
 
@@ -130,24 +119,41 @@
     gap: 0.5rem;
 
     .option {
-      display: grid;
-      grid-template-rows: auto auto;
-
       border: 2px solid var(--color-ink-30);
       border-radius: 0.5rem;
+      padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+      gap: 0.5rem;
+      position: relative;
       overflow: hidden;
+      min-height: 3rem;
+      justify-content: center;
 
-      .blocks {
-        padding: 0.5rem;
-        gap: 0.5rem;
+      .number {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1.5rem;
+        padding: 0.25rem 0;
+
+        background-color: var(--color-ink-10);
+        border-bottom-right-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-align: center;
       }
-
-      .add-block-button {
-        @include template.button-filled-neutral;
+      .delete-button {
+        @include template.button-hover;
         @include template.content-text-icon;
-        --button-rounding: 0;
-        padding: 0rem 0.5rem;
-        height: 1.5rem;
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        top: 50%;
+        right: 0.5rem;
+        transform: translate(0%, -50%);
+
+        .icon {
+          font-size: 1.2rem;
+        }
       }
     }
   }

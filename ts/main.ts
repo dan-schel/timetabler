@@ -18,15 +18,32 @@ const html = {
   statusContainerClass: "status-container",
   editClassDialog: find.dialog("edit-class-dialog"),
   editClassCloseButton: find.button("edit-class-close-button"),
-  editClassMainPage: find.div("edit-class-main-page"),
-  editClassErrorText: find.any("edit-class-main-page-error-text"),
-  editClassNameInput: find.input("edit-class-main-page-name-input"),
-  editClassTypeInput: find.input("edit-class-main-page-type-input"),
-  editClassColorPicker: find.div("edit-class-main-page-color-picker"),
-  editClassAddOptionButton: find.button("edit-class-main-page-add-option-button"),
-  editClassOptions: find.div("edit-class-main-page-options"),
-  editClassOptionalSwitch: find.input("edit-class-main-page-optional-switch"),
-  editClassSubmitButton: find.button("edit-class-main-page-submit-button"),
+  editClassMainPage: {
+    div: find.div("edit-class-main-page"),
+    errorText: find.any("edit-class-main-page-error-text"),
+    nameInput: find.input("edit-class-main-page-name-input"),
+    typeInput: find.input("edit-class-main-page-type-input"),
+    colorPicker: find.div("edit-class-main-page-color-picker"),
+    addOptionButton: find.button("edit-class-main-page-add-option-button"),
+    optionsDiv: find.div("edit-class-main-page-options"),
+    optionalSwitch: find.input("edit-class-main-page-optional-switch"),
+    submitButton: find.button("edit-class-main-page-submit-button"),
+  },
+  editClassOptionPage: {
+    div: find.div("edit-class-option-page"),
+    backButton: find.button("edit-class-option-page-back-button"),
+    errorText: find.any("edit-class-option-page-error-text"),
+    dowSelect: find.select("edit-class-option-page-dow-select"),
+    timeInput: find.input("edit-class-option-page-time-input"),
+    durationInput: find.input("edit-class-option-page-duration-input"),
+    durationHoursRadio: find.input("edit-class-option-page-hours-radio"),
+    durationMinutesRadio: find.input("edit-class-option-page-minutes-radio"),
+    onlineSwitch: find.input("edit-class-option-page-online-switch"),
+    addBlockButton: find.button("edit-class-option-page-add-block-button"),
+    blocksDivContainer: find.div("edit-class-option-page-blocks-container"),
+    blocksDiv: find.div("edit-class-option-page-blocks"),
+    submitButton: find.button("edit-class-option-page-submit-button")
+  }
 };
 
 // Used by other files to refer to the above html object.

@@ -1,11 +1,14 @@
 import { make } from "schel-d-utils-browser";
-import { EditClassOptionController } from "./edit-class-option-controller";
+import { EditClassOptionPageController } from "./edit-class-option-page-controller";
+import { icons } from "./icons";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
+import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableClass } from "./timetable/timetable-class";
 import { TimetableColor, TimetableColors } from "./timetable/timetable-class-color";
 import { TimetableError } from "./timetable/timetable-error";
+import { TimetableOption } from "./timetable/timetable-option";
 
-/** Manages the edit class menu. */
+/** Manages the edit class dialog. */
 export class EditClassController {
   /** References to the HTML elements on the page. */
   private readonly _html: Html;
@@ -22,7 +25,10 @@ export class EditClassController {
     $radio: HTMLInputElement
   }[];
 
-  private _optionUIs: EditClassOptionController[];
+  /** The current options created in the UI. */
+  private _options: TimetableOption[];
+
+  private readonly optionPageController: EditClassOptionPageController;
 
   /**
    * Creates a {@link EditClassController}.
@@ -32,9 +38,14 @@ export class EditClassController {
     this._html = html;
     this._existingClass = null;
     this._colorRadios = EditClassController.createColorSwatches(
-      this._html.editClassColorPicker
+      this._html.editClassMainPage.colorPicker
     );
-    this._optionUIs = [];
+    this._options = [];
+    this.optionPageController = new EditClassOptionPageController(
+      html,
+      blocks => this.onOptionPageSubmitted(blocks),
+      () => this.closeOptionPage()
+    );
     this.attachEvents();
   }
 
@@ -43,16 +54,12 @@ export class EditClassController {
     this._html.editClassCloseButton.addEventListener("click", () => {
       this.close();
     });
-    this._html.editClassSubmitButton.addEventListener("click", () => {
+    this._html.editClassMainPage.submitButton.addEventListener("click", () => {
       this.onSubmit();
     });
-    this._html.editClassAddOptionButton.addEventListener("click", () => {
-      // Only add a new options UI if all the existing ones are being used.
-      if (this._optionUIs.every(u => u._blocks.length > 0)) {
-        this.setOptionUIs(
-          [...this._optionUIs, EditClassOptionController.create(null)]
-        );
-      }
+    this._html.editClassMainPage.addOptionButton.addEventListener("click", () => {
+      this.optionPageController.reset();
+      this._html.editClassDialog.classList.add("option-page");
     });
   }
 
@@ -76,10 +83,10 @@ export class EditClassController {
 
   /** Runs when the submit button is clicked. */
   onSubmit() {
-    const name = this._html.editClassNameInput.value;
-    const type = this._html.editClassTypeInput.value;
+    const name = this._html.editClassMainPage.nameInput.value;
+    const type = this._html.editClassMainPage.typeInput.value;
     const color = this._colorRadios.find(r => r.$radio.checked)?.color;
-    const optional = this._html.editClassOptionalSwitch.checked;
+    const optional = this._html.editClassMainPage.optionalSwitch.checked;
 
     if (color == null) {
       this.showError("No colour chosen");
@@ -87,9 +94,8 @@ export class EditClassController {
     }
 
     try {
-      const options = this._optionUIs.map(u => u.toTimetableOption());
       const timetableClass = new TimetableClass(
-        name, type, color, options, optional
+        name, type, color, this._options, optional
       );
 
       updateTimetable(getCurrentTimetable().withClass(
@@ -121,18 +127,16 @@ export class EditClassController {
     this._existingClass = existingClass;
 
     this._html.editClassDialog.showModal();
-    this._html.editClassMainPage.classList.toggle("new", existingClass == null);
+    this._html.editClassMainPage.div.classList.toggle("new", existingClass == null);
 
     if (existingClass != null) {
-      this._html.editClassNameInput.value = existingClass.name;
-      this._html.editClassTypeInput.value = existingClass.type;
+      this._html.editClassMainPage.nameInput.value = existingClass.name;
+      this._html.editClassMainPage.typeInput.value = existingClass.type;
       this._colorRadios.forEach(r => {
         r.$radio.checked = existingClass.color == r.color;
       });
-      this._html.editClassOptionalSwitch.checked = existingClass.optional;
-      this.setOptionUIs(existingClass.options.map(
-        o => EditClassOptionController.create(o)
-      ));
+      this._html.editClassMainPage.optionalSwitch.checked = existingClass.optional;
+      this.setOptions(existingClass.options);
     }
   }
 
@@ -143,24 +147,81 @@ export class EditClassController {
 
   /** Called when the dialog is about to open. Clears any old values. */
   reset() {
-    // Todo: go back to the main page.
-    this._html.editClassMainPage.classList.remove("new");
+    this._html.editClassDialog.classList.remove("option-page");
+    this._html.editClassMainPage.div.classList.remove("new");
 
-    this._html.editClassNameInput.value = "";
-    this._html.editClassTypeInput.value = "";
+    this._html.editClassMainPage.nameInput.value = "";
+    this._html.editClassMainPage.typeInput.value = "";
     this._colorRadios.forEach(r => r.$radio.checked = false);
-    this._html.editClassOptionalSwitch.checked = false;
-    this.setOptionUIs([]);
+    this._html.editClassMainPage.optionalSwitch.checked = false;
+    this.setOptions([]);
     this.showError(null);
   }
 
   /**
-   * Replace the value of this._optionUIs and attach each option UI to the DOM.
-   * @param optionsUI The option UIs.
+   * Replace the options being shown in the UI with the given ones.
+   * @param options The timetable options to display.
    */
-  setOptionUIs(optionsUI: EditClassOptionController[]) {
-    this._optionUIs = optionsUI;
-    this._html.editClassOptions.replaceChildren(...optionsUI.map(u => u.$div));
+  setOptions(options: TimetableOption[]) {
+    this._options = options;
+    this._html.editClassMainPage.optionsDiv.replaceChildren(...options.map((o, i) => {
+      const dom = make.div({ classes: ["option"] }, {
+        number: make.p({ classes: ["number"], text: (i + 1).toFixed() }, {}),
+        blocks: o.blocks.map(b => {
+          return make.div({ classes: ["one-line"] }, {
+            text: make.p({ text: b.toDisplayString(true) }, {})
+          });
+        }),
+        deleteButton: make.button({ classes: ["delete-button"] }, {
+          icon: make.icon("uil:trash-alt", icons, {})
+        })
+      });
+      dom.deleteButton.$element.addEventListener("click", () => {
+        this.deleteOption(o);
+      });
+      return dom.$element;
+    }));
+  }
+
+  /**
+   * Called when the option page is submitted. Provides the blocks to this
+   * controller. Returns an error message if applicable, otherwise null. If
+   * accepted, closes the option page.
+   * @param blocks The blocks created in the option page.
+   */
+  onOptionPageSubmitted(blocks: TimetableBlock[]): string | null {
+    try {
+      const newOption = new TimetableOption(blocks);
+
+      if (this._options.some(o => o.equals(newOption))) {
+        return "This option is identical to an existing one in this class";
+      }
+
+      this.setOptions([...this._options, newOption]);
+      this.closeOptionPage();
+      return null;
+    }
+    catch (ex) {
+      if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
+        return ex.editClassUIMessage;
+      }
+      console.warn(ex);
+      return "Something went wrong";
+    }
+  }
+
+  /** Closes the option page within the dialog. */
+  closeOptionPage() {
+    this._html.editClassDialog.classList.remove("option-page");
+  }
+
+  /**
+   * Removes an option from the stored options and the UI.
+   * @param option The option to remove.
+   */
+  deleteOption(option: TimetableOption) {
+    // Keep all options except this one.
+    this.setOptions(this._options.filter(x => !x.equals(option)));
   }
 
   /**
@@ -168,7 +229,7 @@ export class EditClassController {
    * @param message The message to show, or null to clear the message.
    */
   showError(message: string | null) {
-    this._html.editClassMainPage.classList.toggle("error", message != null);
-    this._html.editClassErrorText.textContent = message;
+    this._html.editClassMainPage.div.classList.toggle("error", message != null);
+    this._html.editClassMainPage.errorText.textContent = message;
   }
 }

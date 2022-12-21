@@ -1,12 +1,13 @@
 @use "../css-template/import" as template;
 @use "main-page";
+@use "option-page";
 
 // The styles applied to the dialog element.
 @mixin main {
   @include template.dialog;
   border-radius: 0.75rem;
 
-  width: min(calc(100% - 2rem), 50rem);
+  width: min(calc(100% - 2rem), 30rem);
   height: min(calc(100% - 2rem), 40rem);
   min-width: calc(var(--min-page-width) - 1rem);
   max-height: calc(100% - 2rem);
@@ -46,10 +47,20 @@
   #edit-class-main-page {
     @include main-page.main;
   }
+  #edit-class-option-page {
+    @include option-page.main;
+  }
+
+  &.option-page #edit-class-main-page {
+    @include template.gone;
+  }
+  &:not(.option-page) #edit-class-option-page {
+    @include template.gone;
+  }
 }
 
 @mixin mobile {
-  width: min(calc(100% - 1rem), 60rem);
+  width: min(calc(100% - 1rem), 30rem);
   max-height: calc(100% - 1rem);
   height: calc(100% - 1rem);
 }

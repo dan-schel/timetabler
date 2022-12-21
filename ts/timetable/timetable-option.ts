@@ -48,6 +48,11 @@ export class TimetableOption {
       throw TimetableError.optionDuplicateBlocks();
     }
 
+    // Blocks within the same option cannot clash.
+    if (blocks.some(b1 => blocks.some(b2 => !b1.equals(b2) && b1.clashesWith(b2)))) {
+      throw TimetableError.optionInternalClash();
+    }
+
     this.blocks = blocks;
   }
 
