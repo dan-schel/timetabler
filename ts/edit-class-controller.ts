@@ -54,6 +54,9 @@ export class EditClassController {
         );
       }
     });
+    this._html.editClassDialog.addEventListener("close", () => {
+      this.reset();
+    });
   }
 
   /** Fills in the class colors into the color picker. */
@@ -126,7 +129,7 @@ export class EditClassController {
   open(existingClass: TimetableClass | null) {
     this._existingClass = existingClass;
 
-    this._html.controls.classList.add("edit-class");
+    this._html.editClassDialog.showModal();
     this._html.editClassMenu.classList.toggle("new", existingClass == null);
 
     if (existingClass != null) {
@@ -142,10 +145,13 @@ export class EditClassController {
     }
   }
 
-  /** Closes the menu. */
+  /** Closes the dialog. */
   close() {
-    this._html.controls.classList.remove("edit-class");
+    this._html.editClassDialog.close();
+  }
 
+  /** Called when the dialog has closed. Clears the fields in the UI. */
+  reset() {
     this._html.editClassNameInput.value = "";
     this._html.editClassTypeInput.value = "";
     this._colorRadios.forEach(r => r.$radio.checked = false);

@@ -30,9 +30,6 @@ html(lang="en")
           include main-menu.pug
           +main-menu#main-menu
 
-          include edit-class-menu.pug
-          +edit-class-menu#edit-class-menu
-
         +status#expanded-status
 
       #collapsed-content
@@ -50,3 +47,7 @@ html(lang="en")
 
     section#canvas-container
       canvas#canvas
+
+    dialog#edit-class-dialog
+      include edit-class-menu.pug
+      +edit-class-menu#edit-class-menu

@@ -73,6 +73,10 @@ export class ControlsController {
     // Open the edit class menu when "Add class" button clicked.
     this._html.addClassButton.addEventListener("click", () => {
       this._editClassController.open(null);
+
+      // Make sure if the screen size changes while the dialog is open, it
+      // doesn't result in the controls being collapsed (again).
+      this._html.controls.classList.remove("collapsed");
     });
   }
 

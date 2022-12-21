@@ -1,9 +1,11 @@
-@use "../css-template/import" as template;
+@use "../../css-template/import" as template;
 @use "picker-swatches";
-@use "../colors";
+@use "../../colors";
 
+// The styles applied to the edit class menu.
 @mixin main {
   flex-grow: 1;
+  padding: 1rem;
 
   // The "Back" button.
   #edit-class-back-button {
@@ -259,4 +261,32 @@
       font-size: 1.2rem;
     }
   }
+}
+
+// The styles applied to the dialog element that the menu sits inside.
+@mixin dialog {
+  @include template.dialog;
+  border-radius: 0.75rem;
+
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  opacity: 1;
+  visibility: visible;
+  display: block;
+
+  width: min(calc(100% - 2rem), 50rem);
+  min-width: calc(var(--min-page-width) - 1rem);
+  max-height: calc(100% - 2rem);
+  z-index: 2;
+
+  &:not([open]) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, calc(1rem - 50%));
+    min-width: 0;
+  }
+}
+@mixin dialog-mobile {
+  width: min(calc(100% - 1rem), 60rem);
+  max-height: calc(100% - 1rem);
 }

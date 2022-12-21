@@ -1,4 +1,4 @@
-@use "../css-template/import" as template;
+@use "../../css-template/import" as template;
 
 @mixin swatches($content-class: "picker-content") {
   @include template.picker-base($content-class: $content-class);

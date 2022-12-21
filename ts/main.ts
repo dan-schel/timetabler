@@ -16,6 +16,7 @@ const html = {
   addClassButton: find.button("add-class-button"),
   classes: find.div("classes"),
   statusContainerClass: "status-container",
+  editClassDialog: find.any("edit-class-dialog") as HTMLDialogElement,
   editClassMenu: find.div("edit-class-menu"),
   editClassErrorText: find.any("edit-class-error-text"),
   editClassBackButton: find.button("edit-class-back-button"),

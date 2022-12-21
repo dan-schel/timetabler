@@ -2,7 +2,6 @@
 @use "status";
 @use "wordmark";
 @use "main-menu";
-@use "edit-class-menu";
 
 @mixin main {
   // Use grid layout to separate the scrolling content from the status, so the
@@ -32,10 +31,6 @@
       @include main-menu.main;
     }
 
-    #edit-class-menu {
-      @include edit-class-menu.main;
-    }
-
     padding: 1rem;
 
     // Enable scrolling.
@@ -44,22 +39,6 @@
 
   #expanded-status {
     @include status.expanded;
-  }
-}
-
-// Applied when the ".edit-class" class is applied to the "#controls".
-@mixin show-edit-class-menu {
-  @include hide-status;
-
-  #main-menu {
-    @include template.gone;
-  }
-}
-
-// Applied when the ".edit-class" class is NOT applied to the "#controls".
-@mixin show-main-menu {
-  #edit-class-menu {
-    @include template.gone;
   }
 }
 
