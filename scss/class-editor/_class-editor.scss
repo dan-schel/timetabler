@@ -1,59 +1,33 @@
 @use "../css-template/import" as template;
 @use "picker-swatches";
 @use "../colors";
-@use "common";
+@use "../common";
 
-// The styles applied to the edit class menu.
+// The styles applied to the class editor page in the class editor dialog.
 @mixin main {
   flex-grow: 1;
   padding: 1rem;
   padding-top: 1.5rem;
   gap: 1rem;
 
-  // Only show .when-edit html when the .new class is NOT on the
-  // #edit-class-menu.
-  &.new {
-    .when-edit {
-      @include template.gone;
-    }
-  }
-
-  // Only show .when-new html when the .new class is on the #edit-class-menu.
-  &:not(.new) {
-    .when-new {
-      @include template.gone;
-    }
-  }
-
-  // The "Edit/add class" title.
+  // The "Edit/Add class" title.
   h2 {
     font-size: 1.2rem;
     font-weight: bold;
     color: var(--color-ink-100);
   }
 
-  #class-editor-error-ui {
-    @include common.error-ui;
-    //margin-top: 0.5rem;
-  }
-
-  // Only show error UI when the .error class is on the #edit-class-menu.
-  &:not(.error) {
-    .when-error {
-      @include template.gone;
+  // General styles for all fields.
+  .field {
+    .label {
+      @include template.no-select;
+      margin-bottom: 0.25rem;
     }
-  }
 
-  p.label {
-    @include template.no-select;
-  }
-
-  .field > .label {
-    margin-bottom: 0.25rem;
-  }
-
-  label.text-input {
-    cursor: text;
+    // For fields which contain text inputs, e.g. the "Name" and "Type" field.
+    &.text-input {
+      cursor: text;
+    }
 
     input[type="text"] {
       @include template.input-filled-neutral;
@@ -62,6 +36,7 @@
     }
   }
 
+  // The "Colour" picker.
   #class-editor-color-picker {
     @include picker-swatches.swatches($content-class: "picker-content");
     @include colors.gradient-classes($direction: "to bottom right");
@@ -79,18 +54,7 @@
     }
   }
 
-  .switch {
-    @include template.checkbox-switch(
-      $graphic-class: "switch-graphic",
-      $content-class: "switch-content"
-    );
-
-    .switch-content {
-      @include template.content-text;
-      margin-left: 1rem;
-    }
-  }
-
+  // The "Add option" button.
   #class-editor-add-option-button {
     @include template.button-filled-neutral;
     @include template.content-text-icon;
@@ -105,20 +69,29 @@
     }
   }
 
+  // The div containing the dynamically populated options.
   #class-editor-options {
     flex-grow: 1;
     gap: 0.5rem;
 
+    // The option divs created dynamically.
     .option {
       border: 2px solid var(--color-ink-30);
       border-radius: 0.5rem;
-      padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-      gap: 0.5rem;
-      position: relative;
       overflow: hidden;
+
+      gap: 0.5rem;
+
+      // Number label and delete button use absolute positioning. Extra side
+      // padding and min height ensures space is left for them. Justify content
+      // center ensures that the labels appear centered when the min height is
+      // in effect.
+      position: relative;
+      padding: 0.5rem 2.5rem 0.5rem 2.5rem;
       min-height: 3rem;
       justify-content: center;
 
+      // The number labels on each option.
       .number {
         position: absolute;
         top: 0;
@@ -132,6 +105,8 @@
         font-weight: bold;
         text-align: center;
       }
+
+      // The delete button on each option.
       .delete-button {
         @include template.button-hover;
         @include template.content-text-icon;
@@ -149,6 +124,25 @@
     }
   }
 
+  // The "Class is optional" switch.
+  #class-editor-optional-switch {
+    @include template.checkbox-switch(
+      $graphic-class: "switch-graphic",
+      $content-class: "switch-content"
+    );
+
+    .switch-content {
+      @include template.content-text;
+      margin-left: 1rem;
+    }
+  }
+
+  // The error UI.
+  #class-editor-error-ui {
+    @include common.error-ui;
+  }
+
+  // The submit button.
   #class-editor-submit-button {
     @include template.button-filled;
     @include template.content-text-icon;
@@ -156,6 +150,28 @@
     gap: 0.5rem;
     .icon {
       font-size: 1.2rem;
+    }
+  }
+
+  // Only show .when-edit html when the .new class is NOT on the
+  // #edit-class-menu.
+  &.new {
+    .when-edit {
+      @include template.gone;
+    }
+  }
+
+  // Only show .when-new html when the .new class is on the #edit-class-menu.
+  &:not(.new) {
+    .when-new {
+      @include template.gone;
+    }
+  }
+
+  // Only show error UI when the .error class is on the #edit-class-menu.
+  &:not(.error) {
+    .when-error {
+      @include template.gone;
     }
   }
 }

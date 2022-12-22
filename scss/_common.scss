@@ -1,4 +1,4 @@
-@use "../css-template/import" as template;
+@use "css-template/import" as template;
 
 @mixin error-ui {
   @include template.row;

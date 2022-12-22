@@ -86,7 +86,7 @@ export class EditClassController {
     const name = this._html.classEditor.nameInput.value;
     const type = this._html.classEditor.typeInput.value;
     const color = this._colorRadios.find(r => r.$radio.checked)?.color;
-    const optional = this._html.classEditor.optionalSwitch.checked;
+    const optional = this._html.classEditor.optionalSwitchInput.checked;
 
     if (color == null) {
       this.showError("No colour chosen");
@@ -135,7 +135,7 @@ export class EditClassController {
       this._colorRadios.forEach(r => {
         r.$radio.checked = existingClass.color == r.color;
       });
-      this._html.classEditor.optionalSwitch.checked = existingClass.optional;
+      this._html.classEditor.optionalSwitchInput.checked = existingClass.optional;
       this.setOptions(existingClass.options);
     }
   }
@@ -153,7 +153,7 @@ export class EditClassController {
     this._html.classEditor.nameInput.value = "";
     this._html.classEditor.typeInput.value = "";
     this._colorRadios.forEach(r => r.$radio.checked = false);
-    this._html.classEditor.optionalSwitch.checked = false;
+    this._html.classEditor.optionalSwitchInput.checked = false;
     this.setOptions([]);
     this.showError(null);
   }

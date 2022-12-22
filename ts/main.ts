@@ -26,7 +26,7 @@ const html = {
     colorPicker: find.div("class-editor-color-picker"),
     addOptionButton: find.button("class-editor-add-option-button"),
     optionsDiv: find.div("class-editor-options"),
-    optionalSwitch: find.input("class-editor-optional-switch"),
+    optionalSwitchInput: find.input("class-editor-optional-switch-input"),
     submitButton: find.button("class-editor-submit-button"),
   },
   optionEditor: {
