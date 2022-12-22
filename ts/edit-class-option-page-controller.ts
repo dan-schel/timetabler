@@ -2,7 +2,8 @@ import { make } from "schel-d-utils-browser";
 import { icons } from "./icons";
 import { Html } from "./main";
 import { DayOfWeek } from "./time/day-of-week";
-import { LocalTime } from "./time/local-time";
+import { tryParseUserDurationString, tryParseUserTimeString }
+  from "./time/parse-user-time-string";
 import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableError } from "./timetable/timetable-error";
 
@@ -48,43 +49,73 @@ export class EditClassOptionPageController {
 
   /** Runs when the "add block" button is clicked. */
   onAddBlock() {
-    const startTimeString = this._html.editClassOptionPage.timeInput.value;
-    const startTime = LocalTime.fromTime(9, 0);
-
-    const durationString = this._html.editClassOptionPage.durationInput.value;
-    const useMins = this._html.editClassOptionPage.durationMinutesRadio.checked;
-
-    const durationMins = 60;
-
-    const online = this._html.editClassOptionPage.onlineSwitch.checked;
-
     try {
+      // Should always work (unless someone messed with DevTools) since the
+      // select options have values set for the days since Monday.
       const dayOfWeek = DayOfWeek.fromDaysSinceMonday(
         parseInt(this._html.editClassOptionPage.dowSelect.value)
       );
 
-      const newBlock = new TimetableBlock(dayOfWeek, startTime, durationMins, online);
+      const startTimeString = this._html.editClassOptionPage.timeInput.value;
+      if (startTimeString.length < 1) {
+        this.showBlockError(`Please enter a start time`);
+        return;
+      }
+
+      const startTime = tryParseUserTimeString(startTimeString);
+      if (startTime == null) {
+        this.showBlockError(
+          `Cannot understand start time, try formatting it like "3:30pm" or ` +
+          `"16:00"`
+        );
+        return;
+      }
+
+      const durationString = this._html.editClassOptionPage.durationInput.value;
+      if (durationString.length < 1) {
+        this.showBlockError(`Please enter a duration`);
+        return;
+      }
+
+      const useMins = this._html.editClassOptionPage.durationMinutesRadio.checked;
+      const durationMins = tryParseUserDurationString(durationString, useMins);
+      if (durationMins == null) {
+        this.showBlockError(
+          `The duration must be a number, and a whole number of minutes ` +
+          `(e.g. 2.5 minutes is not allowed)`
+        );
+        return;
+      }
+
+      const online = this._html.editClassOptionPage.onlineSwitch.checked;
+      const newBlock = new TimetableBlock(
+        dayOfWeek, startTime, durationMins, online
+      );
 
       if (this._blocks.some(b => b.equals(newBlock))) {
-        this.showError("An identical time block has already been added to this option");
+        this.showBlockError(
+          "An identical time block has already been added to this option"
+        );
         return;
       }
       if (this._blocks.some(b => b.clashesWith(newBlock))) {
-        this.showError("This block clashes with one already added to this option");
+        this.showBlockError(
+          "This block clashes with one already added to this option"
+        );
         return;
       }
 
       this.setBlocks([...this._blocks, newBlock]);
       this.resetAddTimeBlockUI();
-      this.showError(null);
+      this.showBlockError(null);
     }
     catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
-        this.showError(ex.editClassUIMessage);
+        this.showBlockError(ex.editClassUIMessage);
         return;
       }
       console.warn(ex);
-      this.showError("Something went wrong");
+      this.showBlockError("Something went wrong");
     }
   }
 
@@ -93,11 +124,11 @@ export class EditClassOptionPageController {
     if (this._blocks.length > 0) {
       const error = this._callback(this._blocks);
       if (error != null) {
-        this.showError(error);
+        this.showSubmitError(error);
       }
     }
     else {
-      this.showError("Please add at least one time block to this option");
+      this.showSubmitError("Please add at least one time block to this option");
     }
   }
 
@@ -110,7 +141,8 @@ export class EditClassOptionPageController {
   reset() {
     this.resetAddTimeBlockUI();
     this.setBlocks([]);
-    this.showError(null);
+    this.showSubmitError(null);
+    this.showBlockError(null);
   }
 
   /** Clears the old values in the "Add time block" panel. */
@@ -160,8 +192,19 @@ export class EditClassOptionPageController {
    * Shows an error message, or clears it.
    * @param message The message to show, or null to clear the message.
    */
-  showError(message: string | null) {
-    this._html.editClassOptionPage.div.classList.toggle("error", message != null);
-    this._html.editClassOptionPage.errorText.textContent = message;
+  showSubmitError(message: string | null) {
+    this._html.editClassOptionPage.div.classList.remove("block-error");
+    this._html.editClassOptionPage.div.classList.toggle("submit-error", message != null);
+    this._html.editClassOptionPage.submitErrorText.textContent = message;
+  }
+
+  /**
+   * Shows an error message, or clears it.
+   * @param message The message to show, or null to clear the message.
+   */
+  showBlockError(message: string | null) {
+    this._html.editClassOptionPage.div.classList.remove("submit-error");
+    this._html.editClassOptionPage.div.classList.toggle("block-error", message != null);
+    this._html.editClassOptionPage.blockErrorText.textContent = message;
   }
 }

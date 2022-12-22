@@ -8,6 +8,7 @@
   flex-grow: 1;
   padding: 1rem;
   padding-top: 1.5rem;
+  gap: 1rem;
 
   // Only show .when-edit html when the .new class is NOT on the
   // #edit-class-menu.
@@ -33,7 +34,7 @@
 
   #edit-class-main-page-error-ui {
     @include dialog-common.error-ui;
-    margin-top: 0.5rem;
+    //margin-top: 0.5rem;
   }
 
   // Only show error UI when the .error class is on the #edit-class-menu.
@@ -45,19 +46,14 @@
 
   p.label {
     @include template.no-select;
-    margin-top: 1rem;
+  }
+
+  .field > .label {
     margin-bottom: 0.25rem;
   }
 
   label.text-input {
-    // Prevents the whitespace above the label being considered part of the
-    // textbox's hitbox.
-    margin-top: 1rem;
     cursor: text;
-    .label {
-      margin-top: 0rem;
-      margin-bottom: 0.25rem;
-    }
 
     input[type="text"] {
       @include template.input-filled-neutral;
@@ -94,9 +90,6 @@
       margin-left: 1rem;
     }
   }
-  #edit-class-main-page-optional-switch-label {
-    margin-bottom: 1rem;
-  }
 
   #edit-class-main-page-add-option-button {
     @include template.button-filled-neutral;
@@ -105,7 +98,6 @@
     height: 1.5rem;
     gap: 0.25rem;
     align-self: flex-start;
-    margin-bottom: 1rem;
 
     p {
       font-size: 0.75rem;
@@ -115,7 +107,6 @@
 
   #edit-class-main-page-options {
     flex-grow: 1;
-    margin-bottom: 1rem;
     gap: 0.5rem;
 
     .option {

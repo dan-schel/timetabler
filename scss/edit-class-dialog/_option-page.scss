@@ -35,13 +35,23 @@
     margin-top: -0.5rem;
   }
 
-  #edit-class-option-page-error-ui {
+  #edit-class-option-page-submit-error-ui,
+  #edit-class-option-page-block-error-ui {
     @include dialog-common.error-ui;
   }
 
-  // Only show error UI when the .error class is on the #edit-class-menu.
-  &:not(.error) {
-    .when-error {
+  // Only show the submit error UI when the .submit-error class is on the option
+  // page.
+  &:not(.submit-error) {
+    .when-submit-error {
+      @include template.gone;
+    }
+  }
+
+  // Only show the block error UI when the .block-error class is on the option
+  // page.
+  &:not(.block-error) {
+    .when-block-error {
       @include template.gone;
     }
   }
@@ -78,7 +88,7 @@
     }
     .duration-row {
       @include template.row;
-      gap: 1rem;
+      gap: 0.5rem;
 
       #edit-class-option-page-duration-input {
         @include template.input-filled-neutral;
@@ -119,10 +129,8 @@
   }
 
   #edit-class-option-page-blocks-container {
-    border: 2px solid var(--color-ink-30);
-    border-radius: 0.5rem;
-    padding: 1rem;
     flex-grow: 1;
+    min-height: 8rem;
 
     h3 {
       font-weight: bold;

@@ -12,10 +12,6 @@ mixin edit-class-option-page
       | together. Add as many time blocks as you need, then hit "add option". In
       | most cases, you'll probably only want one.
 
-    #edit-class-option-page-error-ui.when-error
-      +icon("uil:exclamation-circle")
-      p#edit-class-option-page-error-text
-
     #edit-class-option-page-time-block-ui
       h3 Add time block
       label
@@ -56,17 +52,25 @@ mixin edit-class-option-page
           .switch-content
             p Online
 
+      #edit-class-option-page-block-error-ui.when-block-error
+        +icon("uil:exclamation-circle")
+        p#edit-class-option-page-block-error-text
+
       button#edit-class-option-page-add-block-button
         +icon("uil:plus")
         p.when-new Add time block
 
     #edit-class-option-page-blocks-container
-      h3 Time blocks in this option
+      h3 Time blocks
       p.when-empty
-        | Once you add a time block with the controls above, they'll show up
-        | here.
+        | You haven't added any time blocks to this option yet. Once you do
+        | they'll show up here.
       #edit-class-option-page-blocks
+
+    #edit-class-option-page-submit-error-ui.when-submit-error
+      +icon("uil:exclamation-circle")
+      p#edit-class-option-page-submit-error-text
 
     button#edit-class-option-page-submit-button
       +icon("uil:check")
-      p.when-new Add option
+      p.when-new Add option to class

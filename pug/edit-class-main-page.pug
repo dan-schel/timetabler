@@ -5,23 +5,22 @@ mixin edit-class-main-page
     h2.when-new Add class
     h2.when-edit Edit class
 
-    #edit-class-main-page-error-ui.when-error
-      +icon("uil:exclamation-circle")
-      p#edit-class-main-page-error-text
-
-    label.text-input
+    label.field.text-input
       p.label Name
       input#edit-class-main-page-name-input(type="text", autocomplete="off", placeholder="e.g. Advanced Tin Opening")
-    label.text-input
+    label.field.text-input
       p.label Type
       input#edit-class-main-page-type-input(type="text", autocomplete="off", placeholder="e.g. Lecture")
-    p.label Colour
-    #edit-class-main-page-color-picker
 
-    p.label Options
-    button#edit-class-main-page-add-option-button
-      +icon("uil:plus")
-      p ADD OPTION
+    .field
+      p.label Colour
+      #edit-class-main-page-color-picker
+
+    .field
+      p.label Options
+      button#edit-class-main-page-add-option-button
+        +icon("uil:plus")
+        p ADD OPTION
 
     #edit-class-main-page-options
 
@@ -32,7 +31,11 @@ mixin edit-class-main-page
         .switch-content
           p Class is optional
 
+    #edit-class-main-page-error-ui.when-error
+      +icon("uil:exclamation-circle")
+      p#edit-class-main-page-error-text
+
     button#edit-class-main-page-submit-button
       +icon("uil:check")
-      p.when-new Add to timetable
+      p.when-new Add class to timetable
       p.when-edit Save changes

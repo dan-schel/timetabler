@@ -32,7 +32,8 @@ const html = {
   editClassOptionPage: {
     div: find.div("edit-class-option-page"),
     backButton: find.button("edit-class-option-page-back-button"),
-    errorText: find.any("edit-class-option-page-error-text"),
+    submitErrorText: find.any("edit-class-option-page-submit-error-text"),
+    blockErrorText: find.any("edit-class-option-page-block-error-text"),
     dowSelect: find.select("edit-class-option-page-dow-select"),
     timeInput: find.input("edit-class-option-page-time-input"),
     durationInput: find.input("edit-class-option-page-duration-input"),
