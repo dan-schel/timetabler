@@ -4,6 +4,7 @@
 @use "fonts";
 @use "canvas";
 @use "class-editor/class-editor-dialog";
+@use "about-dialog";
 
 // Initialize the css template with the custom colors.
 @include template.init($custom-colors: colors.$custom-colors);
@@ -29,6 +30,10 @@ body {
 
 #class-editor-dialog {
   @include class-editor-dialog.main;
+}
+
+#about-dialog {
+  @include about-dialog.main;
 }
 
 // Create css classes for common utils from the template.
@@ -118,5 +123,8 @@ body {
   }
   #class-editor-dialog {
     @include class-editor-dialog.mobile;
+  }
+  #about-dialog {
+    @include about-dialog.mobile;
   }
 }

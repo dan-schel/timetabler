@@ -1,6 +1,6 @@
 @use "../css-template/import" as template;
 @use "status";
-@use "wordmark";
+@use "../wordmark";
 
 @mixin main {
   padding: 1rem;

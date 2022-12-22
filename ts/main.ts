@@ -18,6 +18,9 @@ const html = {
   statusContainerClass: "status-container",
   classEditorDialog: find.dialog("class-editor-dialog"),
   classEditorDialogCloseButton: find.button("class-editor-dialog-close-button"),
+  aboutLink: find.anchor("about-link"),
+  aboutDialog: find.dialog("about-dialog"),
+  aboutDialogCloseButton: find.button("about-dialog-close-button"),
   classEditor: {
     div: find.div("class-editor"),
     errorText: find.any("class-editor-error-text"),

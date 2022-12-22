@@ -1,7 +1,7 @@
 {
   "name": "timetabler",
   "version": "1.0.0",
-  "description": "A tool to help choose options on a timetable where there might be multiple classes running!",
+  "description": "A tool designed to help you visualise your uni timetable preferences while you choose them.",
   "scripts": {
     "clean": "rimraf build/*",
     "prebuild": "npm run clean",

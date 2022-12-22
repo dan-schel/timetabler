@@ -19,7 +19,7 @@ export class ControlsController {
   private _classUIs: ClassUIController[];
 
   /** The logic in charge of the edit class menu. */
-  private _editClassController: ClassEditorController;
+  private _classEditorController: ClassEditorController;
 
   /**
    * Creates a {@link ControlsController}.
@@ -29,7 +29,7 @@ export class ControlsController {
     this._html = html;
     this._prevTimetable = null;
     this._classUIs = [];
-    this._editClassController = new ClassEditorController(html);
+    this._classEditorController = new ClassEditorController(html);
 
     this.attachEvents();
   }
@@ -75,11 +75,19 @@ export class ControlsController {
 
     // Open the edit class menu when "Add class" button clicked.
     this._html.addClassButton.addEventListener("click", () => {
-      this._editClassController.open(null);
+      this._classEditorController.open(null);
 
       // Make sure if the screen size changes while the dialog is open, it
       // doesn't result in the controls being collapsed (again).
       this._html.controls.classList.remove("collapsed");
+    });
+
+    // Open/close the about dialog.
+    this._html.aboutLink.addEventListener("click", () => {
+      this._html.aboutDialog.showModal();
+    });
+    this._html.aboutDialogCloseButton.addEventListener("click", () => {
+      this._html.aboutDialog.close();
     });
   }
 
@@ -105,7 +113,7 @@ export class ControlsController {
         if (choice == null) { throw new Error(); }
 
         const onEditClicked = () => {
-          this._editClassController.open(cl);
+          this._classEditorController.open(cl);
         };
         const onDeleteClicked = () => {
           updateTimetable(getCurrentTimetable().withoutClass(cl));
