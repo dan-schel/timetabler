@@ -38,7 +38,7 @@ export class EditClassController {
     this._html = html;
     this._existingClass = null;
     this._colorRadios = EditClassController.createColorSwatches(
-      this._html.editClassMainPage.colorPicker
+      this._html.classEditor.colorPicker
     );
     this._options = [];
     this.optionPageController = new EditClassOptionPageController(
@@ -51,15 +51,15 @@ export class EditClassController {
 
   /** Sets up event handlers. */
   attachEvents() {
-    this._html.editClassCloseButton.addEventListener("click", () => {
+    this._html.classEditorDialogCloseButton.addEventListener("click", () => {
       this.close();
     });
-    this._html.editClassMainPage.submitButton.addEventListener("click", () => {
+    this._html.classEditor.submitButton.addEventListener("click", () => {
       this.onSubmit();
     });
-    this._html.editClassMainPage.addOptionButton.addEventListener("click", () => {
+    this._html.classEditor.addOptionButton.addEventListener("click", () => {
       this.optionPageController.reset();
-      this._html.editClassDialog.classList.add("option-page");
+      this._html.classEditorDialog.classList.add("option-page");
     });
   }
 
@@ -83,10 +83,10 @@ export class EditClassController {
 
   /** Runs when the submit button is clicked. */
   onSubmit() {
-    const name = this._html.editClassMainPage.nameInput.value;
-    const type = this._html.editClassMainPage.typeInput.value;
+    const name = this._html.classEditor.nameInput.value;
+    const type = this._html.classEditor.typeInput.value;
     const color = this._colorRadios.find(r => r.$radio.checked)?.color;
-    const optional = this._html.editClassMainPage.optionalSwitch.checked;
+    const optional = this._html.classEditor.optionalSwitch.checked;
 
     if (color == null) {
       this.showError("No colour chosen");
@@ -126,34 +126,34 @@ export class EditClassController {
     this.reset();
     this._existingClass = existingClass;
 
-    this._html.editClassDialog.showModal();
-    this._html.editClassMainPage.div.classList.toggle("new", existingClass == null);
+    this._html.classEditorDialog.showModal();
+    this._html.classEditor.div.classList.toggle("new", existingClass == null);
 
     if (existingClass != null) {
-      this._html.editClassMainPage.nameInput.value = existingClass.name;
-      this._html.editClassMainPage.typeInput.value = existingClass.type;
+      this._html.classEditor.nameInput.value = existingClass.name;
+      this._html.classEditor.typeInput.value = existingClass.type;
       this._colorRadios.forEach(r => {
         r.$radio.checked = existingClass.color == r.color;
       });
-      this._html.editClassMainPage.optionalSwitch.checked = existingClass.optional;
+      this._html.classEditor.optionalSwitch.checked = existingClass.optional;
       this.setOptions(existingClass.options);
     }
   }
 
   /** Closes the dialog. */
   close() {
-    this._html.editClassDialog.close();
+    this._html.classEditorDialog.close();
   }
 
   /** Called when the dialog is about to open. Clears any old values. */
   reset() {
-    this._html.editClassDialog.classList.remove("option-page");
-    this._html.editClassMainPage.div.classList.remove("new");
+    this._html.classEditorDialog.classList.remove("option-page");
+    this._html.classEditor.div.classList.remove("new");
 
-    this._html.editClassMainPage.nameInput.value = "";
-    this._html.editClassMainPage.typeInput.value = "";
+    this._html.classEditor.nameInput.value = "";
+    this._html.classEditor.typeInput.value = "";
     this._colorRadios.forEach(r => r.$radio.checked = false);
-    this._html.editClassMainPage.optionalSwitch.checked = false;
+    this._html.classEditor.optionalSwitch.checked = false;
     this.setOptions([]);
     this.showError(null);
   }
@@ -164,7 +164,7 @@ export class EditClassController {
    */
   setOptions(options: TimetableOption[]) {
     this._options = options;
-    this._html.editClassMainPage.optionsDiv.replaceChildren(...options.map((o, i) => {
+    this._html.classEditor.optionsDiv.replaceChildren(...options.map((o, i) => {
       const dom = make.div({ classes: ["option"] }, {
         number: make.p({ classes: ["number"], text: (i + 1).toFixed() }, {}),
         blocks: o.blocks.map(b => {
@@ -212,7 +212,7 @@ export class EditClassController {
 
   /** Closes the option page within the dialog. */
   closeOptionPage() {
-    this._html.editClassDialog.classList.remove("option-page");
+    this._html.classEditorDialog.classList.remove("option-page");
   }
 
   /**
@@ -229,7 +229,7 @@ export class EditClassController {
    * @param message The message to show, or null to clear the message.
    */
   showError(message: string | null) {
-    this._html.editClassMainPage.div.classList.toggle("error", message != null);
-    this._html.editClassMainPage.errorText.textContent = message;
+    this._html.classEditor.div.classList.toggle("error", message != null);
+    this._html.classEditor.errorText.textContent = message;
   }
 }

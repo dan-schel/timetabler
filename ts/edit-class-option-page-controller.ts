@@ -36,13 +36,13 @@ export class EditClassOptionPageController {
 
   /** Sets up event handlers. */
   attachEvents() {
-    this._html.editClassOptionPage.backButton.addEventListener("click", () => {
+    this._html.optionEditor.backButton.addEventListener("click", () => {
       this._onBack();
     });
-    this._html.editClassOptionPage.submitButton.addEventListener("click", () => {
+    this._html.optionEditor.submitButton.addEventListener("click", () => {
       this.onSubmitAll();
     });
-    this._html.editClassOptionPage.addBlockButton.addEventListener("click", () => {
+    this._html.optionEditor.addBlockButton.addEventListener("click", () => {
       this.onAddBlock();
     });
   }
@@ -53,10 +53,10 @@ export class EditClassOptionPageController {
       // Should always work (unless someone messed with DevTools) since the
       // select options have values set for the days since Monday.
       const dayOfWeek = DayOfWeek.fromDaysSinceMonday(
-        parseInt(this._html.editClassOptionPage.dowSelect.value)
+        parseInt(this._html.optionEditor.dowSelect.value)
       );
 
-      const startTimeString = this._html.editClassOptionPage.timeInput.value;
+      const startTimeString = this._html.optionEditor.timeInput.value;
       if (startTimeString.length < 1) {
         this.showBlockError(`Please enter a start time`);
         return;
@@ -71,13 +71,13 @@ export class EditClassOptionPageController {
         return;
       }
 
-      const durationString = this._html.editClassOptionPage.durationInput.value;
+      const durationString = this._html.optionEditor.durationInput.value;
       if (durationString.length < 1) {
         this.showBlockError(`Please enter a duration`);
         return;
       }
 
-      const useMins = this._html.editClassOptionPage.durationMinutesRadio.checked;
+      const useMins = this._html.optionEditor.durationMinutesRadio.checked;
       const durationMins = tryParseUserDurationString(durationString, useMins);
       if (durationMins == null) {
         this.showBlockError(
@@ -87,7 +87,7 @@ export class EditClassOptionPageController {
         return;
       }
 
-      const online = this._html.editClassOptionPage.onlineSwitch.checked;
+      const online = this._html.optionEditor.onlineSwitch.checked;
       const newBlock = new TimetableBlock(
         dayOfWeek, startTime, durationMins, online
       );
@@ -134,7 +134,7 @@ export class EditClassOptionPageController {
 
   /** Closes the dialog. */
   close() {
-    this._html.editClassDialog.close();
+    this._html.classEditorDialog.close();
   }
 
   /** Called when the page is about to open. Clears any old values. */
@@ -147,11 +147,11 @@ export class EditClassOptionPageController {
 
   /** Clears the old values in the "Add time block" panel. */
   resetAddTimeBlockUI() {
-    this._html.editClassOptionPage.dowSelect.value = "0";
-    this._html.editClassOptionPage.timeInput.value = "";
-    this._html.editClassOptionPage.durationInput.value = "";
-    this._html.editClassOptionPage.durationHoursRadio.checked = true;
-    this._html.editClassOptionPage.onlineSwitch.checked = false;
+    this._html.optionEditor.dowSelect.value = "0";
+    this._html.optionEditor.timeInput.value = "";
+    this._html.optionEditor.durationInput.value = "";
+    this._html.optionEditor.durationHoursRadio.checked = true;
+    this._html.optionEditor.onlineSwitch.checked = false;
   }
 
   /**
@@ -160,10 +160,10 @@ export class EditClassOptionPageController {
    */
   setBlocks(blocks: TimetableBlock[]) {
     this._blocks = blocks;
-    this._html.editClassOptionPage.blocksDivContainer.classList.toggle(
+    this._html.optionEditor.blocksDivContainer.classList.toggle(
       "non-empty", blocks.length > 0
     );
-    this._html.editClassOptionPage.blocksDiv.replaceChildren(...blocks.map(b => {
+    this._html.optionEditor.blocksDiv.replaceChildren(...blocks.map(b => {
       const dom = make.div({ classes: ["block"] }, {
         block: make.div({ classes: ["one-line"] }, {
           text: make.p({ text: b.toDisplayString(true) }, {})
@@ -193,9 +193,9 @@ export class EditClassOptionPageController {
    * @param message The message to show, or null to clear the message.
    */
   showSubmitError(message: string | null) {
-    this._html.editClassOptionPage.div.classList.remove("block-error");
-    this._html.editClassOptionPage.div.classList.toggle("submit-error", message != null);
-    this._html.editClassOptionPage.submitErrorText.textContent = message;
+    this._html.optionEditor.div.classList.remove("block-error");
+    this._html.optionEditor.div.classList.toggle("submit-error", message != null);
+    this._html.optionEditor.submitErrorText.textContent = message;
   }
 
   /**
@@ -203,8 +203,8 @@ export class EditClassOptionPageController {
    * @param message The message to show, or null to clear the message.
    */
   showBlockError(message: string | null) {
-    this._html.editClassOptionPage.div.classList.remove("submit-error");
-    this._html.editClassOptionPage.div.classList.toggle("block-error", message != null);
-    this._html.editClassOptionPage.blockErrorText.textContent = message;
+    this._html.optionEditor.div.classList.remove("submit-error");
+    this._html.optionEditor.div.classList.toggle("block-error", message != null);
+    this._html.optionEditor.blockErrorText.textContent = message;
   }
 }

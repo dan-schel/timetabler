@@ -1,6 +1,6 @@
 @use "../css-template/import" as template;
-@use "main-page";
-@use "option-page";
+@use "class-editor";
+@use "option-editor";
 
 // The styles applied to the dialog element.
 @mixin main {
@@ -30,7 +30,7 @@
   }
 
   // The close button.
-  #edit-class-close-button {
+  #class-editor-dialog-close-button {
     @include template.button-hover;
     @include template.content-text-icon;
     --button-rounding: 0.5rem;
@@ -44,21 +44,24 @@
     }
   }
 
-  #edit-class-main-page {
-    @include main-page.main;
-  }
-  #edit-class-option-page {
-    @include option-page.main;
+  #class-editor {
+    @include class-editor.main;
   }
 
-  &.option-page #edit-class-main-page {
+  #option-editor {
+    @include option-editor.main;
+  }
+
+  &.option-page #class-editor {
     @include template.gone;
   }
-  &:not(.option-page) #edit-class-option-page {
+
+  &:not(.option-page) #option-editor {
     @include template.gone;
   }
 }
 
+// The styles applied to the dialog element when in mobile view.
 @mixin mobile {
   width: min(calc(100% - 1rem), 30rem);
   max-height: calc(100% - 1rem);

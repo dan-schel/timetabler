@@ -1,7 +1,7 @@
 @use "../css-template/import" as template;
 @use "picker-swatches";
 @use "../colors";
-@use "dialog-common";
+@use "common";
 
 // The styles applied to the edit class menu.
 @mixin main {
@@ -32,8 +32,8 @@
     color: var(--color-ink-100);
   }
 
-  #edit-class-main-page-error-ui {
-    @include dialog-common.error-ui;
+  #class-editor-error-ui {
+    @include common.error-ui;
     //margin-top: 0.5rem;
   }
 
@@ -62,7 +62,7 @@
     }
   }
 
-  #edit-class-main-page-color-picker {
+  #class-editor-color-picker {
     @include picker-swatches.swatches($content-class: "picker-content");
     @include colors.gradient-classes($direction: "to bottom right");
 
@@ -91,7 +91,7 @@
     }
   }
 
-  #edit-class-main-page-add-option-button {
+  #class-editor-add-option-button {
     @include template.button-filled-neutral;
     @include template.content-text-icon;
     padding: 0rem 0.5rem;
@@ -105,7 +105,7 @@
     }
   }
 
-  #edit-class-main-page-options {
+  #class-editor-options {
     flex-grow: 1;
     gap: 0.5rem;
 
@@ -149,7 +149,7 @@
     }
   }
 
-  #edit-class-main-page-submit-button {
+  #class-editor-submit-button {
     @include template.button-filled;
     @include template.content-text-icon;
     height: 2.5rem;

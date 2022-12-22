@@ -1,0 +1,45 @@
+include icons.pug
+
+mixin class-editor
+  div&attributes(attributes)
+    //- Title
+    h2.when-new Add class
+    h2.when-edit Edit class
+
+    label.field.text-input
+      p.label Name
+      input#class-editor-name-input(
+        type="text", autocomplete="off", placeholder="e.g. Advanced Tin Opening")
+
+    label.field.text-input
+      p.label Type
+      input#class-editor-type-input(
+        type="text", autocomplete="off", placeholder="e.g. Lecture")
+
+    .field
+      p.label Colour
+      #class-editor-color-picker
+
+    .field
+      p.label Options
+      button#class-editor-add-option-button
+        +icon("uil:plus")
+        p ADD OPTION
+
+    #class-editor-options
+
+    label#class-editor-optional-switch-label.switch
+      input#class-editor-optional-switch(type="checkbox", autocomplete="off")
+      div
+        .switch-graphic
+        .switch-content
+          p Class is optional
+
+    #class-editor-error-ui.when-error
+      +icon("uil:exclamation-circle")
+      p#class-editor-error-text
+
+    button#class-editor-submit-button
+      +icon("uil:check")
+      p.when-new Add class to timetable
+      p.when-edit Save changes

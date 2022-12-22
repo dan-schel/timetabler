@@ -1,7 +1,7 @@
 @use "../css-template/import" as template;
 @use "picker-swatches";
 @use "../colors";
-@use "dialog-common";
+@use "common";
 
 // The styles applied to the edit class menu.
 @mixin main {
@@ -10,7 +10,7 @@
   gap: 1rem;
 
   // The "back" button.
-  #edit-class-option-page-back-button {
+  #option-editor-back-button {
     @include template.button-filled-neutral;
     @include template.content-text-icon;
     padding: 0rem 0.5rem;
@@ -35,9 +35,9 @@
     margin-top: -0.5rem;
   }
 
-  #edit-class-option-page-submit-error-ui,
-  #edit-class-option-page-block-error-ui {
-    @include dialog-common.error-ui;
+  #option-editor-submit-error-ui,
+  #option-editor-block-error-ui {
+    @include common.error-ui;
   }
 
   // Only show the submit error UI when the .submit-error class is on the option
@@ -56,7 +56,7 @@
     }
   }
 
-  #edit-class-option-page-time-block-ui {
+  #option-editor-time-block-ui {
     border: 2px solid var(--color-ink-30);
     border-radius: 0.5rem;
     padding: 1rem;
@@ -74,14 +74,14 @@
       margin-bottom: -0.5rem;
     }
 
-    #edit-class-option-page-dow-wrapper {
+    #option-editor-dow-wrapper {
       @include template.select-filled-neutral;
       select {
         height: 2rem;
         padding: 0rem 1rem;
       }
     }
-    #edit-class-option-page-time-input {
+    #option-editor-time-input {
       @include template.input-filled-neutral;
       height: 2rem;
       padding: 0rem 1rem;
@@ -90,7 +90,7 @@
       @include template.row;
       gap: 0.5rem;
 
-      #edit-class-option-page-duration-input {
+      #option-editor-duration-input {
         @include template.input-filled-neutral;
         height: 2rem;
         padding: 0rem 1rem;
@@ -110,14 +110,14 @@
         }
       }
     }
-    #edit-class-option-page-online-switch-label {
+    #option-editor-online-switch-label {
       @include template.checkbox-switch;
       .switch-content {
         @include template.content-text;
         margin-left: 1rem;
       }
     }
-    #edit-class-option-page-add-block-button {
+    #option-editor-add-block-button {
       @include template.button-filled;
       @include template.content-text-icon;
       height: 2.5rem;
@@ -128,7 +128,7 @@
     }
   }
 
-  #edit-class-option-page-blocks-container {
+  #option-editor-blocks-container {
     flex-grow: 1;
     min-height: 8rem;
 
@@ -159,7 +159,7 @@
       }
     }
   }
-  #edit-class-option-page-submit-button {
+  #option-editor-submit-button {
     @include template.button-filled;
     @include template.content-text-icon;
     height: 2.5rem;
