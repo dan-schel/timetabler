@@ -1,5 +1,5 @@
 import { make } from "schel-d-utils-browser";
-import { EditClassOptionPageController } from "./edit-class-option-page-controller";
+import { OptionEditorController } from "./option-editor-controller";
 import { icons } from "./icons";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableBlock } from "./timetable/timetable-block";
@@ -8,8 +8,8 @@ import { TimetableColor, TimetableColors } from "./timetable/timetable-class-col
 import { TimetableError } from "./timetable/timetable-error";
 import { TimetableOption } from "./timetable/timetable-option";
 
-/** Manages the edit class dialog. */
-export class EditClassController {
+/** Manages the class editor dialog. */
+export class ClassEditorController {
   /** References to the HTML elements on the page. */
   private readonly _html: Html;
 
@@ -28,23 +28,23 @@ export class EditClassController {
   /** The current options created in the UI. */
   private _options: TimetableOption[];
 
-  private readonly optionPageController: EditClassOptionPageController;
+  private readonly optionEditorController: OptionEditorController;
 
   /**
-   * Creates a {@link EditClassController}.
+   * Creates a {@link ClassEditorController}.
    * @param html References to the HTML elements on the page.
    */
   constructor(html: Html) {
     this._html = html;
     this._existingClass = null;
-    this._colorRadios = EditClassController.createColorSwatches(
+    this._colorRadios = ClassEditorController.createColorSwatches(
       this._html.classEditor.colorPicker
     );
     this._options = [];
-    this.optionPageController = new EditClassOptionPageController(
+    this.optionEditorController = new OptionEditorController(
       html,
-      blocks => this.onOptionPageSubmitted(blocks),
-      () => this.closeOptionPage()
+      blocks => this.onOptionEditorSubmitted(blocks),
+      () => this.closeOptionEditor()
     );
     this.attachEvents();
   }
@@ -58,8 +58,8 @@ export class EditClassController {
       this.onSubmit();
     });
     this._html.classEditor.addOptionButton.addEventListener("click", () => {
-      this.optionPageController.reset();
-      this._html.classEditorDialog.classList.add("option-page");
+      this.optionEditorController.reset();
+      this._html.classEditorDialog.classList.add("edit-option");
     });
   }
 
@@ -143,11 +143,16 @@ export class EditClassController {
   /** Closes the dialog. */
   close() {
     this._html.classEditorDialog.close();
+
+    // Reset after the animation plays. Not essential, since we'll reset before
+    // we open again, but resets still animate the UI, so it's nice if the reset
+    // occurs while the dialog is hidden rather than as it's opening.
+    setTimeout(() => this.reset(), 500);
   }
 
   /** Called when the dialog is about to open. Clears any old values. */
   reset() {
-    this._html.classEditorDialog.classList.remove("option-page");
+    this._html.classEditorDialog.classList.remove("edit-option");
     this._html.classEditor.div.classList.remove("new");
 
     this._html.classEditor.nameInput.value = "";
@@ -156,6 +161,8 @@ export class EditClassController {
     this._html.classEditor.optionalSwitchInput.checked = false;
     this.setOptions([]);
     this.showError(null);
+
+    this.optionEditorController.reset();
   }
 
   /**
@@ -164,6 +171,7 @@ export class EditClassController {
    */
   setOptions(options: TimetableOption[]) {
     this._options = options;
+    this._html.classEditor.div.classList.toggle("non-empty", options.length > 0);
     this._html.classEditor.optionsDiv.replaceChildren(...options.map((o, i) => {
       const dom = make.div({ classes: ["option"] }, {
         number: make.p({ classes: ["number"], text: (i + 1).toFixed() }, {}),
@@ -184,12 +192,12 @@ export class EditClassController {
   }
 
   /**
-   * Called when the option page is submitted. Provides the blocks to this
+   * Called when the option editor is submitted. Provides the blocks to this
    * controller. Returns an error message if applicable, otherwise null. If
-   * accepted, closes the option page.
-   * @param blocks The blocks created in the option page.
+   * accepted, closes the option editor page.
+   * @param blocks The blocks created in the option editor.
    */
-  onOptionPageSubmitted(blocks: TimetableBlock[]): string | null {
+  onOptionEditorSubmitted(blocks: TimetableBlock[]): string | null {
     try {
       const newOption = new TimetableOption(blocks);
 
@@ -198,7 +206,7 @@ export class EditClassController {
       }
 
       this.setOptions([...this._options, newOption]);
-      this.closeOptionPage();
+      this.closeOptionEditor();
       return null;
     }
     catch (ex) {
@@ -210,9 +218,14 @@ export class EditClassController {
     }
   }
 
-  /** Closes the option page within the dialog. */
-  closeOptionPage() {
-    this._html.classEditorDialog.classList.remove("option-page");
+  /** Closes the option editor page within the dialog. */
+  closeOptionEditor() {
+    this._html.classEditorDialog.classList.remove("edit-option");
+
+    // Reset after the animation plays. Not essential, since we'll reset before
+    // we open again, but resets still animate the UI, so it's nice if the reset
+    // occurs while the page is hidden rather than as it's opening.
+    setTimeout(() => this.optionEditorController.reset(), 500);
   }
 
   /**

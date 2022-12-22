@@ -8,7 +8,7 @@ import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableError } from "./timetable/timetable-error";
 
 /** Manages the option page in the edit class dialog. */
-export class EditClassOptionPageController {
+export class OptionEditorController {
   /** References to the HTML elements on the page. */
   private readonly _html: Html;
 
@@ -22,7 +22,7 @@ export class EditClassOptionPageController {
   private readonly _onBack: () => void;
 
   /**
-   * Creates a {@link EditClassOptionPageController}.
+   * Creates a {@link OptionEditorController}.
    * @param html References to the HTML elements on the page.
    */
   constructor(html: Html, callback: (blocks: TimetableBlock[]) => string | null,
@@ -130,11 +130,6 @@ export class EditClassOptionPageController {
     else {
       this.showSubmitError("Please add at least one time block to this option");
     }
-  }
-
-  /** Closes the dialog. */
-  close() {
-    this._html.classEditorDialog.close();
   }
 
   /** Called when the page is about to open. Clears any old values. */

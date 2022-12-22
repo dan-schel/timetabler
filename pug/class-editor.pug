@@ -23,12 +23,16 @@ mixin class-editor
       p.label Colour
       #class-editor-color-picker
 
-    //- "Options" section
-    .field
-      p.label Options
-      button#class-editor-add-option-button
-        +icon("uil:plus")
-        p ADD OPTION
+    //- "Timetable options" section
+    p.label Timetable options
+    button#class-editor-add-option-button
+      +icon("uil:plus")
+      p ADD OPTION
+
+    //- Message shown when no options have been added yet.
+    p#class-editor-no-options-message
+      | You haven't added any timetable options to this class yet. Once you do
+      | they'll show up here.
 
     #class-editor-options
       //- Populates with options. Flex grows to fill dialog.

@@ -1,6 +1,6 @@
 import { download, openFileDialog } from "schel-d-utils-browser";
 import { ClassUIController } from "./class-ui-controller";
-import { EditClassController } from "./edit-class-controller";
+import { ClassEditorController } from "./class-editor-controller";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableChoices } from "./timetable/timetable-choices";
 
@@ -19,7 +19,7 @@ export class ControlsController {
   private _classUIs: ClassUIController[];
 
   /** The logic in charge of the edit class menu. */
-  private _editClassController: EditClassController;
+  private _editClassController: ClassEditorController;
 
   /**
    * Creates a {@link ControlsController}.
@@ -29,7 +29,7 @@ export class ControlsController {
     this._html = html;
     this._prevTimetable = null;
     this._classUIs = [];
-    this._editClassController = new EditClassController(html);
+    this._editClassController = new ClassEditorController(html);
 
     this.attachEvents();
   }

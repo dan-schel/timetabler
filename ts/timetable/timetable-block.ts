@@ -137,16 +137,24 @@ export class TimetableBlock {
     const dow = this.dayOfWeek.name.substring(0, 3);
 
     // Use hours for duration if possible.
-    const duration = this.durationMins % 60 == 0
-      ? ` ${this.durationMins / 60}${this.durationMins / 60 == 1 ? "hr" : "hrs"}`
-      : ` ${this.durationMins}${this.durationMins == 1 ? "min" : "mins"}`;
+    const hrs = Math.floor(this.durationMins / 60);
+    const mins = this.durationMins % 60;
+    const duration = (() => {
+      if (hrs == 0) {
+        return `${mins}${mins == 1 ? "min" : "mins"}`;
+      }
+      if (mins == 0) {
+        return `${hrs}${hrs == 1 ? "hr" : "hrs"}`;
+      }
+      return `${hrs}h${mins}m`;
+    })();
 
     const onlineSuffix = this.online
       ? (includeDuration ? " (online)" : " online")
       : "";
 
     return `${dow} ${this.startTime.to12HString()}`
-      + `${includeDuration ? duration : ""}${onlineSuffix}`;
+      + `${includeDuration ? (" " + duration) : ""}${onlineSuffix}`;
   }
 
   /**

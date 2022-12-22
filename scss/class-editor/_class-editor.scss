@@ -54,6 +54,12 @@
     }
   }
 
+  // Hide the "You haven't added any timetable options..." message when the
+  // .non-empty class is present.
+  &.non-empty #class-editor-no-options-message {
+    @include template.gone;
+  }
+
   // The "Add option" button.
   #class-editor-add-option-button {
     @include template.button-filled-neutral;
@@ -62,6 +68,7 @@
     height: 1.5rem;
     gap: 0.25rem;
     align-self: flex-start;
+    margin-top: -0.5rem;
 
     p {
       font-size: 0.75rem;
