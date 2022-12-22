@@ -4,97 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
-    <title>Not found | Timetabler</title>
-  </head>
-  <body>
-    <style>
-      @font-face {
-        font-family: "Atkinson Hyperlegible";
-        font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url("/ah-400.woff2") format("woff2");
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-          U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
-          U+2212, U+2215, U+FEFF, U+FFFD;
-      }
-      @font-face {
-        font-family: "Atkinson Hyperlegible";
-        font-style: normal;
-        font-weight: 700;
-        font-display: swap;
-        src: url("/ah-700.woff2") format("woff2");
-        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
-          U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193,
-          U+2212, U+2215, U+FEFF, U+FFFD;
-      }
-      * {
-        font-family: "Atkinson Hyperlegible";
-        font-weight: normal;
-        font-size: 1rem;
-        margin: 0;
-        padding: 0;
-      }
-      :root {
-        --color-paper-30: rgb(36, 41, 51);
-        --color-ink-30: rgba(184, 207, 255, 0.3);
-        --color-ink-80: rgba(235, 241, 255, 0.8);
-        --color-ink-100: rgb(255, 255, 255);
-        --color-accent: rgb(25, 214, 255);
-      }
-      html,
-      body {
-        height: 98%;
-        height: 98svh;
-      }
-      body {
-        background-color: var(--color-paper-30);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-width: 18rem;
-        min-height: 25rem;
-      }
-      main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        max-width: 24rem;
-        padding: 1.5rem;
-      }
-      h1 {
-        color: var(--color-ink-100);
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 0.5rem;
-      }
-      main > p {
-        color: var(--color-ink-80);
-        text-align: center;
-        line-height: 1.3em;
-      }
-      a {
-        color: var(--color-accent);
-        text-decoration: underline transparent 1px;
-        transition: text-decoration-color 0.05s;
-      }
-      a:hover,
-      a:focus-visible {
-        text-decoration-color: var(--color-accent);
-      }
-    </style>
-    <main>
-      <h1>Page not found</h1>
-      <p>
-        Redirecting you to
-        <a href="/">Timetabler</a>...
-      </p>
-    </main>
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content="0; url=/" />
     <script>
+      // If the meta redirect fails... I guess?
       window.location.replace("/");
     </script>
-  </body>
+  </head>
+  <body></body>
 </html>

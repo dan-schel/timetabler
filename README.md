@@ -1,6 +1,6 @@
 # Timetabler
 
-A tool to help choose options on a timetable where there might be multiple classes running! Allows you to select different preferences and checks for clashes for you as you go.
+A tool designed to help you visualise your uni timetable preferences while you choose them.
 
 ✅ Live at [timetabler.danschellekens.com](https://timetabler.danschellekens.com)!
 

@@ -38,3 +38,43 @@
     font-weight: bold;
   }
 }
+
+@mixin dialog($close-button-selector) {
+  @include template.dialog;
+  border-radius: 0.75rem;
+  z-index: 2;
+
+  // For the open/close animation.
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  opacity: 1;
+  visibility: visible;
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  &:not([open]) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, calc(1rem - 50%));
+    min-width: 0;
+
+    // Instead of display: none;
+    display: flex;
+  }
+
+  // The close button.
+  #{$close-button-selector} {
+    @include template.button-hover;
+    @include template.content-text-icon;
+    --button-rounding: 0.5rem;
+    position: absolute;
+    height: 2rem;
+    width: 2rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+}

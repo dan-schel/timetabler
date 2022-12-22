@@ -16,7 +16,7 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Timetabler &ndash; Visualise your uni timetable preferences
-    meta(name="description", content="A tool to help choose options on a timetable where there might be multiple classes running! Allows you to select different preferences and checks for clashes for you as you go.")
+    meta(name="description", content="A tool designed to help you visualise your uni timetable preferences while you choose them.")
     link(rel="shortcut icon", href="/favicon.svg", type="image/x-icon")
     link(rel="stylesheet", href="/main.css")
     script(src="/main.js", defer)
@@ -50,3 +50,6 @@ html(lang="en")
 
     include class-editor-dialog.pug
     +class-editor-dialog#class-editor-dialog
+
+    include about-dialog.pug
+    +about-dialog#about-dialog
