@@ -62,18 +62,9 @@
 
   // The "Add option" button.
   #class-editor-add-option-button {
-    @include template.button-filled-neutral;
-    @include template.content-text-icon;
-    padding: 0rem 0.5rem;
-    height: 1.5rem;
-    gap: 0.25rem;
+    @include common.secondary-button;
     align-self: flex-start;
     margin-top: -0.5rem;
-
-    p {
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
   }
 
   // The div containing the dynamically populated options.
@@ -151,13 +142,7 @@
 
   // The submit button.
   #class-editor-submit-button {
-    @include template.button-filled;
-    @include template.content-text-icon;
-    height: 2.5rem;
-    gap: 0.5rem;
-    .icon {
-      font-size: 1.2rem;
-    }
+    @include common.primary-button;
   }
 
   // Only show .when-edit html when the .new class is NOT on the

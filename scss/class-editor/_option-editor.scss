@@ -11,18 +11,9 @@
 
   // The "Back" button.
   #option-editor-back-button {
-    @include template.button-filled-neutral;
-    @include template.content-text-icon;
-    padding: 0rem 0.5rem;
-    height: 1.5rem;
-    gap: 0.25rem;
+    @include common.secondary-button;
     align-self: flex-start;
     margin-bottom: 0.5rem;
-
-    p {
-      font-size: 0.75rem;
-      font-weight: bold;
-    }
   }
 
   // The "New option" title.
@@ -96,13 +87,7 @@
 
   // The "Add option to class" button.
   #option-editor-submit-button {
-    @include template.button-filled;
-    @include template.content-text-icon;
-    height: 2.5rem;
-    gap: 0.5rem;
-    .icon {
-      font-size: 1.2rem;
-    }
+    @include common.primary-button;
   }
 }
 
@@ -188,13 +173,7 @@
 
   // The "Add time block" button.
   #option-editor-add-block-button {
-    @include template.button-filled;
-    @include template.content-text-icon;
-    height: 2.5rem;
-    gap: 0.5rem;
-    .icon {
-      font-size: 1.2rem;
-    }
+    @include common.primary-button;
   }
 }
 
