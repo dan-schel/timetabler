@@ -252,9 +252,18 @@ function determineHourRange(timetable: Timetable): HourRange {
   const split = Math.min(earliestHour, latestDaySplitHour);
 
   if (latestHour <= 24 || latestHour <= split + 24) {
+    let start = earliestHour;
+    let end = latestHour;
+
+    // If the hour range is less than 6 hours, add some hours either side.
+    while (end - start < 6) {
+      if (start > 0) { start--; }
+      if (end < 24) { end++; }
+    }
+
     return {
-      start: earliestHour,
-      end: latestHour
+      start: start,
+      end: end
     };
   }
 
