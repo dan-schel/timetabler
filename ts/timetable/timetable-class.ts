@@ -48,13 +48,20 @@ export class TimetableClass {
   /**
    * Creates a {@link TimetableClass}.
    * @param name The class name, e.g. "Advanced Tin Opening".
-   * @param title The class type, e.g. "Workshop".
+   * @param type The class type, e.g. "Workshop".
    * @param color The color this class will be shown on the timetable.
    * @param options The timetable options. Must have at least 1.
    * @param optional True, if not adding the class to the timetable is an option.
    */
-  constructor(name: string, title: string, color: TimetableColor,
+  constructor(name: string, type: string, color: TimetableColor,
     options: TimetableOption[], optional: boolean) {
+
+    if (name.length < 1) {
+      throw TimetableError.classEmptyName();
+    }
+    if (type.length < 1) {
+      throw TimetableError.classEmptyType();
+    }
 
     if (options.length < 1) {
       throw TimetableError.classNoOptions();
@@ -66,7 +73,7 @@ export class TimetableClass {
     }
 
     this.name = name;
-    this.type = title;
+    this.type = type;
     this.color = color;
     this.options = options;
     this.optional = optional;

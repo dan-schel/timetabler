@@ -1,0 +1,12 @@
+include icons.pug
+
+mixin class-editor-dialog
+  dialog&attributes(attributes)
+    button#class-editor-dialog-close-button
+      +icon("uil:times")
+
+    include class-editor.pug
+    +class-editor#class-editor
+
+    include option-editor.pug
+    +option-editor#option-editor

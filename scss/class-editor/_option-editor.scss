@@ -1,0 +1,185 @@
+@use "../css-template/import" as template;
+@use "picker-swatches";
+@use "../colors";
+@use "../common";
+
+// The styles applied to the option editor page in the class editor dialog.
+@mixin main {
+  flex-grow: 1;
+  padding: 1rem;
+  gap: 1rem;
+
+  // The "Back" button.
+  #option-editor-back-button {
+    @include common.secondary-button;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  // The "New option" title.
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+
+  // The instructions message below the title.
+  #option-editor-message {
+    margin-top: -0.5rem;
+  }
+
+  // The div containing the block editor ("Add time block") UI.
+  #block-editor {
+    @include block-editor;
+  }
+
+  // Section containing the currently added blocks.
+  #option-editor-blocks-container {
+    flex-grow: 1;
+    min-height: 6rem;
+
+    h3 {
+      font-weight: bold;
+      color: var(--color-ink-100);
+      margin-bottom: 0.5rem;
+    }
+
+    // Hide the "You haven't added any time blocks..." message when the
+    // container is non-empty.
+    &.non-empty #option-editor-no-blocks-message {
+      @include template.gone;
+    }
+
+    // The time block divs created dynamically.
+    .block {
+      @include template.row;
+      overflow: hidden;
+
+      .one-line {
+        flex-grow: 1;
+      }
+
+      // The delete button on each time block.
+      .delete-button {
+        @include template.button-hover;
+        @include template.content-text-icon;
+        width: 2rem;
+        height: 2rem;
+        .icon {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  // The error UI. Only shown when the .submit-error class is present.
+  #option-editor-submit-error-ui {
+    @include common.error-ui;
+  }
+  &:not(.submit-error) #option-editor-submit-error-ui {
+    @include template.gone;
+  }
+
+  // Inform the block editor when the .block-error class is present.
+  &:not(.block-error) #block-editor {
+    @include block-editor-no-error;
+  }
+
+  // The "Add option to class" button.
+  #option-editor-submit-button {
+    @include common.primary-button;
+  }
+}
+
+@mixin block-editor {
+  border: 2px solid var(--color-ink-30);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  gap: 1rem;
+
+  // The "Add time block" title.
+  h3 {
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+
+  // General styles for all fields.
+  .field {
+    .label {
+      @include template.no-select;
+      margin-bottom: 0.25rem;
+    }
+
+    // For fields which contain text inputs, e.g. the "Start time" field.
+    &.text-input {
+      cursor: text;
+    }
+
+    input[type="text"] {
+      @include template.input-filled-neutral;
+      height: 2rem;
+      padding: 0rem 1rem;
+    }
+  }
+
+  // The "Day of the week" select.
+  #option-editor-dow-wrapper {
+    @include template.select-filled-neutral;
+    select {
+      height: 2rem;
+      padding: 0rem 1rem;
+    }
+  }
+
+  // The div that lays the text input alongside the hrs/mins picker.
+  .duration-row {
+    @include template.row;
+    gap: 0.5rem;
+
+    // The text field in the duration input UI.
+    #option-editor-duration-input {
+      flex-grow: 1;
+      min-width: 0;
+      flex-shrink: 1;
+      max-width: 5rem;
+    }
+
+    // The hrs/mins picker in the duration input UI.
+    .unit-picker {
+      @include template.picker-subtle;
+      @include template.row;
+      > p {
+        color: var(--color-ink-50);
+      }
+      .picker-content {
+        @include template.content-text;
+      }
+    }
+  }
+
+  // The "Online" switch.
+  #option-editor-online-switch-label {
+    @include template.checkbox-switch;
+    .switch-content {
+      @include template.content-text;
+      margin-left: 1rem;
+    }
+  }
+
+  // The error UI. Only shown when the .block-error class is present.
+  #option-editor-block-error-ui {
+    @include common.error-ui;
+  }
+
+  // The "Add time block" button.
+  #option-editor-add-block-button {
+    @include common.primary-button;
+  }
+}
+
+@mixin block-editor-no-error {
+  // Only show the error UI when the .block-error class is present.
+  #option-editor-block-error-ui {
+    @include template.gone;
+  }
+}

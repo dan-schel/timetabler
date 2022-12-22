@@ -1,0 +1,33 @@
+@use "../css-template/import" as template;
+
+@mixin swatches($content-class: "picker-content") {
+  @include template.picker-base($content-class: $content-class);
+  @include template.row;
+  flex-wrap: wrap;
+
+  > label {
+    > input[type="radio"] + .#{$content-class} {
+      align-items: center;
+      justify-content: center;
+
+      background: var(--background);
+      opacity: 0.5;
+      transform: scale(50%);
+      transition: opacity 0.1s, transform 0.1s;
+      border-radius: 1000vw;
+    }
+    > input[type="radio"]:hover + .#{$content-class},
+    > input[type="radio"]:focus-visible + .#{$content-class} {
+      opacity: 1;
+      transform: scale(70%);
+    }
+    > input[type="radio"]:active + .#{$content-class} {
+      opacity: 0.7;
+      transform: scale(60%);
+    }
+    > input[type="radio"]:checked + .#{$content-class} {
+      opacity: 1;
+      transform: scale(80%);
+    }
+  }
+}

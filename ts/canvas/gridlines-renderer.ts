@@ -1,5 +1,6 @@
+import { hour24To12 } from "schel-d-utils";
 import { DayOfWeek } from "../time/day-of-week";
-import { hour24To12, LocalTime } from "../time/local-time";
+import { LocalTime } from "../time/local-time";
 import { Timetable } from "../timetable/timetable";
 import { TimetableChoices } from "../timetable/timetable-choices";
 import { CanvasController } from "./canvas-controller";

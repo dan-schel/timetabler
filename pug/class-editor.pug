@@ -1,0 +1,57 @@
+include icons.pug
+
+mixin class-editor
+  div&attributes(attributes)
+    //- Title
+    h2.when-new Add class
+    h2.when-edit Edit class
+
+    //- "Name" field.
+    label.field.text-input
+      p.label Name
+      input#class-editor-name-input(
+        type="text", autocomplete="off", placeholder="e.g. Advanced Tin Opening")
+
+    //- "Type" field.
+    label.field.text-input
+      p.label Type
+      input#class-editor-type-input(
+        type="text", autocomplete="off", placeholder="e.g. Lecture")
+
+    //- "Colour" picker.
+    .field
+      p.label Colour
+      #class-editor-color-picker
+
+    //- "Timetable options" section
+    p.label Timetable options
+    button#class-editor-add-option-button
+      +icon("uil:plus")
+      p ADD OPTION
+
+    //- Message shown when no options have been added yet.
+    p#class-editor-no-options-message
+      | You haven't added any timetable options to this class yet. Once you do
+      | they'll show up here.
+
+    #class-editor-options
+      //- Populates with options. Flex grows to fill dialog.
+
+    //- "Class is optional" switch.
+    label#class-editor-optional-switch
+      input#class-editor-optional-switch-input(type="checkbox", autocomplete="off")
+      div
+        .switch-graphic
+        .switch-content
+          p Class is optional
+
+    //- Error message UI. Hides when not in use.
+    #class-editor-error-ui.when-error
+      +icon("uil:exclamation-circle")
+      p#class-editor-error-text
+
+    //- "Add class to timetable/save changes" button.
+    button#class-editor-submit-button
+      +icon("uil:check")
+      p.when-new Add class to timetable
+      p.when-edit Save changes

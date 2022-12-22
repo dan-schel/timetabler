@@ -1,19 +1,50 @@
-import { download, finder, openFileDialog } from "schel-d-utils-browser";
+import { find } from "schel-d-utils-browser";
 import { CanvasController } from "./canvas/canvas-controller";
 import { ControlsController } from "./controls-controller";
+import { DropdownCoordinator } from "./dropdown-coordinator";
 import { Timetable } from "./timetable/timetable";
 import { TimetableChoices } from "./timetable/timetable-choices";
 
 // Retrieve the HTML elements from the page.
 const html = {
-  controls: finder.any("controls"),
-  canvasContainer: finder.div("canvas-container"),
-  canvas: finder.canvas("canvas"),
-  mobileExpanderButton: finder.button("mobile-expander-button"),
-  importButton: finder.button("import-button"),
-  exportButton: finder.button("export-button"),
-  classes: finder.div("classes"),
-  statusContainerClass: "status-container"
+  controls: find.any("controls"),
+  canvasContainer: find.any("canvas-container"),
+  canvas: find.canvas("canvas"),
+  mobileExpanderButton: find.button("mobile-expander-button"),
+  importButton: find.button("import-button"),
+  exportButton: find.button("export-button"),
+  addClassButton: find.button("add-class-button"),
+  classes: find.div("classes"),
+  statusContainerClass: "status-container",
+  classEditorDialog: find.dialog("class-editor-dialog"),
+  classEditorDialogCloseButton: find.button("class-editor-dialog-close-button"),
+  classEditor: {
+    div: find.div("class-editor"),
+    errorText: find.any("class-editor-error-text"),
+    nameInput: find.input("class-editor-name-input"),
+    typeInput: find.input("class-editor-type-input"),
+    colorPicker: find.div("class-editor-color-picker"),
+    addOptionButton: find.button("class-editor-add-option-button"),
+    optionsDiv: find.div("class-editor-options"),
+    optionalSwitchInput: find.input("class-editor-optional-switch-input"),
+    submitButton: find.button("class-editor-submit-button"),
+  },
+  optionEditor: {
+    div: find.div("option-editor"),
+    backButton: find.button("option-editor-back-button"),
+    submitErrorText: find.any("option-editor-submit-error-text"),
+    blockErrorText: find.any("option-editor-block-error-text"),
+    dowSelect: find.select("option-editor-dow-select"),
+    timeInput: find.input("option-editor-time-input"),
+    durationInput: find.input("option-editor-duration-input"),
+    durationHoursRadio: find.input("option-editor-hours-radio"),
+    durationMinutesRadio: find.input("option-editor-minutes-radio"),
+    onlineSwitch: find.input("option-editor-online-switch"),
+    addBlockButton: find.button("option-editor-add-block-button"),
+    blocksDivContainer: find.div("option-editor-blocks-container"),
+    blocksDiv: find.div("option-editor-blocks"),
+    submitButton: find.button("option-editor-submit-button")
+  }
 };
 
 // Used by other files to refer to the above html object.
@@ -21,51 +52,20 @@ export type Html = typeof html;
 
 const controls = new ControlsController(html);
 
-// Initially, start with an empty timetable.
-let timetable = new TimetableChoices(new Timetable([]), []);
-
 // Set the canvas size and draw. Also have the canvas resize itself when the
 // window size changes.
 const canvas = new CanvasController(html);
 canvas.fitCanvas();
 window.addEventListener("resize", () => canvas.fitCanvas());
 
+// Initially, start with an empty timetable.
+let timetable = new TimetableChoices(new Timetable([]), []);
+updateTimetable(timetable);
+
 // Redraw the canvas when the webfonts have loaded.
 document.fonts.ready.then(() => canvas.markDirty());
 
-// Toggle the "collapsed" class on the controls when the expander button is
-// clicked (only appears when the screen is too small to keep it permanently
-// open).
-html.mobileExpanderButton.addEventListener("click", () => {
-  html.controls.classList.toggle("collapsed");
-});
-
-// Import a timetable.
-html.importButton.addEventListener("click", () => {
-  openFileDialog(".json", (file: string) => {
-    const newTimetable = (() => {
-      try {
-        const json = JSON.parse(file);
-        return TimetableChoices.json.parse(json);
-      }
-      catch (err) {
-        alert("That .json file was invalid.");
-        console.warn(err);
-        return null;
-      }
-    })();
-
-    if (newTimetable != null) {
-      updateTimetable(newTimetable);
-    }
-  });
-});
-
-// Export the timetable.
-html.exportButton.addEventListener("click", () => {
-  const text = JSON.stringify(timetable.toJSON());
-  download(text, "timetable.json");
-});
+export const dropdowns = new DropdownCoordinator();
 
 /**
  * Modifies the timetable/choices being displayed with a new one.

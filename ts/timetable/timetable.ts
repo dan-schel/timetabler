@@ -51,6 +51,32 @@ export class Timetable {
     return arraysMatch(this.classes, other.classes);
   }
 
+  /**
+   * Returns a new {@link Timetable} that is identical, except with the given
+   * class added.
+   * @param newClass The new class to add.
+   * @param replace The old class to replace (if any). If this class is not
+   * found within the timetable, then nothing will change.
+   */
+  withClass(newClass: TimetableClass, replace?: TimetableClass): Timetable {
+    if (replace != null) {
+      return new Timetable(
+        this.classes.map(x => x.equals(replace) ? newClass : x)
+      );
+    }
+
+    return new Timetable([...this.classes, newClass]);
+  }
+
+  /**
+   * Returns a new {@link Timetable} that is identical, except with the given
+   * class removed.
+   * @param oldClass The class to remove.
+   */
+  withoutClass(oldClass: TimetableClass): Timetable {
+    return new Timetable(this.classes.filter(c => !c.equals(oldClass)));
+  }
+
   /** Convert to JSON object according to {@link Timetable.rawJson}. */
   toJSON(): z.infer<typeof Timetable.rawJson> {
     return {

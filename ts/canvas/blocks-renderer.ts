@@ -58,7 +58,10 @@ export class BlocksRenderer {
    * @param timetable The updated timetable.
    */
   onTimetableUpdate(timetable: TimetableChoices) {
+    // Clear all blocks except the primary blocks.
     this._overflowBlocks.splice(0, this._overflowBlocks.length);
+    this._draggingBlock = null;
+    this._suggestionBlocks = [];
 
     // For each choice (a.k.a. each timetable class, since there's guaranteed to
     // be exactly one for each)...
@@ -86,6 +89,12 @@ export class BlocksRenderer {
         }
       });
     });
+
+    // Remove any primary blocks for classes which no longer exist.
+    const toDelete = this._primaryBlocks.filter(b =>
+      timetable.timetable.classes.find(c => c.equals(b.timetableClass)) == null
+    );
+    toDelete.forEach(d => this._primaryBlocks.splice(this._primaryBlocks.indexOf(d), 1));
   }
 
   /**

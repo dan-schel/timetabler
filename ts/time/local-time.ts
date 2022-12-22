@@ -1,3 +1,4 @@
+import { hour24To12 } from "schel-d-utils";
 import { TimeError } from "./time-error";
 
 /**
@@ -261,21 +262,4 @@ export class LocalTime {
   static latest(...times: LocalTime[]): LocalTime {
     return new LocalTime(Math.max(...times.map(t => t.minuteOfDay)));
   }
-}
-
-/** A 12-hour hour. */
-export type Hour12 = {
-  hour: number,
-  half: "am" | "pm"
-};
-
-/**
- * Converts a 24-hour hour to a 12-hour hour.
- * @param hour24 The 24-hour hour.
- */
-export function hour24To12(hour24: number): Hour12 {
-  return {
-    hour: (hour24 + 11) % 12 + 1,
-    half: hour24 < 12 ? "am" : "pm"
-  };
 }

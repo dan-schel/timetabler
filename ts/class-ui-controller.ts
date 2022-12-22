@@ -1,7 +1,7 @@
 import { TimetableClass } from "./timetable/timetable-class";
-import { v4 as uuidv4 } from "uuid";
 import { TimetableOption } from "./timetable/timetable-option";
-import { getCurrentTimetable, updateTimetable } from "./main";
+import { dropdowns, getCurrentTimetable, updateTimetable } from "./main";
+import { createClassUIDom } from "./class-ui-creator";
 
 export type OptionRadioMapping = {
   option: TimetableOption,
@@ -31,6 +31,8 @@ export class ClassUIController {
    * @param $noChoiceInput The radio input used when no choice is selected.
    * @param optionRadios A list of each option in the class and the
    * corresponding radio button.
+   * @param onEditClicked Called when the edit button is clicked.
+   * @param onDeleteClicked Called when the delete button is clicked.
    */
   constructor(timetableClass: TimetableClass, $div: HTMLDivElement,
     $noChoiceInput: HTMLInputElement, optionRadios: OptionRadioMapping[]) {
@@ -67,91 +69,56 @@ export class ClassUIController {
   /**
    * Creates a {@link ClassUIController} for the given class.
    * @param classData The class data.
+   * @param onEditClicked Called when the edit button is clicked.
+   * @param onDeleteClicked Called when the delete button is clicked.
    */
-  static create(classData: TimetableClass): ClassUIController {
-    // The class name label (wrapped in a one-line).
-    const $name = document.createElement("h3");
-    $name.textContent = classData.name;
-    const $nameOL = document.createElement("div");
-    $nameOL.className = "one-line";
-    $nameOL.append($name);
+  static create(classData: TimetableClass, onEditClicked: () => void,
+    onDeleteClicked: () => void): ClassUIController {
 
-    // The class name label (wrapped in a one-line).
-    const $type = document.createElement("h4");
-    $type.textContent = classData.type.toUpperCase();
+    // Create the DOM for the class UI.
+    const { dom, options } = createClassUIDom(classData);
 
-    if (classData.optional) {
-      $type.textContent += " - OPTIONAL";
-    }
-
-    const $typeOL = document.createElement("div");
-    $typeOL.className = "one-line";
-    $typeOL.append($type);
-
-    // The options container.
-    const $options = document.createElement("div");
-    $options.className = "options";
-
-    // The option labels.
-    const radiosName = uuidv4();
-    const createOptionUI = ($inner: HTMLElement) => {
-      const $input = document.createElement("input");
-      $input.type = "radio";
-      $input.name = radiosName;
-      $input.autocomplete = "off";
-
-      const $button = document.createElement("div");
-      $button.className = "button";
-      $button.append($inner);
-
-      const $label = document.createElement("label");
-      $label.className = "option";
-      $label.append($input, $button);
-
-      return { $label: $label, $input: $input };
-    };
-    const optionUIs = classData.options.map(o => {
-      const $text = document.createElement("p");
-      $text.textContent = o.toDisplayString();
-      const $textOL = document.createElement("div");
-      $textOL.className = "one-line";
-      $textOL.append($text);
-
-      const ui = createOptionUI($textOL);
-
-      ui.$input.addEventListener("click", () => {
-        updateTimetable(getCurrentTimetable().withChoice(classData, o));
-      });
-
-      return { option: o, $label: ui.$label, $input: ui.$input };
+    // The event for the no-choice picker button.
+    dom.options.noChoice.radio.$element.addEventListener("click", () => {
+      updateTimetable(getCurrentTimetable().withChoice(classData, null));
     });
-    const noChoiceOptionUI = (() => {
-      const $text = document.createElement("p");
-      $text.textContent = "None";
-      const $textOL = document.createElement("div");
-      $textOL.className = "one-line";
-      $textOL.append($text);
 
-      const ui = createOptionUI($textOL);
-
-      ui.$input.addEventListener("click", () => {
-        updateTimetable(getCurrentTimetable().withChoice(classData, null));
+    // The events for the choices' picker buttons.
+    options.forEach(o => {
+      o.dom.radio.$element.addEventListener("click", () => {
+        updateTimetable(getCurrentTimetable().withChoice(classData, o.option));
       });
-
-      return { $label: ui.$label, $input: ui.$input };
-    })();
-    $options.append(noChoiceOptionUI.$label, ...optionUIs.map(o => o.$label));
-
-    // The parent div.
-    const $div = document.createElement("div");
-    $div.classList.add("class", `accent-${classData.color}`);
-    $div.append($nameOL, $typeOL, $options);
-
-    const optionRadios = optionUIs.map(o => {
-      return { option: o.option, $radio: o.$input };
     });
+
+    // The logic behind the menu buttons (edit/delete/confirmation).
+    const $menuButton = dom.nameRow.menu.menuButton.$element;
+    const $dropdownContainer = dom.nameRow.menu.$element;
+    const menuDropdown = dom.nameRow.menu.menuDropdown;
+    const deleteDropdown = dom.nameRow.menu.deleteDropdown;
+    $menuButton.addEventListener("click", () => {
+      dropdowns.toggle(menuDropdown.$element, $dropdownContainer);
+    });
+    menuDropdown.content.editButton.$element.addEventListener("click", () => {
+      dropdowns.close();
+      onEditClicked();
+    });
+    menuDropdown.content.deleteButton.$element.addEventListener("click", () => {
+      dropdowns.open(deleteDropdown.$element, $dropdownContainer);
+    });
+    deleteDropdown.content.deleteButton.$element.addEventListener("click", () => {
+      dropdowns.close();
+      onDeleteClicked();
+    });
+
+    // Get references to the inputs form each option for the controller, so that
+    // when a choice is changed outside this UI (e.g. from a drag on the canvas)
+    // the checked one can be updated.
+    const optionRadios = options.map(o => {
+      return { option: o.option, $radio: o.dom.radio.$element };
+    });
+
     return new ClassUIController(
-      classData, $div, noChoiceOptionUI.$input, optionRadios
+      classData, dom.$element, dom.options.noChoice.radio.$element, optionRadios
     );
   }
 }

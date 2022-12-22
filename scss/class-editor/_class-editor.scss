@@ -1,0 +1,169 @@
+@use "../css-template/import" as template;
+@use "picker-swatches";
+@use "../colors";
+@use "../common";
+
+// The styles applied to the class editor page in the class editor dialog.
+@mixin main {
+  flex-grow: 1;
+  padding: 1rem;
+  padding-top: 1.5rem;
+  gap: 1rem;
+
+  // The "Edit/Add class" title.
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+
+  // General styles for all fields.
+  .field {
+    .label {
+      @include template.no-select;
+      margin-bottom: 0.25rem;
+    }
+
+    // For fields which contain text inputs, e.g. the "Name" and "Type" field.
+    &.text-input {
+      cursor: text;
+    }
+
+    input[type="text"] {
+      @include template.input-filled-neutral;
+      height: 2rem;
+      padding: 0rem 1rem;
+    }
+  }
+
+  // The "Colour" picker.
+  #class-editor-color-picker {
+    @include picker-swatches.swatches($content-class: "picker-content");
+    @include colors.gradient-classes($direction: "to bottom right");
+
+    // The swatch only fill 80% of their diameter on a good day, to move them
+    // over a smidge to line up with the edge better.
+    margin-left: -0.2rem;
+    margin-right: -0.2rem;
+    margin-bottom: -0.2rem;
+
+    .picker-content {
+      width: 2rem;
+      height: 2rem;
+      --background: var(--gradient);
+    }
+  }
+
+  // Hide the "You haven't added any timetable options..." message when the
+  // .non-empty class is present.
+  &.non-empty #class-editor-no-options-message {
+    @include template.gone;
+  }
+
+  // The "Add option" button.
+  #class-editor-add-option-button {
+    @include common.secondary-button;
+    align-self: flex-start;
+    margin-top: -0.5rem;
+  }
+
+  // The div containing the dynamically populated options.
+  #class-editor-options {
+    flex-grow: 1;
+    gap: 0.5rem;
+
+    // The option divs created dynamically.
+    .option {
+      border: 2px solid var(--color-ink-30);
+      border-radius: 0.5rem;
+      overflow: hidden;
+
+      gap: 0.5rem;
+
+      // Number label and delete button use absolute positioning. Extra side
+      // padding and min height ensures space is left for them. Justify content
+      // center ensures that the labels appear centered when the min height is
+      // in effect.
+      position: relative;
+      padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+      min-height: 3rem;
+      justify-content: center;
+
+      // The number labels on each option.
+      .number {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1.5rem;
+        padding: 0.25rem 0;
+
+        background-color: var(--color-ink-10);
+        border-bottom-right-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      // The delete button on each option.
+      .delete-button {
+        @include template.button-hover;
+        @include template.content-text-icon;
+        position: absolute;
+        width: 2rem;
+        height: 2rem;
+        top: 50%;
+        right: 0.5rem;
+        transform: translate(0%, -50%);
+
+        .icon {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  // The "Class is optional" switch.
+  #class-editor-optional-switch {
+    @include template.checkbox-switch(
+      $graphic-class: "switch-graphic",
+      $content-class: "switch-content"
+    );
+
+    .switch-content {
+      @include template.content-text;
+      margin-left: 1rem;
+    }
+  }
+
+  // The error UI.
+  #class-editor-error-ui {
+    @include common.error-ui;
+  }
+
+  // The submit button.
+  #class-editor-submit-button {
+    @include common.primary-button;
+  }
+
+  // Only show .when-edit html when the .new class is NOT on the
+  // #edit-class-menu.
+  &.new {
+    .when-edit {
+      @include template.gone;
+    }
+  }
+
+  // Only show .when-new html when the .new class is on the #edit-class-menu.
+  &:not(.new) {
+    .when-new {
+      @include template.gone;
+    }
+  }
+
+  // Only show error UI when the .error class is on the #edit-class-menu.
+  &:not(.error) {
+    .when-error {
+      @include template.gone;
+    }
+  }
+}

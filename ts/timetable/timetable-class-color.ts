@@ -28,3 +28,20 @@ export function toTimetableColor(val: string): TimetableColor {
 const badTimetableColor = (val: string) => new Error(
   `Invalid timetable color "${val}"`
 );
+
+/**
+ * Returns a user-friendly name for each color, e.g. "Red" for "red".
+ * @param color The color.
+ */
+export function timetableColorDisplayName(color: TimetableColor): string {
+  return {
+    "red": "Red",
+    "orange": "Orange",
+    "yellow": "Yellow",
+    "green": "Green",
+    "cyan": "Cyan",
+    "blue": "Blue",
+    "purple": "Purple",
+    "pink": "Pink"
+  }[color];
+}

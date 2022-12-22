@@ -1,0 +1,40 @@
+@use "css-template/import" as template;
+
+@mixin error-ui {
+  @include template.row;
+  border: 2px solid var(--color-error);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  gap: 0.5rem;
+
+  .icon {
+    color: var(--color-error);
+    font-size: 1.2rem;
+  }
+  p {
+    flex-shrink: 1;
+  }
+}
+
+@mixin primary-button {
+  @include template.button-filled;
+  @include template.content-text-icon;
+  height: 2.5rem;
+  gap: 0.5rem;
+  .icon {
+    font-size: 1.2rem;
+  }
+}
+
+@mixin secondary-button {
+  @include template.button-filled-neutral;
+  @include template.content-text-icon;
+  padding: 0rem 0.5rem;
+  height: 1.5rem;
+  gap: 0.25rem;
+
+  p {
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+}

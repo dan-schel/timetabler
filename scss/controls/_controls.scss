@@ -52,7 +52,7 @@
     --button-rounding: 0;
     --content-color: var(--color-accent);
     gap: 0.2rem;
-    .iconify {
+    .icon {
       font-size: 1.5rem;
     }
     p {
@@ -100,16 +100,20 @@
 
 // Applied by media query when the screen is wide enough.
 @mixin desktop {
-  // For desktop view, the mobile expander button is hidden and the row
-  // dedicated to it in the #controls div can be removed.
-  grid-template-rows: 1fr;
-  #mobile-expander-button {
-    @include template.gone;
-  }
+  @include hide-mobile-expander-button;
 
   // Collapsed view is never used in the desktop layout regardless of whether
   // the ".collapsed" class is present on the #controls div or not.
   #collapsed-content {
+    @include template.gone;
+  }
+}
+
+@mixin hide-mobile-expander-button {
+  // The mobile expander button is hidden and the row dedicated to it in the
+  // #controls div can be removed.
+  grid-template-rows: 1fr;
+  #mobile-expander-button {
     @include template.gone;
   }
 }

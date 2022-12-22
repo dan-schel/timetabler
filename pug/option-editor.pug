@@ -1,0 +1,104 @@
+include icons.pug
+
+mixin option-editor
+  div&attributes(attributes)
+    //- The "Back" button.
+    button#option-editor-back-button
+      +icon("uil:angle-left-b")
+      p BACK
+
+    //- Title.
+    h2 New timetable option
+
+    //- Instructions message.
+    p#option-editor-message
+      | An option can have multiple time blocks which must be taken together.
+      | Add as many time blocks as you need, then click "add option to
+      | class". In most cases, you'll only want one.
+
+    //- The block editor ("Add time block") UI.
+    +block-editor#block-editor
+
+    //- Section containing the currently added blocks.
+    #option-editor-blocks-container
+      h3 Time blocks
+
+      //- Message shown when no time blocks have been added.
+      p#option-editor-no-blocks-message
+        | You haven't added any time blocks to this option yet. Once you do
+        | they'll show up here.
+
+      #option-editor-blocks
+        //- Populates with time blocks.
+
+    //- Error message UI. Hides when not in use. Only shows errors that occur
+    //- when clicking the button below.
+    #option-editor-submit-error-ui
+      +icon("uil:exclamation-circle")
+      p#option-editor-submit-error-text
+
+    //- The "Add option to class" button.
+    button#option-editor-submit-button
+      +icon("uil:check")
+      p Add option to class
+
+mixin block-editor
+  div&attributes(attributes)
+    //- Title.
+    h3 Add time block
+
+    //- "Day of the week" field.
+    label.field
+      p.label Day of the week
+      #option-editor-dow-wrapper
+        select#option-editor-dow-select(autocomplete="off")
+          option(value="0") Monday
+          option(value="1") Tuesday
+          option(value="2") Wednesday
+          option(value="3") Thursday
+          option(value="4") Friday
+          option(value="5") Saturday
+          option(value="6") Sunday
+        .select-highlight
+          .select-arrow
+
+    //- "Start time" field.
+    label.field.text-input
+      p.label Start time
+      input#option-editor-time-input(type="text", autocomplete="off", placeholder="e.g. 11:30am")
+
+    //- "Duration" field.
+    .field
+      p.label Duration
+
+      //- Lays the text input alongside the hrs/mins picker.
+      .duration-row
+        input#option-editor-duration-input(type="text", autocomplete="off")
+        .unit-picker
+          label
+            input#option-editor-hours-radio(type="radio", name="option-editor-duration", autocomplete="off")
+            .picker-content
+              p hrs
+          p /
+          label
+            input#option-editor-minutes-radio(type="radio", name="option-editor-duration", autocomplete="off")
+            .picker-content
+              p mins
+
+    //- The "Online" switch.
+    label#option-editor-online-switch-label
+      input#option-editor-online-switch(type="checkbox", autocomplete="off")
+      div
+        .switch-graphic
+        .switch-content
+          p Online
+
+    //- Error message UI. Hides when not in use.
+    #option-editor-block-error-ui
+      +icon("uil:exclamation-circle")
+      p#option-editor-block-error-text
+
+    //- The "Add time block" button.
+    button#option-editor-add-block-button
+      +icon("uil:plus")
+      p Add time block
