@@ -159,10 +159,21 @@ export class TimetableChoices {
     const newChoices = (() => {
       if (replace != null) {
         // Find the choice for the old class and change it to the new class.
-        return this.choices.map(ch => ch.timetableClass.equals(replace)
-          ? new TimetableChoice(newClass, null)
-          : ch
-        );
+        return this.choices.map(ch => {
+          // Don't change any choices for any other classes.
+          if (!ch.timetableClass.equals(replace)) {
+            return ch;
+          }
+
+          // Keep the same option chosen if the new class still has it.
+          const prevOption = ch.option;
+          if (prevOption != null && newClass.options.some(o => o.equals(prevOption))) {
+            return new TimetableChoice(newClass, prevOption);
+          }
+
+          // Otherwise select nothing.
+          return new TimetableChoice(newClass, null);
+        });
       }
       return [...this.choices, new TimetableChoice(newClass, null)];
     })();
