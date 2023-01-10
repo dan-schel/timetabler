@@ -68,6 +68,12 @@ updateTimetable(timetable);
 // Redraw the canvas when the webfonts have loaded.
 document.fonts.ready.then(() => canvas.markDirty());
 
+// <EXPERIMENTAL>
+// This might help fix the iOS Safari bug which occasionally happens on load
+// where the timetable is rendered funny?
+setTimeout(() => canvas.markDirty(), 1000);
+// </EXPERIMENTAL>
+
 export const dropdowns = new DropdownCoordinator();
 
 /**
