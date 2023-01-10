@@ -26,7 +26,9 @@ export class TimetableChoices {
 
   /** Zod schema for parsing from JSON. */
   static readonly json = z.object({
-    version: z.string().refine(s => s == version),
+    version: z.string().refine(s => s == version, {
+      message: `Only version '${version}' timetables are supported`
+    }),
     classes: TimetableClass.json.array(),
     choices: z.union([z.number().int(), z.null()]).array().optional()
   }).transform(x =>
@@ -50,7 +52,13 @@ export class TimetableChoices {
   constructor(timetable: Timetable, choices: TimetableChoice[]) {
     // Check that the classes present in the choices array match the classes
     // in the timetable. Either array cannot have an element the other does not.
-    if (!arraysMatch(choices.map(c => c.timetableClass), timetable.classes)) {
+    const choicesMatch = arraysMatch(
+      choices.map(c => c.timetableClass),
+      timetable.classes,
+      (a, b) => a.equals(b)
+    );
+
+    if (!choicesMatch) {
       throw TimetableError.classesChoicesMismatch();
     }
 

@@ -3,6 +3,8 @@ import { ClassUIController } from "./class-ui-controller";
 import { ClassEditorController } from "./class-editor-controller";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableChoices } from "./timetable/timetable-choices";
+import { ZodError } from "zod";
+import { TimetableError } from "./timetable/timetable-error";
 
 /** Manages the controls UI (the side-panel). */
 export class ControlsController {
@@ -52,9 +54,7 @@ export class ControlsController {
             return TimetableChoices.json.parse(json);
           }
           catch (err) {
-            alert("That .json file was invalid.");
-            console.warn(err);
-            return null;
+            this.onTimetableParseError(err);
           }
         })();
 
@@ -89,6 +89,36 @@ export class ControlsController {
     this._html.aboutDialogCloseButton.addEventListener("click", () => {
       this._html.aboutDialog.close();
     });
+  }
+
+  /**
+   * Called when an error occurs parsing an imported timetable JSON file.
+   * @param err The error.
+   */
+  onTimetableParseError(err: unknown) {
+    if (err instanceof ZodError) {
+      const message = err.issues[0].message;
+
+      // Create a nice path string, e.g. "<root>.classes[0].name".
+      const path = "<root>" + err.issues[0].path.map(x => {
+        if (typeof x === "number") {
+          return `[${x.toFixed()}]`;
+        }
+        return `.${x}`;
+      }).join("");
+      alert(`That .json file is invalid: ${message} (at ${path})`);
+      console.warn(err);
+      return null;
+    }
+    if (TimetableError.detect(err) && err.importMessage != null) {
+      alert(`That .json file is invalid: ${err.importMessage}`);
+      console.warn(err);
+      return null;
+    }
+
+    alert("That .json file is invalid.");
+    console.warn(err);
+    return null;
   }
 
   /**

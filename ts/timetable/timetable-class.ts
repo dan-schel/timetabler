@@ -29,7 +29,17 @@ export class TimetableClass {
   static readonly json = z.object({
     name: z.string(),
     type: z.string(),
-    color: z.enum(TimetableColors),
+    color: z.enum(TimetableColors, {
+      errorMap: (issue, ctx) => {
+        if (issue.code === "invalid_enum_value" || issue.code === "invalid_type") {
+          return {
+            message: "Valid colors are \"red\", \"orange\", \"yellow\", " +
+              "\"green\", \"cyan\", \"blue\", \"purple\", or \"pink\""
+          };
+        }
+        return { message: ctx.defaultError };
+      }
+    }),
     options: TimetableOption.json.array().min(1),
     optional: z.boolean().optional()
   }).transform(x =>
@@ -87,7 +97,7 @@ export class TimetableClass {
     return this.name === other.name
       && this.type === other.type
       && this.color === other.color
-      && arraysMatch(this.options, other.options)
+      && arraysMatch(this.options, other.options, (a, b) => a.equals(b))
       && this.optional === other.optional;
   }
 

@@ -16,10 +16,16 @@ export class TimetableOption {
   /** Zod schema for parsing from JSON. */
   static readonly json = z.union([
     z.string()
-      .refine(s => TimetableBlock.isValidString(s))
+      .refine(s => TimetableBlock.isValidString(s), {
+        message: "Time blocks should be in the format \"day time duration " +
+          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
+      })
       .transform(s => [TimetableBlock.fromString(s)]),
     z.string()
-      .refine(s => TimetableBlock.isValidString(s))
+      .refine(s => TimetableBlock.isValidString(s), {
+        message: "Time blocks should be in the format \"day time duration " +
+          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
+      })
       .transform(s => TimetableBlock.fromString(s))
       .array()
       .min(1)

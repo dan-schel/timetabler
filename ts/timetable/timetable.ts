@@ -48,7 +48,7 @@ export class Timetable {
    * @param other The other object.
    */
   equals(other: Timetable) {
-    return arraysMatch(this.classes, other.classes);
+    return arraysMatch(this.classes, other.classes, (a, b) => a.equals(b));
   }
 
   /**
