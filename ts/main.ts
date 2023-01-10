@@ -74,6 +74,17 @@ document.fonts.ready.then(() => canvas.markDirty());
 setTimeout(() => canvas.markDirty(), 1000);
 // </EXPERIMENTAL>
 
+// If the browser supports it, detect changes to "prefers-color-scheme" and
+// update the canvas appropriately.
+const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+if (darkMode.addEventListener) {
+  darkMode.addEventListener("change", () => canvas.refreshCSS());
+}
+if (darkMode.addListener) {
+  darkMode.addListener(() => canvas.refreshCSS());
+}
+
+
 export const dropdowns = new DropdownCoordinator();
 
 /**

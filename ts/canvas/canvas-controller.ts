@@ -18,7 +18,7 @@ export class CanvasController {
   dpiRatio: number;
 
   /** A reference to frequently used CSS values. */
-  readonly css: {
+  css: {
     colorInk10: string,
     colorInk30: string,
     colorInk80: string,
@@ -66,7 +66,6 @@ export class CanvasController {
     this.height = 0;
     this.dpiRatio = 1;
 
-
     // Retrieve the canvas context from the HTML element.
     this._ctx = (() => {
       const maybe = html.canvas.getContext("2d");
@@ -75,58 +74,7 @@ export class CanvasController {
     })();
 
     // Calculate the frequently use CSS values.
-    this.css = (() => {
-      const style = getComputedStyle(html.canvas);
-      return {
-        colorInk10: style.getPropertyValue("--color-ink-10"),
-        colorInk30: style.getPropertyValue("--color-ink-30"),
-        colorInk80: style.getPropertyValue("--color-ink-80"),
-        colorOnAccent: style.getPropertyValue("--color-on-accent"),
-        colorPaper20: style.getPropertyValue("--color-paper-20"),
-        classColors: {
-          "red": {
-            gradient1: style.getPropertyValue("--color-red-gradient-1"),
-            gradient2: style.getPropertyValue("--color-red-gradient-2"),
-            on: style.getPropertyValue("--color-on-red"),
-          },
-          "orange": {
-            gradient1: style.getPropertyValue("--color-orange-gradient-1"),
-            gradient2: style.getPropertyValue("--color-orange-gradient-2"),
-            on: style.getPropertyValue("--color-on-orange"),
-          },
-          "yellow": {
-            gradient1: style.getPropertyValue("--color-yellow-gradient-1"),
-            gradient2: style.getPropertyValue("--color-yellow-gradient-2"),
-            on: style.getPropertyValue("--color-on-yellow"),
-          },
-          "green": {
-            gradient1: style.getPropertyValue("--color-green-gradient-1"),
-            gradient2: style.getPropertyValue("--color-green-gradient-2"),
-            on: style.getPropertyValue("--color-on-green"),
-          },
-          "cyan": {
-            gradient1: style.getPropertyValue("--color-cyan-gradient-1"),
-            gradient2: style.getPropertyValue("--color-cyan-gradient-2"),
-            on: style.getPropertyValue("--color-on-cyan"),
-          },
-          "blue": {
-            gradient1: style.getPropertyValue("--color-blue-gradient-1"),
-            gradient2: style.getPropertyValue("--color-blue-gradient-2"),
-            on: style.getPropertyValue("--color-on-blue"),
-          },
-          "purple": {
-            gradient1: style.getPropertyValue("--color-purple-gradient-1"),
-            gradient2: style.getPropertyValue("--color-purple-gradient-2"),
-            on: style.getPropertyValue("--color-on-purple"),
-          },
-          "pink": {
-            gradient1: style.getPropertyValue("--color-pink-gradient-1"),
-            gradient2: style.getPropertyValue("--color-pink-gradient-2"),
-            on: style.getPropertyValue("--color-on-pink"),
-          },
-        }
-      };
-    })();
+    this.css = getCSS(html);
 
     this._lastFrameTime = null;
     this._animations = [];
@@ -270,6 +218,72 @@ export class CanvasController {
   onTimetableUpdate(timetable: TimetableChoices) {
     this._renderer.onTimetableUpdate(timetable);
   }
+
+  /**
+   * Called when an event occurs that requires the CSS colors to be re-loaded,
+   * such as a change to "prefers-color-scheme".
+   */
+  refreshCSS() {
+    this.css = getCSS(this._html);
+    this.markDirty();
+  }
+}
+
+/**
+ * Calculates the colors from the CSS.
+ * @param html References to the HTML elements on the page.
+ */
+function getCSS(html: Html) {
+  const style = getComputedStyle(html.canvas);
+  return {
+    colorInk10: style.getPropertyValue("--color-ink-10"),
+    colorInk30: style.getPropertyValue("--color-ink-30"),
+    colorInk80: style.getPropertyValue("--color-ink-80"),
+    colorOnAccent: style.getPropertyValue("--color-on-accent"),
+    colorPaper20: style.getPropertyValue("--color-paper-20"),
+    classColors: {
+      "red": {
+        gradient1: style.getPropertyValue("--color-red-gradient-1"),
+        gradient2: style.getPropertyValue("--color-red-gradient-2"),
+        on: style.getPropertyValue("--color-on-red"),
+      },
+      "orange": {
+        gradient1: style.getPropertyValue("--color-orange-gradient-1"),
+        gradient2: style.getPropertyValue("--color-orange-gradient-2"),
+        on: style.getPropertyValue("--color-on-orange"),
+      },
+      "yellow": {
+        gradient1: style.getPropertyValue("--color-yellow-gradient-1"),
+        gradient2: style.getPropertyValue("--color-yellow-gradient-2"),
+        on: style.getPropertyValue("--color-on-yellow"),
+      },
+      "green": {
+        gradient1: style.getPropertyValue("--color-green-gradient-1"),
+        gradient2: style.getPropertyValue("--color-green-gradient-2"),
+        on: style.getPropertyValue("--color-on-green"),
+      },
+      "cyan": {
+        gradient1: style.getPropertyValue("--color-cyan-gradient-1"),
+        gradient2: style.getPropertyValue("--color-cyan-gradient-2"),
+        on: style.getPropertyValue("--color-on-cyan"),
+      },
+      "blue": {
+        gradient1: style.getPropertyValue("--color-blue-gradient-1"),
+        gradient2: style.getPropertyValue("--color-blue-gradient-2"),
+        on: style.getPropertyValue("--color-on-blue"),
+      },
+      "purple": {
+        gradient1: style.getPropertyValue("--color-purple-gradient-1"),
+        gradient2: style.getPropertyValue("--color-purple-gradient-2"),
+        on: style.getPropertyValue("--color-on-purple"),
+      },
+      "pink": {
+        gradient1: style.getPropertyValue("--color-pink-gradient-1"),
+        gradient2: style.getPropertyValue("--color-pink-gradient-2"),
+        on: style.getPropertyValue("--color-on-pink"),
+      },
+    }
+  };
 }
 
 /**

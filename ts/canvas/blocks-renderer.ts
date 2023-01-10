@@ -179,12 +179,17 @@ export class BlocksRenderer {
    * @param ctx The canvas context.
    */
   draw(ctx: CanvasRenderingContext2D) {
-    this._primaryBlocks.forEach(b => {
+    // Render the blocks in reverse order (so earlier blocks - which are first
+    // to be dragged - appear on top).
+    for (let i = this._primaryBlocks.length - 1; i >= 0; i--) {
+      const block = this._primaryBlocks[i];
+
       // We'll render the dragging block later (so it's on top).
-      if (b != this._draggingBlock) {
-        b.draw(ctx);
+      if (block != this._draggingBlock) {
+        block.draw(ctx);
       }
-    });
+    }
+
     this._overflowBlocks.forEach(b => b.draw(ctx));
 
     this._suggestionBlocks.forEach(b => b.draw(ctx));
