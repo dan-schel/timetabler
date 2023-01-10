@@ -5,10 +5,7 @@ import { TimetableColor, TimetableColors } from "./timetable-class-color";
 import { TimetableError } from "./timetable-error";
 import { TimetableOption } from "./timetable-option";
 
-/**
- * Represents a class (e.g. Advanced Tin Opening Workshop). Should be
- * treated as immutable (despite arrays technically being mutable).
- */
+/** Represents a class (e.g. Advanced Tin Opening Workshop). */
 export class TimetableClass {
   /** The class name, e.g. "Advanced Tin Opening". */
   readonly name: string;
@@ -20,7 +17,7 @@ export class TimetableClass {
   readonly color: TimetableColor;
 
   /** The timetable options. Must have at least 1. */
-  readonly options: TimetableOption[];
+  readonly options: readonly TimetableOption[];
 
   /** True, if not adding the class to the timetable is an option. */
   readonly optional: boolean;
@@ -97,7 +94,11 @@ export class TimetableClass {
     return this.name === other.name
       && this.type === other.type
       && this.color === other.color
-      && arraysMatch(this.options, other.options, (a, b) => a.equals(b))
+      && arraysMatch(
+        this.options as TimetableOption[],
+        other.options as TimetableOption[],
+        (a, b) => a.equals(b)
+      )
       && this.optional === other.optional;
   }
 

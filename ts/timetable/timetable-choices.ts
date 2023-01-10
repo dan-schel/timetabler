@@ -11,8 +11,7 @@ export type ClashingBlock = { block: TimetableBlock, choice: TimetableChoice };
 
 /**
  * Stores the timetable as well as the currently selected choices for each class
- * in the timetable. Should be treated as immutable (despite arrays technically
- * being mutable).
+ * in the timetable.
  */
 export class TimetableChoices {
   /** The timetable. */
@@ -22,7 +21,7 @@ export class TimetableChoices {
    * The choices for each class. There must be a choice present representing
    * each class in the timetable.
    */
-  readonly choices: TimetableChoice[];
+  readonly choices: readonly TimetableChoice[];
 
   /** Zod schema for parsing from JSON. */
   static readonly json = z.object({
@@ -54,7 +53,7 @@ export class TimetableChoices {
     // in the timetable. Either array cannot have an element the other does not.
     const choicesMatch = arraysMatch(
       choices.map(c => c.timetableClass),
-      timetable.classes,
+      timetable.classes as TimetableClass[],
       (a, b) => a.equals(b)
     );
 

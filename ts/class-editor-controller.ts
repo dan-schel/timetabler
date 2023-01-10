@@ -136,7 +136,7 @@ export class ClassEditorController {
         r.$radio.checked = existingClass.color == r.color;
       });
       this._html.classEditor.optionalSwitchInput.checked = existingClass.optional;
-      this.setOptions(existingClass.options);
+      this.setOptions(existingClass.options as TimetableOption[]);
     }
   }
 
