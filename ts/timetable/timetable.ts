@@ -7,13 +7,10 @@ import { TimetableError } from "./timetable-error";
 /** The current version of timetable file this class represents. */
 export const version = "2";
 
-/**
- * Represents a timetable. Should be treated as immutable (despite arrays
- * technically being mutable).
- */
+/** Represents a timetable. */
 export class Timetable {
   /** The classes in the timetable. Can be empty. */
-  readonly classes: TimetableClass[];
+  readonly classes: readonly TimetableClass[];
 
   /** Zod schema for parsing from JSON. */
   static readonly json = z.object({
@@ -48,7 +45,11 @@ export class Timetable {
    * @param other The other object.
    */
   equals(other: Timetable) {
-    return arraysMatch(this.classes, other.classes);
+    return arraysMatch(
+      this.classes as TimetableClass[],
+      other.classes as TimetableClass[],
+      (a, b) => a.equals(b)
+    );
   }
 
   /**

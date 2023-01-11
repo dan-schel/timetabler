@@ -11,8 +11,7 @@ export type ClashingBlock = { block: TimetableBlock, choice: TimetableChoice };
 
 /**
  * Stores the timetable as well as the currently selected choices for each class
- * in the timetable. Should be treated as immutable (despite arrays technically
- * being mutable).
+ * in the timetable.
  */
 export class TimetableChoices {
   /** The timetable. */
@@ -22,11 +21,13 @@ export class TimetableChoices {
    * The choices for each class. There must be a choice present representing
    * each class in the timetable.
    */
-  readonly choices: TimetableChoice[];
+  readonly choices: readonly TimetableChoice[];
 
   /** Zod schema for parsing from JSON. */
   static readonly json = z.object({
-    version: z.string().refine(s => s == version),
+    version: z.string().refine(s => s == version, {
+      message: `Only version '${version}' timetables are supported`
+    }),
     classes: TimetableClass.json.array(),
     choices: z.union([z.number().int(), z.null()]).array().optional()
   }).transform(x =>
@@ -50,7 +51,13 @@ export class TimetableChoices {
   constructor(timetable: Timetable, choices: TimetableChoice[]) {
     // Check that the classes present in the choices array match the classes
     // in the timetable. Either array cannot have an element the other does not.
-    if (!arraysMatch(choices.map(c => c.timetableClass), timetable.classes)) {
+    const choicesMatch = arraysMatch(
+      choices.map(c => c.timetableClass),
+      timetable.classes as TimetableClass[],
+      (a, b) => a.equals(b)
+    );
+
+    if (!choicesMatch) {
       throw TimetableError.classesChoicesMismatch();
     }
 
@@ -152,10 +159,21 @@ export class TimetableChoices {
     const newChoices = (() => {
       if (replace != null) {
         // Find the choice for the old class and change it to the new class.
-        return this.choices.map(ch => ch.timetableClass.equals(replace)
-          ? new TimetableChoice(newClass, null)
-          : ch
-        );
+        return this.choices.map(ch => {
+          // Don't change any choices for any other classes.
+          if (!ch.timetableClass.equals(replace)) {
+            return ch;
+          }
+
+          // Keep the same option chosen if the new class still has it.
+          const prevOption = ch.option;
+          if (prevOption != null && newClass.options.some(o => o.equals(prevOption))) {
+            return new TimetableChoice(newClass, prevOption);
+          }
+
+          // Otherwise select nothing.
+          return new TimetableChoice(newClass, null);
+        });
       }
       return [...this.choices, new TimetableChoice(newClass, null)];
     })();

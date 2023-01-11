@@ -10,16 +10,26 @@ export class TimetableError extends Error {
   readonly editClassUIMessage: string | null;
 
   /**
+   * The error message used when importing a json file. Can be null if the error
+   * is not the fault of the user (and therefore no user friendly string
+   * needed).
+   */
+  readonly importMessage: string | null;
+
+  /**
    * Creates a {@link TimeError}.
    * @param message The error message (for developer purposes).
    * @param editClassUIMessage The error message used for the edit class UI. Can
    * be null if the error is not the fault of the user (and therefore no user
    * friendly string needed).
    */
-  constructor(message: string, editClassUIMessage: string | null) {
+  constructor(message: string, editClassUIMessage: string | null,
+    importMessage: string | null) {
+
     super(message);
     this.name = "TimetableError";
     this.editClassUIMessage = editClassUIMessage;
+    this.importMessage = importMessage;
   }
 
   /** Returns true if the given object is a {@link TimetableError}. */
@@ -34,7 +44,8 @@ export class TimetableError extends Error {
   static classEmptyName(): TimetableError {
     return new TimetableError(
       `A class's name cannot be empty`,
-      `Name cannot be empty`
+      `Name cannot be empty`,
+      `A class's name cannot be empty`
     );
   }
 
@@ -42,7 +53,8 @@ export class TimetableError extends Error {
   static classEmptyType(): TimetableError {
     return new TimetableError(
       `A class's type cannot be empty`,
-      `Type cannot be empty`
+      `Type cannot be empty`,
+      `A class's type cannot be empty`
     );
   }
 
@@ -50,7 +62,8 @@ export class TimetableError extends Error {
   static badDuration(durationMins: number): TimetableError {
     return new TimetableError(
       `Duration of ${durationMins} minutes is not allowed`,
-      `Durations must be between 1 minute and 24 hours`
+      `Durations must be between 1 minute and 24 hours`,
+      `Duration of ${durationMins} minutes is not allowed`
     );
   }
 
@@ -58,6 +71,7 @@ export class TimetableError extends Error {
   static blockBadStartTime(time: LocalTime): TimetableError {
     return new TimetableError(
       `A block start time of "${time.toString(true)}" is not allowed`,
+      null,
       null
     );
   }
@@ -66,7 +80,8 @@ export class TimetableError extends Error {
   static optionNoBlocks(): TimetableError {
     return new TimetableError(
       `An option cannot have no time blocks`,
-      null
+      null,
+      `An option cannot have no time blocks`,
     );
   }
 
@@ -74,7 +89,8 @@ export class TimetableError extends Error {
   static optionDuplicateBlocks(): TimetableError {
     return new TimetableError(
       `An option cannot have duplicate time blocks`,
-      null
+      null,
+      `An option cannot have duplicate time blocks`,
     );
   }
 
@@ -82,7 +98,8 @@ export class TimetableError extends Error {
   static optionInternalClash(): TimetableError {
     return new TimetableError(
       `An option clashes with itself`,
-      null
+      null,
+      `An option clashes with itself`,
     );
   }
 
@@ -90,7 +107,8 @@ export class TimetableError extends Error {
   static classNoOptions(): TimetableError {
     return new TimetableError(
       `A class cannot have no timeslot options`,
-      "You must add at least one option"
+      "You must add at least one option",
+      `A class cannot have no timeslot options`,
     );
   }
 
@@ -98,7 +116,8 @@ export class TimetableError extends Error {
   static classDuplicateOptions(): TimetableError {
     return new TimetableError(
       `A class cannot have duplicate options`,
-      null
+      null,
+      `A class cannot have duplicate options`,
     );
   }
 
@@ -106,7 +125,8 @@ export class TimetableError extends Error {
   static timetableDuplicateClasses(): TimetableError {
     return new TimetableError(
       `A timetable cannot have duplicate classes`,
-      "This class is identical to one already on the timetable"
+      "This class is identical to one already on the timetable",
+      `A timetable cannot have duplicate classes`,
     );
   }
 
@@ -114,7 +134,8 @@ export class TimetableError extends Error {
   static badBlockString(val: string): TimetableError {
     return new TimetableError(
       `"${val}" is not a valid time block`,
-      null
+      null,
+      `"${val}" is not a valid time block`,
     );
   }
 
@@ -125,6 +146,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `The classes in the choices array do not match the classes in the ` +
       `timetable`,
+      null,
       null
     );
   }
@@ -133,6 +155,7 @@ export class TimetableError extends Error {
   static duplicatedClassInChoices(): TimetableError {
     return new TimetableError(
       `The choices array provided had the same class twice`,
+      null,
       null
     );
   }
@@ -141,6 +164,7 @@ export class TimetableError extends Error {
   static optionMissing(): TimetableError {
     return new TimetableError(
       `The chosen option doesn't exist for this class`,
+      null,
       null
     );
   }
@@ -149,7 +173,8 @@ export class TimetableError extends Error {
   static badChoiceArrayLength(): TimetableError {
     return new TimetableError(
       `The number of choices in the array must match the number of classes`,
-      null
+      null,
+      `The number of choices in the array must match the number of classes`
     );
   }
 
@@ -157,7 +182,8 @@ export class TimetableError extends Error {
   static badChoiceIndex(index: number): TimetableError {
     return new TimetableError(
       `The choice index "${index}" was out of range for this class`,
-      null
+      null,
+      `The choice index "${index}" was out of range for this class`
     );
   }
 }

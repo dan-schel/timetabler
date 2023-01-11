@@ -5,21 +5,24 @@ import { LocalTime } from "../time/local-time";
 import { TimetableBlock } from "./timetable-block";
 import { TimetableError } from "./timetable-error";
 
-/**
- * Represents a timetable option for a class. May contain multiple blocks.
- * Should be treated as immutable (despite blocks technically being mutable).
- */
+/** Represents a timetable option for a class. May contain multiple blocks. */
 export class TimetableOption {
   /** The timetable blocks this option consists of. Must contain at least 1. */
-  readonly blocks: TimetableBlock[];
+  readonly blocks: readonly TimetableBlock[];
 
   /** Zod schema for parsing from JSON. */
   static readonly json = z.union([
     z.string()
-      .refine(s => TimetableBlock.isValidString(s))
+      .refine(s => TimetableBlock.isValidString(s), {
+        message: "Time blocks should be in the format \"day time duration " +
+          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
+      })
       .transform(s => [TimetableBlock.fromString(s)]),
     z.string()
-      .refine(s => TimetableBlock.isValidString(s))
+      .refine(s => TimetableBlock.isValidString(s), {
+        message: "Time blocks should be in the format \"day time duration " +
+          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
+      })
       .transform(s => TimetableBlock.fromString(s))
       .array()
       .min(1)
@@ -61,7 +64,11 @@ export class TimetableOption {
    * @param other The other object.
    */
   equals(other: TimetableOption) {
-    return arraysMatch(this.blocks, other.blocks, (a, b) => a.equals(b));
+    return arraysMatch(
+      this.blocks as TimetableBlock[],
+      other.blocks as TimetableBlock[],
+      (a, b) => a.equals(b)
+    );
   }
 
   /** Convert to JSON object according to {@link TimetableOption.rawJson}. */
