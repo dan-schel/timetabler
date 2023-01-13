@@ -40,17 +40,15 @@ window.addEventListener("error", function (event) {
   // The message to show in the alert if the error occurs when the page is
   // loading.
   var message =
-    "An error occured while loading the page. If reloading the page doesn't " +
-    'fix the issue, click "OK" for more info, or "Cancel" to dismiss this ' +
-    "message.";
+    "An error occured while loading the page. Reloading the page might fix " +
+    "the issue.\n\nWould you like more information?";
 
   if (loaded) {
     // The message to show in the alert if the error occurs when some event
     // occurs on the page after it's loaded.
     message =
       "An error just occurred. The page will probably begin behaving " +
-      'strangely. Click "OK" for more info, or "Cancel" to dismiss ' +
-      "this message.";
+      "strangely.\n\nWould you like more information?";
   }
 
   // Show the message and redirect the user if they click "OK".
