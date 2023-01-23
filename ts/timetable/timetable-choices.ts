@@ -34,14 +34,6 @@ export class TimetableChoices {
     TimetableChoices.fromIndices(new Timetable(x.classes), x.choices ?? null)
   );
 
-  /** Zod schema for parsing from JSON but only using raw types. */
-  static readonly rawJson = z.object({
-    $schema: z.string(),
-    version: z.string(),
-    classes: TimetableClass.rawJson.array(),
-    choices: z.union([z.number(), z.null()]).array().optional()
-  });
-
   /**
    * Creates a {@link TimetableChoices}.
    * @param timetable The timetable.
@@ -96,8 +88,8 @@ export class TimetableChoices {
     );
   }
 
-  /** Convert to JSON object according to {@link TimetableChoices.rawJson}. */
-  toJSON(): z.infer<typeof TimetableChoices.rawJson> {
+  /** Convert to JSON object according to {@link TimetableChoices.json}. */
+  toJSON(): z.input<typeof TimetableChoices.json> {
     let choices: (number | null)[] | undefined = undefined;
 
     // Only create the choices array if some choices have been made.

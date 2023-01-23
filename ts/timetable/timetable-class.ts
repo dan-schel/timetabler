@@ -43,15 +43,6 @@ export class TimetableClass {
     new TimetableClass(x.name, x.type, x.color, x.options, x.optional ?? false)
   );
 
-  /** Zod schema for parsing from JSON but only using raw types. */
-  static readonly rawJson = z.object({
-    name: z.string(),
-    type: z.string(),
-    color: z.enum(TimetableColors),
-    options: TimetableOption.rawJson.array(),
-    optional: z.boolean().optional()
-  });
-
   /**
    * Creates a {@link TimetableClass}.
    * @param name The class name, e.g. "Advanced Tin Opening".
@@ -102,8 +93,8 @@ export class TimetableClass {
       && this.optional === other.optional;
   }
 
-  /** Convert to JSON object according to {@link TimetableClass.rawJson}. */
-  toJSON(): z.infer<typeof TimetableClass.rawJson> {
+  /** Convert to JSON object according to {@link TimetableClass.json}. */
+  toJSON(): z.input<typeof TimetableClass.json> {
     return {
       name: this.name,
       type: this.type,

@@ -30,12 +30,6 @@ export class TimetableOption {
     new TimetableOption(x)
   );
 
-  /** Zod schema for parsing from JSON but only using raw types. */
-  static readonly rawJson = z.union([
-    z.string(),
-    z.string().array()
-  ]);
-
   /**
    * Creates a {@link TimetableOption}.
    * @param blocks The timetable blocks this option consists of. Must contain at
@@ -71,8 +65,8 @@ export class TimetableOption {
     );
   }
 
-  /** Convert to JSON object according to {@link TimetableOption.rawJson}. */
-  toJSON(): z.infer<typeof TimetableOption.rawJson> {
+  /** Convert to JSON object according to {@link TimetableOption.json}. */
+  toJSON(): z.input<typeof TimetableOption.json> {
     // If there's just one block output the single string, otherwise output the
     // array of strings.
     return this.blocks.length == 1
