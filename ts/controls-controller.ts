@@ -69,7 +69,11 @@ export class ControlsController {
       const timetable = getCurrentTimetable();
       if (timetable.timetable.classes.length < 1) { return; }
 
-      const text = JSON.stringify(timetable.toJSON());
+      const json = {
+        $schema: "https://timetabler.danschellekens.com/schema-v2.json",
+        ...timetable.toJSON()
+      };
+      const text = JSON.stringify(json);
       download(text, "timetable.json");
     });
 

@@ -20,13 +20,6 @@ export class Timetable {
     new Timetable(x.classes)
   );
 
-  /** Zod schema for parsing from JSON but only using raw types. */
-  static readonly rawJson = z.object({
-    $schema: z.string(),
-    version: z.string(),
-    classes: TimetableClass.rawJson.array()
-  });
-
   /**
    * Creates a {@link Timetable}.
    * @param classes The classes in the timetable. Can be empty.
@@ -78,10 +71,9 @@ export class Timetable {
     return new Timetable(this.classes.filter(c => !c.equals(oldClass)));
   }
 
-  /** Convert to JSON object according to {@link Timetable.rawJson}. */
-  toJSON(): z.infer<typeof Timetable.rawJson> {
+  /** Convert to JSON object according to {@link Timetable.json}. */
+  toJSON(): z.input<typeof Timetable.json> {
     return {
-      $schema: "https://timetabler.danschellekens.com/schema-v2.json",
       version: "2",
       classes: this.classes.map(c => c.toJSON())
     };
