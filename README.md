@@ -42,4 +42,4 @@ The file contains an array of `classes`, each one having:
 - `options`: An array containing each possible scheduling option/preference. Can contain strings, or arrays of strings if multiple time blocks come as a group. Strings must be in the format `"<day> <time> <duration> [online]"`.
 - `optional`: True, if this class isn't required to be on the timetable for it to be considered valid. Defaults to false if not provided.
 
-The `.json` file will also be rejected if classes, options, or time blocks within the same option are duplicated.
+No two classes, options, or time blocks within the same option can be identical.
