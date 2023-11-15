@@ -1,4 +1,4 @@
-import { map } from "schel-d-utils";
+import { map } from "@schel-d/js-utils";
 import { LerpAnimation } from "./animation";
 import { CanvasController } from "./canvas-controller";
 
@@ -37,9 +37,12 @@ export class Transition {
    * @param easing The easing function to apply to the animation value. Uses
    * a linear easing function if not provided.
    */
-  constructor(canvas: CanvasController, startValue: number, duration: number,
-    easing?: EasingFunction) {
-
+  constructor(
+    canvas: CanvasController,
+    startValue: number,
+    duration: number,
+    easing?: EasingFunction
+  ) {
     this._canvas = canvas;
     this.target = startValue;
     this.duration = duration;
@@ -56,7 +59,9 @@ export class Transition {
    * True by default (will not restart animation).
    */
   animateTo(value: number, ignoreIfSameTarget?: boolean) {
-    if (this.target == value && ignoreIfSameTarget != false) { return; }
+    if (this.target == value && ignoreIfSameTarget != false) {
+      return;
+    }
 
     this._from = this.value();
 
@@ -95,9 +100,7 @@ export class Transition {
 }
 
 /** Linear (a.k.a. no easing) easing function. */
-export const linear: EasingFunction = (x: number) =>
-  x;
+export const linear: EasingFunction = (x: number) => x;
 
 /** Ease-out cubic easing function (https://easings.net/#easeOutCubic). */
-export const cubicOut: EasingFunction = (x: number) =>
-  1 - Math.pow(1 - x, 3);
+export const cubicOut: EasingFunction = (x: number) => 1 - Math.pow(1 - x, 3);

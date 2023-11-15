@@ -3,8 +3,13 @@ import { TimetableClass } from "../timetable/timetable-class";
 import { TimetableOption } from "../timetable/timetable-option";
 import { CanvasController } from "./canvas-controller";
 import { GridlinesRenderer } from "./gridlines-renderer";
-import { drawRoundedRect, rem, measureText, drawText, drawOutlinedRoundedRect }
-  from "./utils";
+import {
+  drawRoundedRect,
+  rem,
+  measureText,
+  drawText,
+  drawOutlinedRoundedRect,
+} from "./utils";
 import { VisualBlock } from "./visual-block";
 
 /**
@@ -41,11 +46,17 @@ export class SuggestionVisualBlock extends VisualBlock {
    * @param x The y2-coordinate (end time).
    * @param label An optional label to display on the block.
    */
-  constructor(canvas: CanvasController, gridlines: GridlinesRenderer,
-    timetableClass: TimetableClass, option: TimetableOption,
-    block: TimetableBlock, x: number, y1: number, y2: number,
-    label: string | null) {
-
+  constructor(
+    canvas: CanvasController,
+    gridlines: GridlinesRenderer,
+    timetableClass: TimetableClass,
+    option: TimetableOption,
+    block: TimetableBlock,
+    x: number,
+    y1: number,
+    y2: number,
+    label: string | null
+  ) {
     super(canvas, gridlines, timetableClass, block);
 
     this.option = option;
@@ -61,22 +72,34 @@ export class SuggestionVisualBlock extends VisualBlock {
    * @param ctx The canvas context.
    */
   draw(ctx: CanvasRenderingContext2D) {
-    const {
-      blockX1, blockY1, blockX2, blockY2, blockWidth, blockHeight
-    } = this.dimensions(this.x, this.y1, this.y2);
+    const { blockX1, blockY1, blockX2, blockY2, blockWidth, blockHeight } =
+      this.dimensions(this.x, this.y1, this.y2);
 
     if (this.timetableBlock.online) {
       // Show online blocks as outlined rectangles.
       drawOutlinedRoundedRect(
-        ctx, blockX1, blockY1, blockX2, blockY2, rem(0.5),
-        this._highlighted ? this._canvas.css.colorInk30 : this._canvas.css.colorInk10
+        ctx,
+        blockX1,
+        blockY1,
+        blockX2,
+        blockY2,
+        rem(0.5),
+        this._highlighted
+          ? this._canvas.css.colorInk30
+          : this._canvas.css.colorInk10
       );
-    }
-    else {
+    } else {
       // Show in-person blocks as filled rectangles.
       drawRoundedRect(
-        ctx, blockX1, blockY1, blockX2, blockY2, rem(0.5),
-        this._highlighted ? this._canvas.css.colorInk30 : this._canvas.css.colorInk10
+        ctx,
+        blockX1,
+        blockY1,
+        blockX2,
+        blockY2,
+        rem(0.5),
+        this._highlighted
+          ? this._canvas.css.colorInk30
+          : this._canvas.css.colorInk10
       );
     }
 
@@ -87,7 +110,13 @@ export class SuggestionVisualBlock extends VisualBlock {
       const textX = blockX1 + (blockWidth - textWidth) / 2;
       const textY = blockY1 + (blockHeight - rem(2)) / 2 + 2;
       drawText(
-        ctx, this.label, textX, textY, 2, "bold", this._canvas.css.colorInk30
+        ctx,
+        this.label,
+        textX,
+        textY,
+        2,
+        "bold",
+        this._canvas.css.colorInk30
       );
     }
   }
@@ -100,7 +129,9 @@ export class SuggestionVisualBlock extends VisualBlock {
   isWithin(x: number, y: number) {
     // Ignore animations, use target values.
     const { blockX1, blockY1, blockX2, blockY2 } = this.dimensions(
-      this.x, this.y1, this.y2
+      this.x,
+      this.y1,
+      this.y2
     );
 
     return x >= blockX1 && x <= blockX2 && y >= blockY1 && y <= blockY2;

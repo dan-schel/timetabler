@@ -1,4 +1,4 @@
-import { hour24To12 } from "schel-d-utils";
+import { hour24To12 } from "@schel-d/js-utils";
 import { TimeError } from "./time-error";
 
 /**
@@ -22,9 +22,11 @@ export class LocalTime {
    * purposes), but no more than one day, otherwise an error is thrown.
    */
   constructor(minuteOfDay: number) {
-    if (!Number.isInteger(minuteOfDay)
-      || minuteOfDay < 0
-      || minuteOfDay >= 60 * 24 * 2) {
+    if (
+      !Number.isInteger(minuteOfDay) ||
+      minuteOfDay < 0 ||
+      minuteOfDay >= 60 * 24 * 2
+    ) {
       throw TimeError.timeOutOfRange(minuteOfDay);
     }
     this.minuteOfDay = minuteOfDay;
@@ -80,7 +82,7 @@ export class LocalTime {
    * purposes). False if omitted.
    */
   static fromTime(hour: number, minute: number, nextDay = false): LocalTime {
-    return new LocalTime((nextDay ? (hour + 24) : hour) * 60 + minute);
+    return new LocalTime((nextDay ? hour + 24 : hour) * 60 + minute);
   }
 
   /**
@@ -104,7 +106,9 @@ export class LocalTime {
   static tryParse(value: string, nextDay = false): LocalTime | null {
     // Checks for 1 or 2 digits, a colon, then 2 digits.
     const correctFormat = /^[0-9]{1,2}:[0-9]{2}$/g.test(value);
-    if (!correctFormat) { return null; }
+    if (!correctFormat) {
+      return null;
+    }
 
     const components = value.split(":");
 
@@ -112,7 +116,9 @@ export class LocalTime {
     // check.
     const hour = parseInt(components[0]);
     const minute = parseInt(components[1]);
-    if (hour >= 24 || minute >= 60) { return null; }
+    if (hour >= 24 || minute >= 60) {
+      return null;
+    }
 
     return LocalTime.fromTime(hour, minute, nextDay);
   }
@@ -127,7 +133,9 @@ export class LocalTime {
    */
   static parse(value: string, nextDay = false): LocalTime {
     const val = LocalTime.tryParse(value, nextDay);
-    if (val == null) { throw TimeError.badTimeString(value); }
+    if (val == null) {
+      throw TimeError.badTimeString(value);
+    }
     return val;
   }
 
@@ -148,9 +156,11 @@ export class LocalTime {
    * day with ">" symbols, e.g. ">04:02" meaning 4:02am the next day.
    */
   toString(includeNextDayMarker: boolean): string {
-    return (this.isNextDay && includeNextDayMarker ? ">" : "") +
+    return (
+      (this.isNextDay && includeNextDayMarker ? ">" : "") +
       `${this.hour.toFixed().padStart(2, "0")}:` +
-      `${this.minute.toFixed().padStart(2, "0")}`;
+      `${this.minute.toFixed().padStart(2, "0")}`
+    );
   }
 
   /**
@@ -160,8 +170,10 @@ export class LocalTime {
   to12HString(): string {
     const hour12 = hour24To12(this.hour);
 
-    return `${hour12.hour.toFixed()}:` +
-      `${this.minute.toFixed().padStart(2, "0")}${hour12.half}`;
+    return (
+      `${hour12.hour.toFixed()}:` +
+      `${this.minute.toFixed().padStart(2, "0")}${hour12.half}`
+    );
   }
 
   /**
@@ -236,7 +248,9 @@ export class LocalTime {
    * minute component is already 0).
    */
   endOfHour(): LocalTime {
-    if (this.minute == 0) { return this; }
+    if (this.minute == 0) {
+      return this;
+    }
     return LocalTime.fromHour48(this.hour48 + 1, 0);
   }
 
@@ -252,7 +266,7 @@ export class LocalTime {
    * @param times The group of times.
    */
   static earliest(...times: LocalTime[]): LocalTime {
-    return new LocalTime(Math.min(...times.map(t => t.minuteOfDay)));
+    return new LocalTime(Math.min(...times.map((t) => t.minuteOfDay)));
   }
 
   /**
@@ -260,6 +274,6 @@ export class LocalTime {
    * @param times The group of times.
    */
   static latest(...times: LocalTime[]): LocalTime {
-    return new LocalTime(Math.max(...times.map(t => t.minuteOfDay)));
+    return new LocalTime(Math.max(...times.map((t) => t.minuteOfDay)));
   }
 }

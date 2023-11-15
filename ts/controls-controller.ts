@@ -1,4 +1,4 @@
-import { download, openFileDialog } from "schel-d-utils-browser";
+import { download, openFileDialog } from "./utils/_export";
 import { ClassUIController } from "./class-ui-controller";
 import { ClassEditorController } from "./class-editor-controller";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
@@ -52,8 +52,7 @@ export class ControlsController {
           try {
             const json = JSON.parse(file);
             return TimetableChoices.json.parse(json);
-          }
-          catch (err) {
+          } catch (err) {
             this.onTimetableParseError(err);
           }
         })();
@@ -67,11 +66,13 @@ export class ControlsController {
     // Export the timetable.
     this._html.exportButton.addEventListener("click", () => {
       const timetable = getCurrentTimetable();
-      if (timetable.timetable.classes.length < 1) { return; }
+      if (timetable.timetable.classes.length < 1) {
+        return;
+      }
 
       const json = {
         $schema: "https://timetabler.danschellekens.com/schema-v2.json",
-        ...timetable.toJSON()
+        ...timetable.toJSON(),
       };
       const text = JSON.stringify(json);
       download(text, "timetable.json");
@@ -104,12 +105,16 @@ export class ControlsController {
       const message = err.issues[0].message;
 
       // Create a nice path string, e.g. "<root>.classes[0].name".
-      const path = "<root>" + err.issues[0].path.map(x => {
-        if (typeof x === "number") {
-          return `[${x.toFixed()}]`;
-        }
-        return `.${x}`;
-      }).join("");
+      const path =
+        "<root>" +
+        err.issues[0].path
+          .map((x) => {
+            if (typeof x === "number") {
+              return `[${x.toFixed()}]`;
+            }
+            return `.${x}`;
+          })
+          .join("");
       alert(`That .json file is invalid: ${message} (at ${path})`);
       console.warn(err);
       return null;
@@ -131,20 +136,26 @@ export class ControlsController {
    */
   onTimetableUpdate(timetable: TimetableChoices) {
     // Avoid recreating the UI for each class if the timetable hasn't changed.
-    if (this._prevTimetable == null ||
-      !timetable.timetable.equals(this._prevTimetable.timetable)) {
-
+    if (
+      this._prevTimetable == null ||
+      !timetable.timetable.equals(this._prevTimetable.timetable)
+    ) {
       // Add the "non-empty" class to the controls (hides the startup message).
       this._html.controls.classList.toggle(
-        "non-empty", timetable.timetable.classes.length != 0
+        "non-empty",
+        timetable.timetable.classes.length != 0
       );
 
-      this._classUIs = timetable.timetable.classes.map(cl => {
-        const choice = timetable.choices.find(ch => ch.timetableClass.equals(cl));
+      this._classUIs = timetable.timetable.classes.map((cl) => {
+        const choice = timetable.choices.find((ch) =>
+          ch.timetableClass.equals(cl)
+        );
 
         // Should never happen. TimetableChoice ensures there's a choice for
         // each class.
-        if (choice == null) { throw new Error(); }
+        if (choice == null) {
+          throw new Error();
+        }
 
         const onEditClicked = () => {
           this._classEditorController.open(cl);
@@ -158,28 +169,30 @@ export class ControlsController {
         return ui;
       });
 
-      this._html.classes.replaceChildren(...this._classUIs.map(u => u.$div));
+      this._html.classes.replaceChildren(...this._classUIs.map((u) => u.$div));
 
       // Disable export for empty timetables.
       this._html.exportButton.disabled = timetable.timetable.classes.length < 1;
     }
 
     // Update the selected options regardless.
-    timetable.choices.forEach(ch => {
-      const classUI = this._classUIs.find(
-        u => u.timetableClass.equals(ch.timetableClass)
+    timetable.choices.forEach((ch) => {
+      const classUI = this._classUIs.find((u) =>
+        u.timetableClass.equals(ch.timetableClass)
       );
 
       // Should never happen. A class UI is made for each class in the timetable
       // and a choice cannot have a class that isn't in the timetable.
-      if (classUI == null) { throw new Error(); }
+      if (classUI == null) {
+        throw new Error();
+      }
 
       classUI.select(ch.option);
     });
 
     // Update the statuses (the expanded one and the collapsed one).
     const selector = `.${this._html.statusContainerClass}`;
-    document.querySelectorAll(selector).forEach(e => {
+    document.querySelectorAll(selector).forEach((e) => {
       const hasClashes = timetable.clashingBlocks().length > 0;
       const hasUnallocated = timetable.unallocatedMandatoryClasses().length > 0;
 

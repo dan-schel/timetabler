@@ -1,4 +1,4 @@
-import { posMod } from "schel-d-utils";
+import { posMod } from "@schel-d/js-utils";
 import { TimeError } from "./time-error";
 
 const DayOfWeekNumbers = [0, 1, 2, 3, 4, 5, 6] as const;
@@ -102,8 +102,11 @@ export class DayOfWeek {
    * inclusive, otherwise a {@link TimeError} is thrown.
    */
   static fromDaysSinceMonday(daysSinceMonday: number): DayOfWeek {
-    if (!Number.isInteger(daysSinceMonday) || daysSinceMonday < 0
-      || daysSinceMonday >= 7) {
+    if (
+      !Number.isInteger(daysSinceMonday) ||
+      daysSinceMonday < 0 ||
+      daysSinceMonday >= 7
+    ) {
       throw TimeError.invalidDaysSinceMonday(daysSinceMonday);
     }
 
@@ -116,8 +119,12 @@ export class DayOfWeek {
    * @param codename The codename (case-insensitive), e.g. "sat" or "Fri".
    */
   static tryFromCodeName(codename: string): DayOfWeek | null {
-    const num = DayOfWeekNumbers.find(n => names[n].codeName === codename.toLowerCase());
-    if (num == null) { return null; }
+    const num = DayOfWeekNumbers.find(
+      (n) => names[n].codeName === codename.toLowerCase()
+    );
+    if (num == null) {
+      return null;
+    }
     return new DayOfWeek(num);
   }
 
@@ -143,5 +150,5 @@ const names = {
   3: { full: "Thursday", codeName: "thu" },
   4: { full: "Friday", codeName: "fri" },
   5: { full: "Saturday", codeName: "sat" },
-  6: { full: "Sunday", codeName: "sun" }
+  6: { full: "Sunday", codeName: "sun" },
 };

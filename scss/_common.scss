@@ -19,6 +19,9 @@
 @mixin primary-button {
   @include template.button-filled;
   @include template.content-text-icon;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   height: 2.5rem;
   gap: 0.5rem;
   .icon {
@@ -29,6 +32,9 @@
 @mixin secondary-button {
   @include template.button-filled-neutral;
   @include template.content-text-icon;
+  flex-direction: row;
+  flex-direction: row;
+  align-items: center;
   padding: 0rem 0.5rem;
   height: 1.5rem;
   gap: 0.25rem;
@@ -36,6 +42,9 @@
   p {
     font-size: 0.75rem;
     font-weight: bold;
+  }
+  .icon {
+    font-size: 0.85rem;
   }
 }
 
@@ -71,6 +80,9 @@
     @include template.button-hover;
     @include template.content-text-icon;
     --button-rounding: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     height: 2rem;
     width: 2rem;

@@ -1,4 +1,4 @@
-import { areUnique, arraysMatch } from "schel-d-utils";
+import { areUnique, arraysMatch } from "@schel-d/js-utils";
 import { z } from "zod";
 import { Timetable, version } from "./timetable";
 import { TimetableBlock } from "./timetable-block";
@@ -7,7 +7,7 @@ import { TimetableError } from "./timetable-error";
 import { TimetableOption } from "./timetable-option";
 
 /** A mapping between a block and a choice. */
-export type ClashingBlock = { block: TimetableBlock, choice: TimetableChoice };
+export type ClashingBlock = { block: TimetableBlock; choice: TimetableChoice };
 
 /**
  * Stores the timetable as well as the currently selected choices for each class
@@ -24,15 +24,17 @@ export class TimetableChoices {
   readonly choices: readonly TimetableChoice[];
 
   /** Zod schema for parsing from JSON. */
-  static readonly json = z.object({
-    version: z.string().refine(s => s == version, {
-      message: `Only version '${version}' timetables are supported`
-    }),
-    classes: TimetableClass.json.array(),
-    choices: z.union([z.number().int(), z.null()]).array().optional()
-  }).transform(x =>
-    TimetableChoices.fromIndices(new Timetable(x.classes), x.choices ?? null)
-  );
+  static readonly json = z
+    .object({
+      version: z.string().refine((s) => s == version, {
+        message: `Only version '${version}' timetables are supported`,
+      }),
+      classes: TimetableClass.json.array(),
+      choices: z.union([z.number().int(), z.null()]).array().optional(),
+    })
+    .transform((x) =>
+      TimetableChoices.fromIndices(new Timetable(x.classes), x.choices ?? null)
+    );
 
   /**
    * Creates a {@link TimetableChoices}.
@@ -44,7 +46,7 @@ export class TimetableChoices {
     // Check that the classes present in the choices array match the classes
     // in the timetable. Either array cannot have an element the other does not.
     const choicesMatch = arraysMatch(
-      choices.map(c => c.timetableClass),
+      choices.map((c) => c.timetableClass),
       timetable.classes as TimetableClass[],
       (a, b) => a.equals(b)
     );
@@ -54,7 +56,12 @@ export class TimetableChoices {
     }
 
     // Check no classes are present twice in the choices array.
-    if (!areUnique(choices.map(c => c.timetableClass), (a, b) => a.equals(b))) {
+    if (
+      !areUnique(
+        choices.map((c) => c.timetableClass),
+        (a, b) => a.equals(b)
+      )
+    ) {
       throw TimetableError.duplicatedClassInChoices();
     }
 
@@ -69,12 +76,14 @@ export class TimetableChoices {
    * @param indices The choices indices for each class. There must be a choice
    * present representing each class in the timetable.
    */
-  static fromIndices(timetable: Timetable,
-    indices: (number | null)[] | null): TimetableChoices {
-
+  static fromIndices(
+    timetable: Timetable,
+    indices: (number | null)[] | null
+  ): TimetableChoices {
     if (indices == null) {
       return new TimetableChoices(
-        timetable, timetable.classes.map(c => new TimetableChoice(c, null))
+        timetable,
+        timetable.classes.map((c) => new TimetableChoice(c, null))
       );
     }
 
@@ -93,26 +102,30 @@ export class TimetableChoices {
     let choices: (number | null)[] | undefined = undefined;
 
     // Only create the choices array if some choices have been made.
-    if (this.choices.some(c => c.option != null)) {
+    if (this.choices.some((c) => c.option != null)) {
       // Create the array by finding the index of each option in each class,
       // in the order the classes are in the timetable.
-      choices = this.timetable.classes.map(cl => {
-        const choice = this.choices.find(ch => ch.timetableClass == cl);
+      choices = this.timetable.classes.map((cl) => {
+        const choice = this.choices.find((ch) => ch.timetableClass == cl);
 
         // Wont happen. The constructor ensures all classes have choices.
-        if (choice == null) { throw new Error(); }
+        if (choice == null) {
+          throw new Error();
+        }
 
         const option = choice.option;
-        if (option == null) { return null; }
+        if (option == null) {
+          return null;
+        }
 
-        const optionIndex = cl.options.findIndex(o => o.equals(option));
+        const optionIndex = cl.options.findIndex((o) => o.equals(option));
         return optionIndex;
       });
     }
 
     return {
       ...this.timetable.toJSON(),
-      choices: choices
+      choices: choices,
     };
   }
 
@@ -122,10 +135,11 @@ export class TimetableChoices {
    * @param timetableClass The class to change the choice for.
    * @param option The new choice (or null for no choice).
    */
-  withChoice(timetableClass: TimetableClass,
-    option: TimetableOption | null): TimetableChoices {
-
-    const choices = this.choices.map(ch => {
+  withChoice(
+    timetableClass: TimetableClass,
+    option: TimetableOption | null
+  ): TimetableChoices {
+    const choices = this.choices.map((ch) => {
       // If this is the class to modify, change the option.
       if (ch.timetableClass == timetableClass) {
         return new TimetableChoice(timetableClass, option);
@@ -145,13 +159,16 @@ export class TimetableChoices {
    * @param replace The old class to replace (if any). If this class is not
    * found within the timetable, then nothing will change.
    */
-  withClass(newClass: TimetableClass, replace?: TimetableClass): TimetableChoices {
+  withClass(
+    newClass: TimetableClass,
+    replace?: TimetableClass
+  ): TimetableChoices {
     const newTimetable = this.timetable.withClass(newClass, replace);
 
     const newChoices = (() => {
       if (replace != null) {
         // Find the choice for the old class and change it to the new class.
-        return this.choices.map(ch => {
+        return this.choices.map((ch) => {
           // Don't change any choices for any other classes.
           if (!ch.timetableClass.equals(replace)) {
             return ch;
@@ -159,7 +176,10 @@ export class TimetableChoices {
 
           // Keep the same option chosen if the new class still has it.
           const prevOption = ch.option;
-          if (prevOption != null && newClass.options.some(o => o.equals(prevOption))) {
+          if (
+            prevOption != null &&
+            newClass.options.some((o) => o.equals(prevOption))
+          ) {
             return new TimetableChoice(newClass, prevOption);
           }
 
@@ -181,7 +201,7 @@ export class TimetableChoices {
   withoutClass(oldClass: TimetableClass): TimetableChoices {
     const newTimetable = this.timetable.withoutClass(oldClass);
     const newChoices = this.choices.filter(
-      c => !c.timetableClass.equals(oldClass)
+      (c) => !c.timetableClass.equals(oldClass)
     );
     return new TimetableChoices(newTimetable, newChoices);
   }
@@ -190,23 +210,27 @@ export class TimetableChoices {
   clashingBlocks(): ClashingBlock[] {
     const result: ClashingBlock[] = [];
 
-    this.choices.forEach(ch => {
+    this.choices.forEach((ch) => {
       // It can't clash if nothing's been chosen.
-      if (ch.option == null) { return; }
+      if (ch.option == null) {
+        return;
+      }
 
       // Work out which blocks from this class clash with other choices.
-      const clashingBlocks = ch.option.blocks.filter(b =>
-        this.choices.some(other => {
+      const clashingBlocks = ch.option.blocks.filter((b) =>
+        this.choices.some((other) => {
           // We only want to compare with other choices in the list (so skip
           // this one) that have options chosen (so skip nulls).
-          if (other == ch || other.option == null) { return false; }
+          if (other == ch || other.option == null) {
+            return false;
+          }
 
           // If any block from this choice clashes this block, it's a clash.
-          return other.option.blocks.some(otherB => otherB.clashesWith(b));
+          return other.option.blocks.some((otherB) => otherB.clashesWith(b));
         })
       );
 
-      clashingBlocks.forEach(b => {
+      clashingBlocks.forEach((b) => {
         result.push({ block: b, choice: ch });
       });
     });
@@ -220,8 +244,8 @@ export class TimetableChoices {
    */
   unallocatedMandatoryClasses(): TimetableClass[] {
     return this.choices
-      .filter(x => !x.timetableClass.optional && x.option == null)
-      .map(x => x.timetableClass);
+      .filter((x) => !x.timetableClass.optional && x.option == null)
+      .map((x) => x.timetableClass);
   }
 }
 
@@ -243,7 +267,10 @@ export class TimetableChoice {
    * may be a valid choice for an optional class.
    */
   constructor(timetableClass: TimetableClass, option: TimetableOption | null) {
-    if (option != null && !timetableClass.options.some(o => o.equals(option))) {
+    if (
+      option != null &&
+      !timetableClass.options.some((o) => o.equals(option))
+    ) {
       throw TimetableError.optionMissing();
     }
 
@@ -257,16 +284,19 @@ export class TimetableChoice {
    * @param index The index of the option chosen, or null if no choice is made.
    * Note that null may be a valid choice for an optional class.
    */
-  static fromIndex(timetableClass: TimetableClass,
-    index: number | null): TimetableChoice {
-
+  static fromIndex(
+    timetableClass: TimetableClass,
+    index: number | null
+  ): TimetableChoice {
     if (index == null) {
       return new TimetableChoice(timetableClass, null);
     }
 
-    if (!Number.isInteger(index) || index < 0 ||
-      index >= timetableClass.options.length) {
-
+    if (
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index >= timetableClass.options.length
+    ) {
       throw TimetableError.badChoiceIndex(index);
     }
 

@@ -28,6 +28,9 @@
       .dropdown-button {
         @include template.button-hover;
         @include template.content-text-icon;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
         height: 1.5rem;
         width: 1.5rem;
       }
@@ -74,7 +77,8 @@
         --button-rounding: 0;
         height: 2rem;
         padding: 0rem 1rem;
-        justify-content: start;
+        justify-content: center;
+        align-items: flex-start;
       }
     }
     .delete-dropdown .dropdown-content {
@@ -90,6 +94,8 @@
         height: 2rem;
         padding: 0rem 1rem;
         width: 8rem;
+        justify-content: center;
+        align-items: center;
       }
     }
   }

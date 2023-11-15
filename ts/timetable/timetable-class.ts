@@ -1,4 +1,4 @@
-import { areUnique, arraysMatch } from "schel-d-utils";
+import { areUnique, arraysMatch } from "@schel-d/js-utils";
 import { z } from "zod";
 import { LocalTime } from "../time/local-time";
 import { TimetableColor, TimetableColors } from "./timetable-class-color";
@@ -23,25 +23,38 @@ export class TimetableClass {
   readonly optional: boolean;
 
   /** Zod schema for parsing from JSON. */
-  static readonly json = z.object({
-    name: z.string(),
-    type: z.string(),
-    color: z.enum(TimetableColors, {
-      errorMap: (issue, ctx) => {
-        if (issue.code === "invalid_enum_value" || issue.code === "invalid_type") {
-          return {
-            message: "Valid colors are \"red\", \"orange\", \"yellow\", " +
-              "\"green\", \"cyan\", \"blue\", \"purple\", or \"pink\""
-          };
-        }
-        return { message: ctx.defaultError };
-      }
-    }),
-    options: TimetableOption.json.array().min(1),
-    optional: z.boolean().optional()
-  }).transform(x =>
-    new TimetableClass(x.name, x.type, x.color, x.options, x.optional ?? false)
-  );
+  static readonly json = z
+    .object({
+      name: z.string(),
+      type: z.string(),
+      color: z.enum(TimetableColors, {
+        errorMap: (issue, ctx) => {
+          if (
+            issue.code === "invalid_enum_value" ||
+            issue.code === "invalid_type"
+          ) {
+            return {
+              message:
+                'Valid colors are "red", "orange", "yellow", ' +
+                '"green", "cyan", "blue", "purple", or "pink"',
+            };
+          }
+          return { message: ctx.defaultError };
+        },
+      }),
+      options: TimetableOption.json.array().min(1),
+      optional: z.boolean().optional(),
+    })
+    .transform(
+      (x) =>
+        new TimetableClass(
+          x.name,
+          x.type,
+          x.color,
+          x.options,
+          x.optional ?? false
+        )
+    );
 
   /**
    * Creates a {@link TimetableClass}.
@@ -51,9 +64,13 @@ export class TimetableClass {
    * @param options The timetable options. Must have at least 1.
    * @param optional True, if not adding the class to the timetable is an option.
    */
-  constructor(name: string, type: string, color: TimetableColor,
-    options: TimetableOption[], optional: boolean) {
-
+  constructor(
+    name: string,
+    type: string,
+    color: TimetableColor,
+    options: TimetableOption[],
+    optional: boolean
+  ) {
     if (name.length < 1) {
       throw TimetableError.classEmptyName();
     }
@@ -82,15 +99,17 @@ export class TimetableClass {
    * @param other The other object.
    */
   equals(other: TimetableClass) {
-    return this.name === other.name
-      && this.type === other.type
-      && this.color === other.color
-      && arraysMatch(
+    return (
+      this.name === other.name &&
+      this.type === other.type &&
+      this.color === other.color &&
+      arraysMatch(
         this.options as TimetableOption[],
         other.options as TimetableOption[],
         (a, b) => a.equals(b)
-      )
-      && this.optional === other.optional;
+      ) &&
+      this.optional === other.optional
+    );
   }
 
   /** Convert to JSON object according to {@link TimetableClass.json}. */
@@ -99,8 +118,8 @@ export class TimetableClass {
       name: this.name,
       type: this.type,
       color: this.color,
-      options: this.options.map(o => o.toJSON()),
-      optional: this.optional ? true : undefined
+      options: this.options.map((o) => o.toJSON()),
+      optional: this.optional ? true : undefined,
     };
   }
 
@@ -110,17 +129,19 @@ export class TimetableClass {
    * next day. The time passed here should have the next day flag set.
    */
   hasWeekendOptions(daySplitTime: LocalTime): boolean {
-    return this.options.some(c => c.hasWeekendBlocks(daySplitTime));
+    return this.options.some((c) => c.hasWeekendBlocks(daySplitTime));
   }
 
   /** Returns the time the earliest block of all the options starts. */
   earliestStartTime(): LocalTime {
-    return LocalTime.earliest(...this.options.map(o => o.earliestStartTime()));
+    return LocalTime.earliest(
+      ...this.options.map((o) => o.earliestStartTime())
+    );
   }
 
   /** Returns the time the latest block of all the options ends. */
   latestEndTime(): LocalTime {
-    return LocalTime.latest(...this.options.map(o => o.latestEndTime()));
+    return LocalTime.latest(...this.options.map((o) => o.latestEndTime()));
   }
 
   /** Returns a three-letter abbreviation suiting the class name. */
@@ -132,6 +153,9 @@ export class TimetableClass {
       }
       return bits[0].replace(/[AEIOU]/g, "").slice(0, 3);
     }
-    return bits.map(x => x[0]).slice(0, 3).join("");
+    return bits
+      .map((x) => x[0])
+      .slice(0, 3)
+      .join("");
   }
 }

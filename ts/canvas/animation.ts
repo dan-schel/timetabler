@@ -1,4 +1,4 @@
-import { mapClamp } from "schel-d-utils";
+import { mapClamp } from "@schel-d/js-utils";
 
 /** An animation running on the canvas. */
 export abstract class Animation {
@@ -41,7 +41,13 @@ export class LerpAnimation extends Animation {
 
   /** Returns a animating value (which is always between 0 and 1). */
   value(): number {
-    return mapClamp(this._elapsed, this.delay, this.duration + this.delay, 0, 1);
+    return mapClamp(
+      this._elapsed,
+      this.delay,
+      this.duration + this.delay,
+      0,
+      1
+    );
   }
 
   // JSDoc inherited.

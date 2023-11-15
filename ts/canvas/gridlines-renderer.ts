@@ -1,4 +1,4 @@
-import { hour24To12 } from "schel-d-utils";
+import { hour24To12 } from "@schel-d/js-utils";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
 import { Timetable } from "../timetable/timetable";
@@ -17,7 +17,11 @@ export const latestDaySplitHour = 3;
 
 /** The days of the week, from Monday to Friday. */
 export const daysMonToFri = [
-  DayOfWeek.mon, DayOfWeek.tue, DayOfWeek.wed, DayOfWeek.thu, DayOfWeek.fri
+  DayOfWeek.mon,
+  DayOfWeek.tue,
+  DayOfWeek.wed,
+  DayOfWeek.thu,
+  DayOfWeek.fri,
 ];
 
 /** The days of the week, from Monday to Sunday. */
@@ -33,7 +37,7 @@ export const defaultStartHour = 8;
 export const defaultEndHour = 20;
 
 /** A start and end time number of hours. */
-type HourRange = { start: number, end: number; }
+type HourRange = { start: number; end: number };
 
 /** Handles rendering the timetable gridlines to the canvas. */
 export class GridlinesRenderer {
@@ -77,8 +81,7 @@ export class GridlinesRenderer {
       this.days = timetable.timetable.hasWeekendOptions(splitTime)
         ? daysMonToSun
         : daysMonToFri;
-    }
-    else {
+    } else {
       this.days = defaultDays;
       this.startHour = defaultStartHour;
       this.endHour = defaultEndHour;
@@ -108,9 +111,16 @@ export class GridlinesRenderer {
     const hourHeight = (y2 - y1) / (this.endHour - this.startHour);
 
     return {
-      timesStart: timesStart, timesWidth: timesWidth, x1: x1, x2: x2,
-      daysStart: daysStart, daysHeight: daysHeight, y1: y1, y2: y2,
-      dayWidth: dayWidth, hourHeight: hourHeight
+      timesStart: timesStart,
+      timesWidth: timesWidth,
+      x1: x1,
+      x2: x2,
+      daysStart: daysStart,
+      daysHeight: daysHeight,
+      y1: y1,
+      y2: y2,
+      dayWidth: dayWidth,
+      hourHeight: hourHeight,
     };
   }
 
@@ -124,24 +134,44 @@ export class GridlinesRenderer {
     // If the time occurs before the start hour, maybe it should be shown on
     // yesterday's column.
     if (time.fractionalHour48 < this.startHour) {
-      if (time.tomorrow().fractionalHour48 > this.endHour) { return null; }
-      const dayIndex = this.days.findIndex(d => d.equals(dayOfWeek.yesterday()));
-      if (dayIndex == -1) { return null; }
-      return { x: dayIndex, y: time.tomorrow().fractionalHour48 - this.startHour };
+      if (time.tomorrow().fractionalHour48 > this.endHour) {
+        return null;
+      }
+      const dayIndex = this.days.findIndex((d) =>
+        d.equals(dayOfWeek.yesterday())
+      );
+      if (dayIndex == -1) {
+        return null;
+      }
+      return {
+        x: dayIndex,
+        y: time.tomorrow().fractionalHour48 - this.startHour,
+      };
     }
 
     // If the time occurs afer the end hour, maybe it should be shown on
     // tomorrow's column.
     if (time.fractionalHour48 > this.endHour) {
-      if (time.yesterday().fractionalHour48 < this.startHour) { return null; }
-      const dayIndex = this.days.findIndex(d => d.equals(dayOfWeek.tomorrow()));
-      if (dayIndex == -1) { return null; }
-      return { x: dayIndex, y: time.yesterday().fractionalHour48 - this.startHour };
+      if (time.yesterday().fractionalHour48 < this.startHour) {
+        return null;
+      }
+      const dayIndex = this.days.findIndex((d) =>
+        d.equals(dayOfWeek.tomorrow())
+      );
+      if (dayIndex == -1) {
+        return null;
+      }
+      return {
+        x: dayIndex,
+        y: time.yesterday().fractionalHour48 - this.startHour,
+      };
     }
 
     // Otherwise, show it on today's column.
-    const dayIndex = this.days.findIndex(d => d.equals(dayOfWeek));
-    if (dayIndex == -1) { return null; }
+    const dayIndex = this.days.findIndex((d) => d.equals(dayOfWeek));
+    if (dayIndex == -1) {
+      return null;
+    }
     return { x: dayIndex, y: time.fractionalHour48 - this.startHour };
   }
 
@@ -154,9 +184,8 @@ export class GridlinesRenderer {
     const colorInk30 = this._canvas.css.colorInk30;
     const colorInk10 = this._canvas.css.colorInk10;
 
-    const {
-      x1, y1, x2, y2, dayWidth, daysStart, hourHeight, timesStart
-    } = this.gridDimensions();
+    const { x1, y1, x2, y2, dayWidth, daysStart, hourHeight, timesStart } =
+      this.gridDimensions();
 
     // Draw the line under the column names.
     drawLine(ctx, x1, y1, x2, y1, colorInk30, 2);
@@ -231,8 +260,8 @@ export class GridlinesRenderer {
     // Draw the diagonal arrows icon.
     const icon = new Path2D(
       "M21.92 2.62a1 1 0 0 0-.54-.54A1 1 0 0 0 21 2h-6a1 1 0 0 0 0 2h3.59L4 " +
-      "18.59V15a1 1 0 0 0-2 0v6a1 1 0 0 0 .08.38a1 1 0 0 0 .54.54A1 1 0 0 0 " +
-      "3 22h6a1 1 0 0 0 0-2H5.41L20 5.41V9a1 1 0 0 0 2 0V3a1 1 0 0 0-.08-.38Z"
+        "18.59V15a1 1 0 0 0-2 0v6a1 1 0 0 0 .08.38a1 1 0 0 0 .54.54A1 1 0 0 0 " +
+        "3 22h6a1 1 0 0 0 0-2H5.41L20 5.41V9a1 1 0 0 0 2 0V3a1 1 0 0 0-.08-.38Z"
     );
     const iconX = (width - totalWidth) / 2;
     const iconY = height - rem(bottomMarginRem + iconSizeRem);
@@ -257,18 +286,22 @@ function determineHourRange(timetable: Timetable): HourRange {
 
     // If the hour range is less than 6 hours, add some hours either side.
     while (end - start < 6) {
-      if (start > 0) { start--; }
-      if (end < 24) { end++; }
+      if (start > 0) {
+        start--;
+      }
+      if (end < 24) {
+        end++;
+      }
     }
 
     return {
       start: start,
-      end: end
+      end: end,
     };
   }
 
   return {
     start: split,
-    end: split + 24
+    end: split + 24,
   };
 }

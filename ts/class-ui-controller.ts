@@ -4,8 +4,8 @@ import { dropdowns, getCurrentTimetable, updateTimetable } from "./main";
 import { createClassUIDom } from "./class-ui-creator";
 
 export type OptionRadioMapping = {
-  option: TimetableOption,
-  $radio: HTMLInputElement
+  option: TimetableOption;
+  $radio: HTMLInputElement;
 };
 
 /** Handles creating and managing a single class's UI in the controls. */
@@ -34,9 +34,12 @@ export class ClassUIController {
    * @param onEditClicked Called when the edit button is clicked.
    * @param onDeleteClicked Called when the delete button is clicked.
    */
-  constructor(timetableClass: TimetableClass, $div: HTMLDivElement,
-    $noChoiceInput: HTMLInputElement, optionRadios: OptionRadioMapping[]) {
-
+  constructor(
+    timetableClass: TimetableClass,
+    $div: HTMLDivElement,
+    $noChoiceInput: HTMLInputElement,
+    optionRadios: OptionRadioMapping[]
+  ) {
     this.timetableClass = timetableClass;
     this.$div = $div;
     this._$noChoiceInput = $noChoiceInput;
@@ -56,10 +59,12 @@ export class ClassUIController {
       return;
     }
 
-    const optionRadio = this._optionRadios.find(o => o.option.equals(option));
+    const optionRadio = this._optionRadios.find((o) => o.option.equals(option));
 
     // Should never happen. The caller should always pass a valid option.
-    if (optionRadio == null) { throw new Error(); }
+    if (optionRadio == null) {
+      throw new Error();
+    }
 
     if (!optionRadio.$radio.checked) {
       optionRadio.$radio.checked = true;
@@ -72,9 +77,11 @@ export class ClassUIController {
    * @param onEditClicked Called when the edit button is clicked.
    * @param onDeleteClicked Called when the delete button is clicked.
    */
-  static create(classData: TimetableClass, onEditClicked: () => void,
-    onDeleteClicked: () => void): ClassUIController {
-
+  static create(
+    classData: TimetableClass,
+    onEditClicked: () => void,
+    onDeleteClicked: () => void
+  ): ClassUIController {
     // Create the DOM for the class UI.
     const { dom, options } = createClassUIDom(classData);
 
@@ -84,7 +91,7 @@ export class ClassUIController {
     });
 
     // The events for the choices' picker buttons.
-    options.forEach(o => {
+    options.forEach((o) => {
       o.dom.radio.$element.addEventListener("click", () => {
         updateTimetable(getCurrentTimetable().withChoice(classData, o.option));
       });
@@ -105,20 +112,26 @@ export class ClassUIController {
     menuDropdown.content.deleteButton.$element.addEventListener("click", () => {
       dropdowns.open(deleteDropdown.$element, $dropdownContainer);
     });
-    deleteDropdown.content.deleteButton.$element.addEventListener("click", () => {
-      dropdowns.close();
-      onDeleteClicked();
-    });
+    deleteDropdown.content.deleteButton.$element.addEventListener(
+      "click",
+      () => {
+        dropdowns.close();
+        onDeleteClicked();
+      }
+    );
 
     // Get references to the inputs form each option for the controller, so that
     // when a choice is changed outside this UI (e.g. from a drag on the canvas)
     // the checked one can be updated.
-    const optionRadios = options.map(o => {
+    const optionRadios = options.map((o) => {
       return { option: o.option, $radio: o.dom.radio.$element };
     });
 
     return new ClassUIController(
-      classData, dom.$element, dom.options.noChoice.radio.$element, optionRadios
+      classData,
+      dom.$element,
+      dom.options.noChoice.radio.$element,
+      optionRadios
     );
   }
 }
