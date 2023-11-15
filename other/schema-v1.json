@@ -27,12 +27,7 @@
           "color": {
             "type": "string",
             "description": "The color to show on the timetable",
-            "enum": [
-              "orange",
-              "blue",
-              "green",
-              "purple"
-            ]
+            "enum": ["orange", "blue", "green", "purple"]
           },
           "options": {
             "type": "array",
@@ -55,18 +50,9 @@
             }
           }
         },
-        "required": [
-          "name",
-          "type",
-          "color",
-          "options"
-        ]
+        "required": ["name", "type", "color", "options"]
       }
     }
   },
-  "required": [
-    "version",
-    "times",
-    "subjects"
-  ]
+  "required": ["version", "times", "subjects"]
 }
