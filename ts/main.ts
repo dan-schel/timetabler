@@ -1,4 +1,4 @@
-import { find } from "schel-d-utils-browser";
+import { find } from "./utils/_export";
 import { CanvasController } from "./canvas/canvas-controller";
 import { ControlsController } from "./controls-controller";
 import { DropdownCoordinator } from "./dropdown-coordinator";
@@ -46,8 +46,8 @@ const html = {
     addBlockButton: find.button("option-editor-add-block-button"),
     blocksDivContainer: find.div("option-editor-blocks-container"),
     blocksDiv: find.div("option-editor-blocks"),
-    submitButton: find.button("option-editor-submit-button")
-  }
+    submitButton: find.button("option-editor-submit-button"),
+  },
 };
 
 // Used by other files to refer to the above html object.
@@ -83,7 +83,6 @@ if (darkMode.addEventListener) {
 if (darkMode.addListener) {
   darkMode.addListener(() => canvas.refreshCSS());
 }
-
 
 export const dropdowns = new DropdownCoordinator();
 

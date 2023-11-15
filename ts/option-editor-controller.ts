@@ -1,9 +1,11 @@
-import { make } from "schel-d-utils-browser";
+import { make } from "./utils/_export";
 import { icons } from "./icons";
 import { Html } from "./main";
 import { DayOfWeek } from "./time/day-of-week";
-import { tryParseUserDurationString, tryParseUserTimeString }
-  from "./time/parse-user-time-string";
+import {
+  tryParseUserDurationString,
+  tryParseUserTimeString,
+} from "./time/parse-user-time-string";
 import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableError } from "./timetable/timetable-error";
 
@@ -25,8 +27,11 @@ export class OptionEditorController {
    * Creates a {@link OptionEditorController}.
    * @param html References to the HTML elements on the page.
    */
-  constructor(html: Html, callback: (blocks: TimetableBlock[]) => string | null,
-    onBack: () => void) {
+  constructor(
+    html: Html,
+    callback: (blocks: TimetableBlock[]) => string | null,
+    onBack: () => void
+  ) {
     this._html = html;
     this._blocks = [];
     this._callback = callback;
@@ -66,7 +71,7 @@ export class OptionEditorController {
       if (startTime == null) {
         this.showBlockError(
           `Cannot understand start time, try formatting it like "3:30pm" or ` +
-          `"16:00"`
+            `"16:00"`
         );
         return;
       }
@@ -82,23 +87,26 @@ export class OptionEditorController {
       if (durationMins == null) {
         this.showBlockError(
           `The duration must be a number, and a whole number of minutes ` +
-          `(e.g. 2.5 minutes is not allowed)`
+            `(e.g. 2.5 minutes is not allowed)`
         );
         return;
       }
 
       const online = this._html.optionEditor.onlineSwitch.checked;
       const newBlock = new TimetableBlock(
-        dayOfWeek, startTime, durationMins, online
+        dayOfWeek,
+        startTime,
+        durationMins,
+        online
       );
 
-      if (this._blocks.some(b => b.equals(newBlock))) {
+      if (this._blocks.some((b) => b.equals(newBlock))) {
         this.showBlockError(
           "An identical time block has already been added to this option"
         );
         return;
       }
-      if (this._blocks.some(b => b.clashesWith(newBlock))) {
+      if (this._blocks.some((b) => b.clashesWith(newBlock))) {
         this.showBlockError(
           "This block clashes with one already added to this option"
         );
@@ -108,8 +116,7 @@ export class OptionEditorController {
       this.setBlocks([...this._blocks, newBlock]);
       this.resetAddTimeBlockUI();
       this.showBlockError(null);
-    }
-    catch (ex) {
+    } catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
         this.showBlockError(ex.editClassUIMessage);
         return;
@@ -126,8 +133,7 @@ export class OptionEditorController {
       if (error != null) {
         this.showSubmitError(error);
       }
-    }
-    else {
+    } else {
       this.showSubmitError("Please add at least one time block to this option");
     }
   }
@@ -156,22 +162,34 @@ export class OptionEditorController {
   setBlocks(blocks: TimetableBlock[]) {
     this._blocks = blocks;
     this._html.optionEditor.blocksDivContainer.classList.toggle(
-      "non-empty", blocks.length > 0
+      "non-empty",
+      blocks.length > 0
     );
-    this._html.optionEditor.blocksDiv.replaceChildren(...blocks.map(b => {
-      const dom = make.div({ classes: ["block"] }, {
-        block: make.div({ classes: ["one-line"] }, {
-          text: make.p({ text: b.toDisplayString(true) }, {})
-        }),
-        deleteButton: make.button({ classes: ["delete-button"] }, {
-          icon: make.icon("uil:trash-alt", icons, {})
-        })
-      });
-      dom.deleteButton.$element.addEventListener("click", () => {
-        this.deleteBlock(b);
-      });
-      return dom.$element;
-    }));
+    this._html.optionEditor.blocksDiv.replaceChildren(
+      ...blocks.map((b) => {
+        const dom = make.div(
+          { classes: ["block"] },
+          {
+            block: make.div(
+              { classes: ["one-line"] },
+              {
+                text: make.p({ text: b.toDisplayString(true) }, {}),
+              }
+            ),
+            deleteButton: make.button(
+              { classes: ["delete-button"] },
+              {
+                icon: make.icon("uil:trash-alt", icons, {}),
+              }
+            ),
+          }
+        );
+        dom.deleteButton.$element.addEventListener("click", () => {
+          this.deleteBlock(b);
+        });
+        return dom.$element;
+      })
+    );
   }
 
   /**
@@ -180,7 +198,7 @@ export class OptionEditorController {
    */
   deleteBlock(block: TimetableBlock) {
     // Keep all blocks except this one.
-    this.setBlocks(this._blocks.filter(x => !x.equals(block)));
+    this.setBlocks(this._blocks.filter((x) => !x.equals(block)));
   }
 
   /**
@@ -189,7 +207,10 @@ export class OptionEditorController {
    */
   showSubmitError(message: string | null) {
     this._html.optionEditor.div.classList.remove("block-error");
-    this._html.optionEditor.div.classList.toggle("submit-error", message != null);
+    this._html.optionEditor.div.classList.toggle(
+      "submit-error",
+      message != null
+    );
     this._html.optionEditor.submitErrorText.textContent = message;
   }
 
@@ -199,7 +220,10 @@ export class OptionEditorController {
    */
   showBlockError(message: string | null) {
     this._html.optionEditor.div.classList.remove("submit-error");
-    this._html.optionEditor.div.classList.toggle("block-error", message != null);
+    this._html.optionEditor.div.classList.toggle(
+      "block-error",
+      message != null
+    );
     this._html.optionEditor.blockErrorText.textContent = message;
   }
 }

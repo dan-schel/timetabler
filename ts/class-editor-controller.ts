@@ -1,10 +1,13 @@
-import { make } from "schel-d-utils-browser";
+import { make } from "./utils/_export";
 import { OptionEditorController } from "./option-editor-controller";
 import { icons } from "./icons";
 import { getCurrentTimetable, Html, updateTimetable } from "./main";
 import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableClass } from "./timetable/timetable-class";
-import { TimetableColor, TimetableColors } from "./timetable/timetable-class-color";
+import {
+  TimetableColor,
+  TimetableColors,
+} from "./timetable/timetable-class-color";
 import { TimetableError } from "./timetable/timetable-error";
 import { TimetableOption } from "./timetable/timetable-option";
 
@@ -21,8 +24,8 @@ export class ClassEditorController {
 
   /** References to the HTML elements making up the color picker. */
   private readonly _colorRadios: {
-    color: TimetableColor,
-    $radio: HTMLInputElement
+    color: TimetableColor;
+    $radio: HTMLInputElement;
   }[];
 
   /** The current options created in the UI. */
@@ -43,7 +46,7 @@ export class ClassEditorController {
     this._options = [];
     this.optionEditorController = new OptionEditorController(
       html,
-      blocks => this.onOptionEditorSubmitted(blocks),
+      (blocks) => this.onOptionEditorSubmitted(blocks),
       () => this.closeOptionEditor()
     );
     this.attachEvents();
@@ -65,18 +68,20 @@ export class ClassEditorController {
 
   /** Fills in the class colors into the color picker. */
   static createColorSwatches(div: HTMLDivElement) {
-    const pickers = TimetableColors.map(c => {
+    const pickers = TimetableColors.map((c) => {
       const dom = make.cssTemplate.pickerButton({}, {});
       dom.$element.classList.add(`gradient-${c}`);
       dom.radio.$element.name = "edit-class-color-picker";
       dom.radio.$element.autocomplete = "off";
 
       return {
-        color: c, $label: dom.$element, $radio: dom.radio.$element
+        color: c,
+        $label: dom.$element,
+        $radio: dom.radio.$element,
       };
     });
 
-    div.replaceChildren(...pickers.map(p => p.$label));
+    div.replaceChildren(...pickers.map((p) => p.$label));
 
     return pickers;
   }
@@ -85,7 +90,7 @@ export class ClassEditorController {
   onSubmit() {
     const name = this._html.classEditor.nameInput.value;
     const type = this._html.classEditor.typeInput.value;
-    const color = this._colorRadios.find(r => r.$radio.checked)?.color;
+    const color = this._colorRadios.find((r) => r.$radio.checked)?.color;
     const optional = this._html.classEditor.optionalSwitchInput.checked;
 
     if (color == null) {
@@ -95,21 +100,26 @@ export class ClassEditorController {
 
     try {
       const timetableClass = new TimetableClass(
-        name, type, color, this._options, optional
+        name,
+        type,
+        color,
+        this._options,
+        optional
       );
 
-      updateTimetable(getCurrentTimetable().withClass(
-        timetableClass, this._existingClass ?? undefined
-      ));
+      updateTimetable(
+        getCurrentTimetable().withClass(
+          timetableClass,
+          this._existingClass ?? undefined
+        )
+      );
       this.close();
-    }
-    catch (ex) {
+    } catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
         // Occurs when the error is the user's fault, e.g. they didn't enter
         // a name or have a duplicate option.
         this.showError(ex.editClassUIMessage);
-      }
-      else {
+      } else {
         // Occurs if the code breaks :/
         this.showError("Something went wrong");
         console.warn(ex);
@@ -132,10 +142,11 @@ export class ClassEditorController {
     if (existingClass != null) {
       this._html.classEditor.nameInput.value = existingClass.name;
       this._html.classEditor.typeInput.value = existingClass.type;
-      this._colorRadios.forEach(r => {
+      this._colorRadios.forEach((r) => {
         r.$radio.checked = existingClass.color == r.color;
       });
-      this._html.classEditor.optionalSwitchInput.checked = existingClass.optional;
+      this._html.classEditor.optionalSwitchInput.checked =
+        existingClass.optional;
       this.setOptions(existingClass.options as TimetableOption[]);
     }
   }
@@ -157,7 +168,7 @@ export class ClassEditorController {
 
     this._html.classEditor.nameInput.value = "";
     this._html.classEditor.typeInput.value = "";
-    this._colorRadios.forEach(r => r.$radio.checked = false);
+    this._colorRadios.forEach((r) => (r.$radio.checked = false));
     this._html.classEditor.optionalSwitchInput.checked = false;
     this.setOptions([]);
     this.showError(null);
@@ -171,24 +182,41 @@ export class ClassEditorController {
    */
   setOptions(options: TimetableOption[]) {
     this._options = options;
-    this._html.classEditor.div.classList.toggle("non-empty", options.length > 0);
-    this._html.classEditor.optionsDiv.replaceChildren(...options.map((o, i) => {
-      const dom = make.div({ classes: ["option"] }, {
-        number: make.p({ classes: ["number"], text: (i + 1).toFixed() }, {}),
-        blocks: o.blocks.map(b => {
-          return make.div({ classes: ["one-line"] }, {
-            text: make.p({ text: b.toDisplayString(true) }, {})
-          });
-        }),
-        deleteButton: make.button({ classes: ["delete-button"] }, {
-          icon: make.icon("uil:trash-alt", icons, {})
-        })
-      });
-      dom.deleteButton.$element.addEventListener("click", () => {
-        this.deleteOption(o);
-      });
-      return dom.$element;
-    }));
+    this._html.classEditor.div.classList.toggle(
+      "non-empty",
+      options.length > 0
+    );
+    this._html.classEditor.optionsDiv.replaceChildren(
+      ...options.map((o, i) => {
+        const dom = make.div(
+          { classes: ["option"] },
+          {
+            number: make.p(
+              { classes: ["number"], text: (i + 1).toFixed() },
+              {}
+            ),
+            blocks: o.blocks.map((b) => {
+              return make.div(
+                { classes: ["one-line"] },
+                {
+                  text: make.p({ text: b.toDisplayString(true) }, {}),
+                }
+              );
+            }),
+            deleteButton: make.button(
+              { classes: ["delete-button"] },
+              {
+                icon: make.icon("uil:trash-alt", icons, {}),
+              }
+            ),
+          }
+        );
+        dom.deleteButton.$element.addEventListener("click", () => {
+          this.deleteOption(o);
+        });
+        return dom.$element;
+      })
+    );
   }
 
   /**
@@ -201,15 +229,14 @@ export class ClassEditorController {
     try {
       const newOption = new TimetableOption(blocks);
 
-      if (this._options.some(o => o.equals(newOption))) {
+      if (this._options.some((o) => o.equals(newOption))) {
         return "This option is identical to an existing one in this class";
       }
 
       this.setOptions([...this._options, newOption]);
       this.closeOptionEditor();
       return null;
-    }
-    catch (ex) {
+    } catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
         return ex.editClassUIMessage;
       }
@@ -234,7 +261,7 @@ export class ClassEditorController {
    */
   deleteOption(option: TimetableOption) {
     // Keep all options except this one.
-    this.setOptions(this._options.filter(x => !x.equals(option)));
+    this.setOptions(this._options.filter((x) => !x.equals(option)));
   }
 
   /**
