@@ -62,12 +62,7 @@
             "description": "True, if this class isn't required to be on the timetable for it to be considered valid. Defaults to false if not provided."
           }
         },
-        "required": [
-          "name",
-          "type",
-          "color",
-          "options"
-        ]
+        "required": ["name", "type", "color", "options"]
       }
     }
   },
@@ -87,8 +82,5 @@
       ]
     }
   },
-  "required": [
-    "version",
-    "classes"
-  ]
+  "required": ["version", "classes"]
 }
