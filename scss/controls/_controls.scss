@@ -51,6 +51,9 @@
     @include template.content-text-icon;
     --button-rounding: 0;
     --content-color: var(--color-accent);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     gap: 0.2rem;
     .icon {
       font-size: 1.5rem;

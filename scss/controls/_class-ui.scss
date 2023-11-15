@@ -28,6 +28,9 @@
       .dropdown-button {
         @include template.button-hover;
         @include template.content-text-icon;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
         height: 1.5rem;
         width: 1.5rem;
       }
