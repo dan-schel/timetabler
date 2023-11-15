@@ -77,7 +77,8 @@
         --button-rounding: 0;
         height: 2rem;
         padding: 0rem 1rem;
-        justify-content: start;
+        justify-content: center;
+        align-items: flex-start;
       }
     }
     .delete-dropdown .dropdown-content {
@@ -93,6 +94,8 @@
         height: 2rem;
         padding: 0rem 1rem;
         width: 8rem;
+        justify-content: center;
+        align-items: center;
       }
     }
   }
