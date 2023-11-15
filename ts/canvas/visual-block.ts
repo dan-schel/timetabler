@@ -32,9 +32,12 @@ export abstract class VisualBlock {
    * @param timetableClass The class this block is for.
    * @param initialBlock The timetable block being drawn for.
    */
-  constructor(canvas: CanvasController, gridlines: GridlinesRenderer,
-    timetableClass: TimetableClass, initialBlock: TimetableBlock) {
-
+  constructor(
+    canvas: CanvasController,
+    gridlines: GridlinesRenderer,
+    timetableClass: TimetableClass,
+    initialBlock: TimetableBlock
+  ) {
     this._canvas = canvas;
     this._gridlines = gridlines;
     this.timetableClass = timetableClass;
@@ -49,7 +52,10 @@ export abstract class VisualBlock {
    */
   dimensions(x: number, y1: number, y2: number) {
     const {
-      x1: gridX1, y1: gridY1, dayWidth, hourHeight
+      x1: gridX1,
+      y1: gridY1,
+      dayWidth,
+      hourHeight,
     } = this._gridlines.gridDimensions();
 
     const blockHeight = Math.max(hourHeight * (y2 - y1), rem(1));
@@ -60,7 +66,7 @@ export abstract class VisualBlock {
       blockX2: gridX1 + dayWidth * (x + 1),
       blockY2: gridY1 + hourHeight * y1 + blockHeight,
       blockWidth: dayWidth,
-      blockHeight: blockHeight
+      blockHeight: blockHeight,
     };
   }
 }

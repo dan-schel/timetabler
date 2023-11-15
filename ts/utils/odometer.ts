@@ -48,11 +48,15 @@ export class OdometerController<T> {
    * odometer.
    * @param childInClass The CSS class applied to the element ani
    */
-  constructor(initialValue: T, equals: (a: T, b: T) => boolean,
-    builder: (value: T) => HTMLElement, animateStart = false,
-    parentDivClass = "odometer", childInClass = "odometer-in",
-    childOutClass = "odometer-out") {
-
+  constructor(
+    initialValue: T,
+    equals: (a: T, b: T) => boolean,
+    builder: (value: T) => HTMLElement,
+    animateStart = false,
+    parentDivClass = "odometer",
+    childInClass = "odometer-in",
+    childOutClass = "odometer-out"
+  ) {
     this._childInClass = childInClass;
     this._childOutClass = childOutClass;
 
@@ -78,7 +82,9 @@ export class OdometerController<T> {
    * @param skipAnimation Whether to skip the animation. False by default.
    */
   update(value: T, skipAnimation = false) {
-    if (this._equals(this.currentValue, value)) { return; }
+    if (this._equals(this.currentValue, value)) {
+      return;
+    }
 
     this._$out?.remove();
     if (!skipAnimation) {
@@ -88,8 +94,7 @@ export class OdometerController<T> {
 
       // Tell screenreaders to ignore the outdated UI.
       this._$out.ariaHidden = "true";
-    }
-    else {
+    } else {
       this._$in.remove();
       this._$out = null;
     }

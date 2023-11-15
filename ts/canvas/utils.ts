@@ -8,9 +8,15 @@
  * @param strokeStyle The stroke style (color) of the line.
  * @param lineWidth The thinkness of the line.
  */
-export function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number,
-  x2: number, y2: number, strokeStyle: string, lineWidth: number) {
-
+export function drawLine(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  strokeStyle: string,
+  lineWidth: number
+) {
   ctx.strokeStyle = strokeStyle;
   ctx.lineWidth = lineWidth;
   ctx.beginPath();
@@ -29,10 +35,15 @@ export function drawLine(ctx: CanvasRenderingContext2D, x1: number, y1: number,
  * @param radius The radius of each corner.
  * @param fillStyle The fill style (color) of the rectangle.
  */
-export function drawRoundedRect(ctx: CanvasRenderingContext2D,
-  x1: number, y1: number, x2: number, y2: number, radius: number,
-  fillStyle: string) {
-
+export function drawRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  radius: number,
+  fillStyle: string
+) {
   ctx.fillStyle = fillStyle;
   roundedRectPath(ctx, x1, y1, x2, y2, radius);
   ctx.fill();
@@ -48,10 +59,15 @@ export function drawRoundedRect(ctx: CanvasRenderingContext2D,
  * @param radius The radius of each corner.
  * @param strokeStyle The stroke style (color) of the rectangle.
  */
-export function drawOutlinedRoundedRect(ctx: CanvasRenderingContext2D,
-  x1: number, y1: number, x2: number, y2: number, radius: number,
-  strokeStyle: string) {
-
+export function drawOutlinedRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  radius: number,
+  strokeStyle: string
+) {
   ctx.strokeStyle = strokeStyle;
   ctx.lineWidth = 4;
 
@@ -70,10 +86,16 @@ export function drawOutlinedRoundedRect(ctx: CanvasRenderingContext2D,
  * @param color1 The first color in the gradient.
  * @param color2 The second color in the gradient.
  */
-export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
-  x1: number, y1: number, x2: number, y2: number, radius: number,
-  color1: string, color2: string) {
-
+export function drawGradientRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  radius: number,
+  color1: string,
+  color2: string
+) {
   ctx.fillStyle = rectGradient(ctx, x1, y1, x2, y2, color1, color2, 2);
 
   roundedRectPath(ctx, x1, y1, x2, y2, radius);
@@ -93,10 +115,17 @@ export function drawGradientRoundedRect(ctx: CanvasRenderingContext2D,
  * @param color2 The second color in the gradient.
  * @param fillStyle The fill style (color) of the rectangle.
  */
-export function drawOutlinedGradientRoundedRect(ctx: CanvasRenderingContext2D,
-  x1: number, y1: number, x2: number, y2: number, radius: number,
-  color1: string, color2: string, fillStyle: string) {
-
+export function drawOutlinedGradientRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  radius: number,
+  color1: string,
+  color2: string,
+  fillStyle: string
+) {
   ctx.strokeStyle = rectGradient(ctx, x1, y1, x2, y2, color1, color2, 1);
   ctx.lineWidth = 4;
   ctx.fillStyle = fillStyle;
@@ -115,9 +144,14 @@ export function drawOutlinedGradientRoundedRect(ctx: CanvasRenderingContext2D,
  * @param y2 The y-coordinate of the bottom-right corner.
  * @param radius The radius of each corner.
  */
-function roundedRectPath(ctx: CanvasRenderingContext2D, x1: number, y1: number,
-  x2: number, y2: number, radius: number) {
-
+function roundedRectPath(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  radius: number
+) {
   ctx.beginPath();
   ctx.moveTo(x1 + radius, y1);
   ctx.lineTo(x2 - radius, y1);
@@ -131,16 +165,25 @@ function roundedRectPath(ctx: CanvasRenderingContext2D, x1: number, y1: number,
   ctx.closePath();
 }
 
-function rectGradient(ctx: CanvasRenderingContext2D, x1: number, y1: number,
-  x2: number, y2: number, color1: string, color2: string, spread: number) {
-
+function rectGradient(
+  ctx: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  color1: string,
+  color2: string,
+  spread: number
+) {
   const centerX = (x1 + x2) / 2;
   const centerY = (y1 + y2) / 2;
   const size = Math.max(x2 - x1, y2 - y1);
 
   const gradient = ctx.createLinearGradient(
-    centerX - size * 0.5 * spread, centerY - size * 0.5 * spread,
-    centerX + size * 0.5 * spread, centerY + size * 0.5 * spread
+    centerX - size * 0.5 * spread,
+    centerY - size * 0.5 * spread,
+    centerX + size * 0.5 * spread,
+    centerY + size * 0.5 * spread
   );
   gradient.addColorStop(0, color1);
   gradient.addColorStop(1, color2);
@@ -156,9 +199,14 @@ function rectGradient(ctx: CanvasRenderingContext2D, x1: number, y1: number,
  * @param scale The size to scale the icon (in addition to the viewbox size).
  * @param fillStyle The fill style (color) of the icon.
  */
-export function drawIcon(ctx: CanvasRenderingContext2D, icon: Path2D, x: number,
-  y: number, scale: number, fillStyle: string) {
-
+export function drawIcon(
+  ctx: CanvasRenderingContext2D,
+  icon: Path2D,
+  x: number,
+  y: number,
+  scale: number,
+  fillStyle: string
+) {
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(scale, scale);
@@ -177,10 +225,15 @@ export function drawIcon(ctx: CanvasRenderingContext2D, icon: Path2D, x: number,
  * @param fontStyle The font style (bold/italic).
  * @param fillStyle The fill style (color) of the text.
  */
-export function drawText(ctx: CanvasRenderingContext2D, text: string,
-  x: number, y: number, fontSizeRem: number, fontStyle: "bold" | null,
-  fillStyle: string) {
-
+export function drawText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  fontSizeRem: number,
+  fontStyle: "bold" | null,
+  fillStyle: string
+) {
   ctx.textBaseline = "top";
   ctx.textAlign = "left";
 
@@ -196,9 +249,12 @@ export function drawText(ctx: CanvasRenderingContext2D, text: string,
  * @param fontSizeRem The font size (measured in rem) of the text.
  * @param fontStyle The font style (bold/italic).
  */
-export function measureText(ctx: CanvasRenderingContext2D, text: string,
-  fontSizeRem: number, fontStyle: "bold" | null): number {
-
+export function measureText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  fontSizeRem: number,
+  fontStyle: "bold" | null
+): number {
   ctx.font = createFontString(fontSizeRem, fontStyle);
   return ctx.measureText(text).width;
 }
@@ -208,11 +264,12 @@ export function measureText(ctx: CanvasRenderingContext2D, text: string,
  * @param fontSizeRem The font size (measured in rem) of the text.
  * @param fontStyle The font style (bold/italic).
  */
-function createFontString(fontSizeRem: number,
-  fontStyle: "bold" | null): string {
-
+function createFontString(
+  fontSizeRem: number,
+  fontStyle: "bold" | null
+): string {
   return [fontStyle, `${fontSizeRem}rem`, "Atkinson Hyperlegible"]
-    .filter(x => x != null)
+    .filter((x) => x != null)
     .join(" ");
 }
 

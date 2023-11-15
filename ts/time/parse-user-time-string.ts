@@ -10,7 +10,9 @@ import { LocalTime } from "./local-time";
  */
 export function tryParseUserTimeString(input: string): LocalTime | null {
   const time = timeStringUtil(input);
-  if (time == null) { return null; }
+  if (time == null) {
+    return null;
+  }
   return LocalTime.fromTime(time.hour, time.minute, false);
 }
 
@@ -21,14 +23,19 @@ export function tryParseUserTimeString(input: string): LocalTime | null {
  * @param input The input string.
  * @param useMins Whether minutes was chosen as the unit.
  */
-export function tryParseUserDurationString(input: string,
-  useMins: boolean): number | null {
-
+export function tryParseUserDurationString(
+  input: string,
+  useMins: boolean
+): number | null {
   const number = parseFloat(input);
-  if (Number.isNaN(number)) { return null; }
+  if (Number.isNaN(number)) {
+    return null;
+  }
 
-  const mins = useMins ? number : (number * 60);
-  if (!Number.isInteger(mins)) { return null; }
+  const mins = useMins ? number : number * 60;
+  if (!Number.isInteger(mins)) {
+    return null;
+  }
 
   return mins;
 }

@@ -1,12 +1,17 @@
-import { ifDefined, element, ElementAttributes, ElementCollection } from "./make";
+import {
+  ifDefined,
+  element,
+  ElementAttributes,
+  ElementCollection,
+} from "./make";
 
 /**
  * Identical to {@link ElementAttributes}, but with additional values for
  * `<a>`s.
  */
 export type AnchorAttributes = ElementAttributes & {
-  text?: string,
-  href?: string
+  text?: string;
+  href?: string;
 };
 
 /**
@@ -15,11 +20,12 @@ export type AnchorAttributes = ElementAttributes & {
  * @param children Children to append to the element and return.
  */
 export function a<K extends ElementCollection>(
-  attributes: AnchorAttributes, children: K) {
-
+  attributes: AnchorAttributes,
+  children: K
+) {
   const dom = element("a", attributes, children);
-  ifDefined(attributes.text, x => dom.$element.textContent = x);
-  ifDefined(attributes.href, x => dom.$element.href = x);
+  ifDefined(attributes.text, (x) => (dom.$element.textContent = x));
+  ifDefined(attributes.href, (x) => (dom.$element.href = x));
   return dom;
 }
 
@@ -28,8 +34,8 @@ export function a<K extends ElementCollection>(
  * `<button>`s.
  */
 export type ButtonAttributes = ElementAttributes & {
-  text?: string,
-  title?: string
+  text?: string;
+  title?: string;
 };
 
 /**
@@ -38,11 +44,12 @@ export type ButtonAttributes = ElementAttributes & {
  * @param children Children to append to the element and return.
  */
 export function button<K extends ElementCollection>(
-  attributes: ButtonAttributes, children: K) {
-
+  attributes: ButtonAttributes,
+  children: K
+) {
   const dom = element("button", attributes, children);
-  ifDefined(attributes.text, x => dom.$element.textContent = x);
-  ifDefined(attributes.title, x => dom.$element.title = x);
+  ifDefined(attributes.text, (x) => (dom.$element.textContent = x));
+  ifDefined(attributes.title, (x) => (dom.$element.title = x));
   return dom;
 }
 
@@ -63,9 +70,9 @@ export type ImageAttributes = ElementAttributes & {
  */
 export function img(attributes: ImageAttributes) {
   const dom = element("img", attributes, {});
-  ifDefined(attributes.src, x => dom.$element.src = x);
-  ifDefined(attributes.alt, x => dom.$element.alt = x);
-  ifDefined(attributes.width, x => dom.$element.width = x);
-  ifDefined(attributes.height, x => dom.$element.height = x);
+  ifDefined(attributes.src, (x) => (dom.$element.src = x));
+  ifDefined(attributes.alt, (x) => (dom.$element.alt = x));
+  ifDefined(attributes.width, (x) => (dom.$element.width = x));
+  ifDefined(attributes.height, (x) => (dom.$element.height = x));
   return dom;
 }

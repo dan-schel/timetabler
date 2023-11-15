@@ -10,13 +10,17 @@ import { SuggestionVisualBlock } from "./suggestion-visual-block";
 
 /** Instructions for which visual blocks need to be created for a block. */
 export type VisualBlockMapping = {
-  block: TimetableBlock,
+  block: TimetableBlock;
   main: {
-    x: number, y1: number, y2: number
-  },
+    x: number;
+    y1: number;
+    y2: number;
+  };
   overflow: {
-    x: number, y1: number, y2: number
-  } | null
+    x: number;
+    y1: number;
+    y2: number;
+  } | null;
 };
 
 /** Handles rendering the timetable blocks to the canvas. */
@@ -65,7 +69,7 @@ export class BlocksRenderer {
 
     // For each choice (a.k.a. each timetable class, since there's guaranteed to
     // be exactly one for each)...
-    timetable.choices.forEach(c => {
+    timetable.choices.forEach((c) => {
       // Todo: skip doing everything below if the choice hasn't changed.
 
       // Get the class and an array of blocks required.
@@ -73,28 +77,40 @@ export class BlocksRenderer {
       const timetableBlocks = c.option == null ? [] : c.option.blocks;
 
       // For each block, work out which visual blocks need to be created.
-      const newCoordinates: VisualBlockMapping[] =
-        timetableBlocks.map(b => this._determineVisualBlockMapping(b));
+      const newCoordinates: VisualBlockMapping[] = timetableBlocks.map((b) =>
+        this._determineVisualBlockMapping(b)
+      );
 
       // Animate/create/destroy the primary blocks for these new coordinates.
       this._animatePrimaryBlocks(timetableClass, newCoordinates);
 
       // Create overflow blocks from coordinates. Todo: animate in/out.
-      newCoordinates.forEach(b => {
+      newCoordinates.forEach((b) => {
         if (b.overflow != null) {
-          this._overflowBlocks.push(new OverflowVisualBlock(
-            this._canvas, this._gridlines, timetableClass, b.block,
-            b.overflow.x, b.overflow.y1, b.overflow.y2
-          ));
+          this._overflowBlocks.push(
+            new OverflowVisualBlock(
+              this._canvas,
+              this._gridlines,
+              timetableClass,
+              b.block,
+              b.overflow.x,
+              b.overflow.y1,
+              b.overflow.y2
+            )
+          );
         }
       });
     });
 
     // Remove any primary blocks for classes which no longer exist.
-    const toDelete = this._primaryBlocks.filter(b =>
-      timetable.timetable.classes.find(c => c.equals(b.timetableClass)) == null
+    const toDelete = this._primaryBlocks.filter(
+      (b) =>
+        timetable.timetable.classes.find((c) => c.equals(b.timetableClass)) ==
+        null
     );
-    toDelete.forEach(d => this._primaryBlocks.splice(this._primaryBlocks.indexOf(d), 1));
+    toDelete.forEach((d) =>
+      this._primaryBlocks.splice(this._primaryBlocks.indexOf(d), 1)
+    );
   }
 
   /**
@@ -103,12 +119,14 @@ export class BlocksRenderer {
    * @param timetableClass The class to create blocks for.
    * @param newCoordinates The new coordinates to animate the blocks to.
    */
-  private _animatePrimaryBlocks(timetableClass: TimetableClass,
-    newCoordinates: VisualBlockMapping[]) {
-
+  private _animatePrimaryBlocks(
+    timetableClass: TimetableClass,
+    newCoordinates: VisualBlockMapping[]
+  ) {
     // Find the blocks already being shown for this class.
-    const existingBlocks = this._primaryBlocks
-      .filter(b => b.timetableClass.equals(timetableClass));
+    const existingBlocks = this._primaryBlocks.filter((b) =>
+      b.timetableClass.equals(timetableClass)
+    );
 
     // For each existing block...
     existingBlocks.forEach((b, i) => {
@@ -117,11 +135,12 @@ export class BlocksRenderer {
         // repurposed, then animate it to a new location.
         const coordinates = newCoordinates[i];
         b.animateTo(
-          coordinates.block, coordinates.main.x, coordinates.main.y1,
+          coordinates.block,
+          coordinates.main.x,
+          coordinates.main.y1,
           coordinates.main.y2
         );
-      }
-      else {
+      } else {
         // If by the time this block is reached in the loop all the new
         // coordinates have blocks assigned, then this block is extra, so delete
         // it. Todo: animate it out!
@@ -132,12 +151,19 @@ export class BlocksRenderer {
     // If there are more new coordinates than existing blocks, then we'll need
     // to create some new blocks.
     if (newCoordinates.length > existingBlocks.length) {
-      newCoordinates.slice(existingBlocks.length).forEach(b => {
+      newCoordinates.slice(existingBlocks.length).forEach((b) => {
         // Todo: animate in the new block.
-        this._primaryBlocks.push(new PrimaryVisualBlock(
-          this._canvas, this._gridlines, timetableClass, b.block,
-          b.main.x, b.main.y1, b.main.y2
-        ));
+        this._primaryBlocks.push(
+          new PrimaryVisualBlock(
+            this._canvas,
+            this._gridlines,
+            timetableClass,
+            b.block,
+            b.main.x,
+            b.main.y1,
+            b.main.y2
+          )
+        );
       });
     }
   }
@@ -152,14 +178,17 @@ export class BlocksRenderer {
     const end = this._gridlines.timeLocation(b.dayOfWeek, b.endTime);
 
     // Should never happen.
-    if (start == null || end == null) { throw new Error(); }
+    if (start == null || end == null) {
+      throw new Error();
+    }
 
     // If the start and end columns are different, then an overflow block
     // will be required. Work out where the end of the first block should
     // go.
-    const firstBlockEnd = start.x == end.x
-      ? end.y
-      : this._gridlines.endHour - this._gridlines.startHour;
+    const firstBlockEnd =
+      start.x == end.x
+        ? end.y
+        : this._gridlines.endHour - this._gridlines.startHour;
 
     // Work out where the overflow block should go (if appropriate).
     let overflow = null;
@@ -170,7 +199,7 @@ export class BlocksRenderer {
     return {
       block: b,
       main: { x: start.x, y1: start.y, y2: firstBlockEnd },
-      overflow: overflow
+      overflow: overflow,
     };
   }
 
@@ -190,9 +219,9 @@ export class BlocksRenderer {
       }
     }
 
-    this._overflowBlocks.forEach(b => b.draw(ctx));
+    this._overflowBlocks.forEach((b) => b.draw(ctx));
 
-    this._suggestionBlocks.forEach(b => b.draw(ctx));
+    this._suggestionBlocks.forEach((b) => b.draw(ctx));
     this._draggingBlock?.draw(ctx);
   }
 
@@ -210,7 +239,8 @@ export class BlocksRenderer {
     // Find the first block that the pointer is within (if any).
     const x = e.offsetX;
     const y = e.offsetY;
-    this._draggingBlock = this._primaryBlocks.find(b => b.isWithin(x, y)) ?? null;
+    this._draggingBlock =
+      this._primaryBlocks.find((b) => b.isWithin(x, y)) ?? null;
 
     if (this._draggingBlock != null) {
       // Move the block to be in the center of the pointer.
@@ -222,22 +252,32 @@ export class BlocksRenderer {
 
       // Only show labels on the suggestion blocks if there are options with
       // multiple blocks.
-      const showLabels = timetableClass.options.some(o => o.blocks.length > 1);
+      const showLabels = timetableClass.options.some(
+        (o) => o.blocks.length > 1
+      );
 
       timetableClass.options.forEach((o, i) => {
-        this._suggestionBlocks.push(...o.blocks.map(b => {
-          // Create a suggestion block in the place of where the primary visual
-          // block would be (don't create one for the overflow).
-          const mapping = this._determineVisualBlockMapping(b);
-          const label = showLabels ? (i + 1).toFixed() : null;
-          return new SuggestionVisualBlock(
-            this._canvas, this._gridlines, timetableClass, o, b, mapping.main.x,
-            mapping.main.y1, mapping.main.y2, label
-          );
-        }));
+        this._suggestionBlocks.push(
+          ...o.blocks.map((b) => {
+            // Create a suggestion block in the place of where the primary visual
+            // block would be (don't create one for the overflow).
+            const mapping = this._determineVisualBlockMapping(b);
+            const label = showLabels ? (i + 1).toFixed() : null;
+            return new SuggestionVisualBlock(
+              this._canvas,
+              this._gridlines,
+              timetableClass,
+              o,
+              b,
+              mapping.main.x,
+              mapping.main.y1,
+              mapping.main.y2,
+              label
+            );
+          })
+        );
       });
-    }
-    else {
+    } else {
       this._suggestionBlocks = [];
     }
 
@@ -254,16 +294,18 @@ export class BlocksRenderer {
       // Work out if the drag ends on top of a suggestion block.
       const x = e.offsetX;
       const y = e.offsetY;
-      const newPosition = this._suggestionBlocks.find(b => b.isWithin(x, y));
+      const newPosition = this._suggestionBlocks.find((b) => b.isWithin(x, y));
 
       if (newPosition != null) {
         // If so, make this option the suggestion represent the new choice for
         // this class.
-        updateTimetable(getCurrentTimetable().withChoice(
-          this._draggingBlock.timetableClass, newPosition.option
-        ));
-      }
-      else {
+        updateTimetable(
+          getCurrentTimetable().withChoice(
+            this._draggingBlock.timetableClass,
+            newPosition.option
+          )
+        );
+      } else {
         // Otherwise return the dragged block back to it's former position.
         this._draggingBlock.cancelDrag();
       }
@@ -286,9 +328,11 @@ export class BlocksRenderer {
 
       // Highlight the suggestion block that we're hovering over (if any), and
       // any others that represent the same option (would have the same label).
-      const hovered = this._suggestionBlocks.find(b => b.isWithin(x, y))?.option;
-      this._suggestionBlocks.forEach(
-        b => b.setHighlighted(hovered != null && b.option.equals(hovered))
+      const hovered = this._suggestionBlocks.find((b) =>
+        b.isWithin(x, y)
+      )?.option;
+      this._suggestionBlocks.forEach((b) =>
+        b.setHighlighted(hovered != null && b.option.equals(hovered))
       );
     }
   }

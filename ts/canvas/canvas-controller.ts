@@ -19,21 +19,21 @@ export class CanvasController {
 
   /** A reference to frequently used CSS values. */
   css: {
-    colorInk10: string,
-    colorInk30: string,
-    colorInk80: string,
-    colorOnAccent: string,
-    colorPaper20: string,
+    colorInk10: string;
+    colorInk30: string;
+    colorInk80: string;
+    colorOnAccent: string;
+    colorPaper20: string;
     classColors: {
-      "red": { gradient1: string, gradient2: string, on: string },
-      "orange": { gradient1: string, gradient2: string, on: string },
-      "yellow": { gradient1: string, gradient2: string, on: string },
-      "green": { gradient1: string, gradient2: string, on: string },
-      "cyan": { gradient1: string, gradient2: string, on: string },
-      "blue": { gradient1: string, gradient2: string, on: string },
-      "purple": { gradient1: string, gradient2: string, on: string },
-      "pink": { gradient1: string, gradient2: string, on: string }
-    }
+      red: { gradient1: string; gradient2: string; on: string };
+      orange: { gradient1: string; gradient2: string; on: string };
+      yellow: { gradient1: string; gradient2: string; on: string };
+      green: { gradient1: string; gradient2: string; on: string };
+      cyan: { gradient1: string; gradient2: string; on: string };
+      blue: { gradient1: string; gradient2: string; on: string };
+      purple: { gradient1: string; gradient2: string; on: string };
+      pink: { gradient1: string; gradient2: string; on: string };
+    };
   };
 
   /** Controls what is rendered to the canvas. */
@@ -69,7 +69,9 @@ export class CanvasController {
     // Retrieve the canvas context from the HTML element.
     this._ctx = (() => {
       const maybe = html.canvas.getContext("2d");
-      if (maybe == null) { throw new Error("Cannot get canvas context"); }
+      if (maybe == null) {
+        throw new Error("Cannot get canvas context");
+      }
       return maybe;
     })();
 
@@ -81,17 +83,17 @@ export class CanvasController {
 
     this._renderer = new TimetableRenderer(this);
 
-    this._html.canvas.addEventListener("pointerdown",
-      (e) => this._renderer.onPointerDown(e)
+    this._html.canvas.addEventListener("pointerdown", (e) =>
+      this._renderer.onPointerDown(e)
     );
-    this._html.canvas.addEventListener("pointerup",
-      (e) => this._renderer.onPointerUp(e)
+    this._html.canvas.addEventListener("pointerup", (e) =>
+      this._renderer.onPointerUp(e)
     );
-    this._html.canvas.addEventListener("pointerleave",
-      (e) => this._renderer.onPointerUp(e)
+    this._html.canvas.addEventListener("pointerleave", (e) =>
+      this._renderer.onPointerUp(e)
     );
-    this._html.canvas.addEventListener("pointermove",
-      (e) => this._renderer.onPointerMove(e)
+    this._html.canvas.addEventListener("pointermove", (e) =>
+      this._renderer.onPointerMove(e)
     );
 
     this._dirty = true;
@@ -129,7 +131,10 @@ export class CanvasController {
     // measurement individually.
     this._ctx.save();
     this._ctx.clearRect(
-      0, 0, this.width * this.dpiRatio, this.height * this.dpiRatio
+      0,
+      0,
+      this.width * this.dpiRatio,
+      this.height * this.dpiRatio
     );
     this._ctx.scale(this.dpiRatio, this.dpiRatio);
 
@@ -138,7 +143,7 @@ export class CanvasController {
       const animationsToDelete: Animation[] = [];
 
       // Run each animation. Add them to a list of animations to delete if done.
-      this._animations.forEach(a => {
+      this._animations.forEach((a) => {
         a.run(delta);
         if (a.isDone()) {
           animationsToDelete.push(a);
@@ -146,7 +151,7 @@ export class CanvasController {
       });
 
       // Remove all completed animations from the list.
-      animationsToDelete.forEach(a => {
+      animationsToDelete.forEach((a) => {
         this._animations.splice(this._animations.indexOf(a), 1);
       });
     }
@@ -177,7 +182,9 @@ export class CanvasController {
     // Get the canvas context. Throw if null (shouldn't be on any SLIGHTLY modern
     // browser).
     const ctx = this._html.canvas.getContext("2d");
-    if (ctx == null) { throw new Error("Cannot get canvas context"); }
+    if (ctx == null) {
+      throw new Error("Cannot get canvas context");
+    }
     this.dpiRatio = calculateDpiRatio(ctx);
 
     this._html.canvas.style.width = `${this.width}px`;
@@ -242,47 +249,47 @@ function getCSS(html: Html) {
     colorOnAccent: style.getPropertyValue("--color-on-accent"),
     colorPaper20: style.getPropertyValue("--color-paper-20"),
     classColors: {
-      "red": {
+      red: {
         gradient1: style.getPropertyValue("--color-red-gradient-1"),
         gradient2: style.getPropertyValue("--color-red-gradient-2"),
         on: style.getPropertyValue("--color-on-red"),
       },
-      "orange": {
+      orange: {
         gradient1: style.getPropertyValue("--color-orange-gradient-1"),
         gradient2: style.getPropertyValue("--color-orange-gradient-2"),
         on: style.getPropertyValue("--color-on-orange"),
       },
-      "yellow": {
+      yellow: {
         gradient1: style.getPropertyValue("--color-yellow-gradient-1"),
         gradient2: style.getPropertyValue("--color-yellow-gradient-2"),
         on: style.getPropertyValue("--color-on-yellow"),
       },
-      "green": {
+      green: {
         gradient1: style.getPropertyValue("--color-green-gradient-1"),
         gradient2: style.getPropertyValue("--color-green-gradient-2"),
         on: style.getPropertyValue("--color-on-green"),
       },
-      "cyan": {
+      cyan: {
         gradient1: style.getPropertyValue("--color-cyan-gradient-1"),
         gradient2: style.getPropertyValue("--color-cyan-gradient-2"),
         on: style.getPropertyValue("--color-on-cyan"),
       },
-      "blue": {
+      blue: {
         gradient1: style.getPropertyValue("--color-blue-gradient-1"),
         gradient2: style.getPropertyValue("--color-blue-gradient-2"),
         on: style.getPropertyValue("--color-on-blue"),
       },
-      "purple": {
+      purple: {
         gradient1: style.getPropertyValue("--color-purple-gradient-1"),
         gradient2: style.getPropertyValue("--color-purple-gradient-2"),
         on: style.getPropertyValue("--color-on-purple"),
       },
-      "pink": {
+      pink: {
         gradient1: style.getPropertyValue("--color-pink-gradient-1"),
         gradient2: style.getPropertyValue("--color-pink-gradient-2"),
         on: style.getPropertyValue("--color-on-pink"),
       },
-    }
+    },
   };
 }
 
@@ -295,4 +302,4 @@ function calculateDpiRatio(ctx: CanvasRenderingContext2D) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bsr = (ctx as any).backingStorePixelRatio ?? 1;
   return dpr / bsr;
-};
+}

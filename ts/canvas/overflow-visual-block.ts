@@ -26,10 +26,15 @@ export class OverflowVisualBlock extends VisualBlock {
    * @param y1 The y1-coordinate (start time).
    * @param x The y2-coordinate (end time).
    */
-  constructor(canvas: CanvasController, gridlines: GridlinesRenderer,
-    timetableClass: TimetableClass, block: TimetableBlock, x: number,
-    y1: number, y2: number) {
-
+  constructor(
+    canvas: CanvasController,
+    gridlines: GridlinesRenderer,
+    timetableClass: TimetableClass,
+    block: TimetableBlock,
+    x: number,
+    y1: number,
+    y2: number
+  ) {
     super(canvas, gridlines, timetableClass, block);
 
     this.x = x;
@@ -43,11 +48,18 @@ export class OverflowVisualBlock extends VisualBlock {
    */
   draw(ctx: CanvasRenderingContext2D) {
     const { blockX1, blockY1, blockX2, blockY2 } = this.dimensions(
-      this.x, this.y1, this.y2
+      this.x,
+      this.y1,
+      this.y2
     );
 
     drawRoundedRect(
-      ctx, blockX1, blockY1, blockX2, blockY2, rem(0.5),
+      ctx,
+      blockX1,
+      blockY1,
+      blockX2,
+      blockY2,
+      rem(0.5),
       this._canvas.css.colorInk30
     );
   }

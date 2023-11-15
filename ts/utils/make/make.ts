@@ -2,13 +2,14 @@
 export type DynamicCollection<T> = (T | undefined)[];
 
 /** An element and it's children, forming a tree. */
-export type ElementTree<T extends Element, K> = K & { $element: T; };
+export type ElementTree<T extends Element, K> = K & { $element: T };
 
 /**
  * A object containing named element trees for an element's children, or named
  * arrays of element trees.
  */
-export type ElementCollection = Record<string,
+export type ElementCollection = Record<
+  string,
   ElementTree<Element, unknown> | ElementTree<Element, unknown>[]
 >;
 
@@ -19,7 +20,11 @@ export type ElementCollection = Record<string,
  * @param ifTrue Value used if the condition is true.
  * @param ifFalse Value used if the condition is false.
  */
-export function maybe<T>(condition: boolean, ifTrue: T, ifFalse?: T): T | undefined {
+export function maybe<T>(
+  condition: boolean,
+  ifTrue: T,
+  ifFalse?: T
+): T | undefined {
   return condition ? ifTrue : ifFalse;
 }
 
@@ -29,8 +34,10 @@ export function maybe<T>(condition: boolean, ifTrue: T, ifFalse?: T): T | undefi
  * @param array The array.
  */
 export function retrieve<T>(array: DynamicCollection<T> | undefined): T[] {
-  if (array == null) { return []; }
-  return array.filter(x => x != null) as T[];
+  if (array == null) {
+    return [];
+  }
+  return array.filter((x) => x != null) as T[];
 }
 
 /**
@@ -50,9 +57,10 @@ export function ifDefined<T>(value: T | undefined, func: (value: T) => void) {
  * @param array The array.
  * @param func The function to run.
  */
-export function withDefined<T>(array: DynamicCollection<T> | undefined,
-  func: (value: T[]) => void) {
-
+export function withDefined<T>(
+  array: DynamicCollection<T> | undefined,
+  func: (value: T[]) => void
+) {
   const actuals = retrieve(array);
   if (actuals.length > 0) {
     func(actuals);
@@ -65,16 +73,18 @@ export function withDefined<T>(array: DynamicCollection<T> | undefined,
  * @param array The array (may contain `undefined`s).
  * @param builder The function to transform to values to elements.
  */
-export function elementArray<T, K>(array: DynamicCollection<T>,
-  builder: (value: T) => K): K[] {
-  return retrieve(array).map(x => builder(x));
+export function elementArray<T, K>(
+  array: DynamicCollection<T>,
+  builder: (value: T) => K
+): K[] {
+  return retrieve(array).map((x) => builder(x));
 }
 
 /** The possible configuration for a HTMLElement. */
 export type ElementAttributes = {
   id?: string;
   classes?: DynamicCollection<string>;
-}
+};
 
 /**
  * Constructs a html element with the given tag and configures it with the given
@@ -85,20 +95,20 @@ export type ElementAttributes = {
  * @param children The children to append and return.
  */
 export function element<
-  Tag extends keyof HTMLElementTagNameMap, Children extends ElementCollection
+  Tag extends keyof HTMLElementTagNameMap,
+  Children extends ElementCollection
 >(
   tag: Tag,
   attributes: ElementAttributes,
   children: Children
 ): ElementTree<HTMLElementTagNameMap[Tag], Children> {
-
   const element = document.createElement(tag);
 
   // Set the element ID if provided.
-  ifDefined(attributes.id, x => element.id = x);
+  ifDefined(attributes.id, (x) => (element.id = x));
 
   // Add each class provided.
-  withDefined(attributes.classes, x => element.classList.add(...x));
+  withDefined(attributes.classes, (x) => element.classList.add(...x));
 
   // Add each child element provided.
   if (children != null) {
@@ -108,7 +118,7 @@ export function element<
   // Return this element, as well as any children.
   return {
     $element: element,
-    ...children
+    ...children,
   };
 }
 
@@ -127,12 +137,15 @@ function isElementTree(value: unknown): value is ElementTree<Element, unknown> {
  */
 export function getChildrenArray(collection: ElementCollection): Element[] {
   return Object.keys(collection)
-    .filter(k => k != "$element")
-    .filter(k => collection[k] != null)
-    .map(k => {
+    .filter((k) => k != "$element")
+    .filter((k) => collection[k] != null)
+    .map((k) => {
       const value = collection[k];
-      if (isElementTree(value)) { return [value.$element]; }
-      else { return value.map(x => x.$element); }
+      if (isElementTree(value)) {
+        return [value.$element];
+      } else {
+        return value.map((x) => x.$element);
+      }
     })
     .flat();
 }
@@ -142,15 +155,22 @@ export function getChildrenArray(collection: ElementCollection): Element[] {
  * nested children.
  * @param collection The element collection.
  */
-export function getChildrenArrayRecursive(collection: ElementCollection): Element[] {
+export function getChildrenArrayRecursive(
+  collection: ElementCollection
+): Element[] {
   return Object.keys(collection)
-    .filter(k => k != "$element")
-    .filter(k => collection[k] != null)
-    .map(k => {
+    .filter((k) => k != "$element")
+    .filter((k) => collection[k] != null)
+    .map((k) => {
       const value = collection[k];
-      const inner = getChildrenArrayRecursive(value as unknown as ElementCollection);
-      if (isElementTree(value)) { return [value.$element, ...inner]; }
-      else { return [...value.map(x => x.$element), ...inner]; }
+      const inner = getChildrenArrayRecursive(
+        value as unknown as ElementCollection
+      );
+      if (isElementTree(value)) {
+        return [value.$element, ...inner];
+      } else {
+        return [...value.map((x) => x.$element), ...inner];
+      }
     })
     .flat();
 }

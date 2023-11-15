@@ -23,9 +23,11 @@ export class TimetableError extends Error {
    * be null if the error is not the fault of the user (and therefore no user
    * friendly string needed).
    */
-  constructor(message: string, editClassUIMessage: string | null,
-    importMessage: string | null) {
-
+  constructor(
+    message: string,
+    editClassUIMessage: string | null,
+    importMessage: string | null
+  ) {
     super(message);
     this.name = "TimetableError";
     this.editClassUIMessage = editClassUIMessage;
@@ -34,10 +36,12 @@ export class TimetableError extends Error {
 
   /** Returns true if the given object is a {@link TimetableError}. */
   static detect(obj: unknown): obj is TimetableError {
-    return typeof obj == "object"
-      && obj != null
-      && "name" in obj
-      && (obj as TimetableError).name == "TimetableError";
+    return (
+      typeof obj == "object" &&
+      obj != null &&
+      "name" in obj &&
+      (obj as TimetableError).name == "TimetableError"
+    );
   }
 
   /** A class's name cannot be empty. */
@@ -81,7 +85,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `An option cannot have no time blocks`,
       null,
-      `An option cannot have no time blocks`,
+      `An option cannot have no time blocks`
     );
   }
 
@@ -90,7 +94,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `An option cannot have duplicate time blocks`,
       null,
-      `An option cannot have duplicate time blocks`,
+      `An option cannot have duplicate time blocks`
     );
   }
 
@@ -99,7 +103,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `An option clashes with itself`,
       null,
-      `An option clashes with itself`,
+      `An option clashes with itself`
     );
   }
 
@@ -108,7 +112,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `A class cannot have no timeslot options`,
       "You must add at least one option",
-      `A class cannot have no timeslot options`,
+      `A class cannot have no timeslot options`
     );
   }
 
@@ -117,7 +121,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `A class cannot have duplicate options`,
       null,
-      `A class cannot have duplicate options`,
+      `A class cannot have duplicate options`
     );
   }
 
@@ -126,7 +130,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `A timetable cannot have duplicate classes`,
       "This class is identical to one already on the timetable",
-      `A timetable cannot have duplicate classes`,
+      `A timetable cannot have duplicate classes`
     );
   }
 
@@ -135,7 +139,7 @@ export class TimetableError extends Error {
     return new TimetableError(
       `"${val}" is not a valid time block`,
       null,
-      `"${val}" is not a valid time block`,
+      `"${val}" is not a valid time block`
     );
   }
 
@@ -145,7 +149,7 @@ export class TimetableError extends Error {
   static classesChoicesMismatch(): TimetableError {
     return new TimetableError(
       `The classes in the choices array do not match the classes in the ` +
-      `timetable`,
+        `timetable`,
       null,
       null
     );

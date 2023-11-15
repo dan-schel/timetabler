@@ -6,7 +6,9 @@ import { element, ElementAttributes, ElementCollection } from "./make";
  * @param children Children to append to the element and return.
  */
 export function div<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("div", attributes, children);
 }
 
@@ -16,7 +18,9 @@ export function div<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function section<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("section", attributes, children);
 }
 
@@ -26,7 +30,9 @@ export function section<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function main<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("main", attributes, children);
 }
 
@@ -36,7 +42,9 @@ export function main<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function header<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("header", attributes, children);
 }
 
@@ -46,7 +54,9 @@ export function header<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function footer<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("footer", attributes, children);
 }
 
@@ -56,7 +66,9 @@ export function footer<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function nav<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("nav", attributes, children);
 }
 
@@ -66,7 +78,9 @@ export function nav<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function aside<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("aside", attributes, children);
 }
 
@@ -76,6 +90,8 @@ export function aside<K extends ElementCollection>(
  * @param children Children to append to the element and return.
  */
 export function dialog<K extends ElementCollection>(
-  attributes: ElementAttributes, children: K) {
+  attributes: ElementAttributes,
+  children: K
+) {
   return element("dialog", attributes, children);
 }

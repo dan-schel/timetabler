@@ -6,7 +6,9 @@ import dialogPolyfill from "dialog-polyfill";
  */
 export function any(id: string): HTMLElement {
   const result = document.getElementById(id);
-  if (result != null) { return result; }
+  if (result != null) {
+    return result;
+  }
   throw new Error(`Element with id "#${id}" not found.`);
 }
 
@@ -17,11 +19,15 @@ export function any(id: string): HTMLElement {
  * @param typeName The name of the type (for the error message).
  * @param typeChecker Function which checks the type of the element.
  */
-function elementOfType<T extends HTMLElement>(id: string, typeName: string,
-  typeChecker: (val: HTMLElement) => val is T): T {
-
+function elementOfType<T extends HTMLElement>(
+  id: string,
+  typeName: string,
+  typeChecker: (val: HTMLElement) => val is T
+): T {
   const result = any(id);
-  if (typeChecker(result)) { return result as T; }
+  if (typeChecker(result)) {
+    return result as T;
+  }
   throw new Error(`Element with id "#${id}" is not a "${typeName}".`);
 }
 
@@ -32,7 +38,9 @@ function elementOfType<T extends HTMLElement>(id: string, typeName: string,
  */
 export function div(id: string): HTMLDivElement {
   return elementOfType<HTMLDivElement>(
-    id, "HTMLDivElement", (x): x is HTMLDivElement => x instanceof HTMLDivElement
+    id,
+    "HTMLDivElement",
+    (x): x is HTMLDivElement => x instanceof HTMLDivElement
   );
 }
 
@@ -43,7 +51,9 @@ export function div(id: string): HTMLDivElement {
  */
 export function anchor(id: string): HTMLAnchorElement {
   return elementOfType<HTMLAnchorElement>(
-    id, "HTMLAnchorElement", (x): x is HTMLAnchorElement => x instanceof HTMLAnchorElement
+    id,
+    "HTMLAnchorElement",
+    (x): x is HTMLAnchorElement => x instanceof HTMLAnchorElement
   );
 }
 
@@ -54,7 +64,9 @@ export function anchor(id: string): HTMLAnchorElement {
  */
 export function input(id: string): HTMLInputElement {
   return elementOfType<HTMLInputElement>(
-    id, "HTMLInputElement", (x): x is HTMLInputElement => x instanceof HTMLInputElement
+    id,
+    "HTMLInputElement",
+    (x): x is HTMLInputElement => x instanceof HTMLInputElement
   );
 }
 
@@ -65,7 +77,9 @@ export function input(id: string): HTMLInputElement {
  */
 export function button(id: string): HTMLButtonElement {
   return elementOfType<HTMLButtonElement>(
-    id, "HTMLButtonElement", (x): x is HTMLButtonElement => x instanceof HTMLButtonElement
+    id,
+    "HTMLButtonElement",
+    (x): x is HTMLButtonElement => x instanceof HTMLButtonElement
   );
 }
 
@@ -76,7 +90,9 @@ export function button(id: string): HTMLButtonElement {
  */
 export function select(id: string): HTMLSelectElement {
   return elementOfType<HTMLSelectElement>(
-    id, "HTMLSelectElement", (x): x is HTMLSelectElement => x instanceof HTMLSelectElement
+    id,
+    "HTMLSelectElement",
+    (x): x is HTMLSelectElement => x instanceof HTMLSelectElement
   );
 }
 
@@ -87,7 +103,9 @@ export function select(id: string): HTMLSelectElement {
  */
 export function canvas(id: string): HTMLCanvasElement {
   return elementOfType<HTMLCanvasElement>(
-    id, "HTMLCanvasElement", (x): x is HTMLCanvasElement => x instanceof HTMLCanvasElement
+    id,
+    "HTMLCanvasElement",
+    (x): x is HTMLCanvasElement => x instanceof HTMLCanvasElement
   );
 }
 
@@ -98,12 +116,14 @@ export function canvas(id: string): HTMLCanvasElement {
  */
 export function dialog(id: string): HTMLDialogElement {
   const dialog = elementOfType<HTMLDialogElement>(
-    id, "HTMLDialogElement",
+    id,
+    "HTMLDialogElement",
 
     // If window.HTMLDialogElement is false, then the dialog element is not
     // supported (but the polyfill will add support any, so allow it).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (x): x is HTMLDialogElement => !window.HTMLDialogElement || (x as any).showModal
+    (x): x is HTMLDialogElement =>
+      !window.HTMLDialogElement || (x as any).showModal
   );
 
   dialogPolyfill.registerDialog(dialog);

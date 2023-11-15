@@ -17,7 +17,7 @@ export function download(content: string, filename: string) {
 
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
-};
+}
 
 /**
  * Triggers an open file dialog to be created, and passes the content of the
@@ -26,7 +26,10 @@ export function download(content: string, filename: string) {
  * @param extension The file extension including the dot, e.g. ".txt".
  * @param callback The function to call with the file content.
  */
-export function openFileDialog(extension: string, callback: (content: string) => void) {
+export function openFileDialog(
+  extension: string,
+  callback: (content: string) => void
+) {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = extension;
