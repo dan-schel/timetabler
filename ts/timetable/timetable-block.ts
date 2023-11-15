@@ -1,4 +1,4 @@
-import { parseIntNull } from "schel-d-utils";
+import { parseIntNull } from "@schel-d/js-utils";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
 import { TimetableError } from "./timetable-error";
@@ -25,13 +25,20 @@ export class TimetableBlock {
    * min - 24 hrs.
    * @param online True, if this time block is completed online.
    */
-  constructor(dayOfWeek: DayOfWeek, startTime: LocalTime, durationMins: number,
-    online: boolean) {
-
+  constructor(
+    dayOfWeek: DayOfWeek,
+    startTime: LocalTime,
+    durationMins: number,
+    online: boolean
+  ) {
     if (startTime.isNextDay) {
       throw TimetableError.blockBadStartTime(startTime);
     }
-    if (!Number.isInteger(durationMins) || durationMins < 1 || durationMins > 24 * 60) {
+    if (
+      !Number.isInteger(durationMins) ||
+      durationMins < 1 ||
+      durationMins > 24 * 60
+    ) {
       throw TimetableError.badDuration(durationMins);
     }
 
@@ -54,10 +61,12 @@ export class TimetableBlock {
    * @param other The other object.
    */
   equals(other: TimetableBlock) {
-    return this.dayOfWeek.equals(other.dayOfWeek)
-      && this.startTime.equals(other.startTime)
-      && this.durationMins === other.durationMins
-      && this.online === other.online;
+    return (
+      this.dayOfWeek.equals(other.dayOfWeek) &&
+      this.startTime.equals(other.startTime) &&
+      this.durationMins === other.durationMins &&
+      this.online === other.online
+    );
   }
 
   /**
@@ -66,23 +75,40 @@ export class TimetableBlock {
    * @param value The string, e.g. "mon 13:00 2h online" or "fri 9:30 90m".
    */
   static tryFromString(value: string): TimetableBlock | null {
-    const bits = value.trim().split(" ").filter(s => s.length != 0);
-    if (bits.length != 3 && bits.length != 4) { return null; }
+    const bits = value
+      .trim()
+      .split(" ")
+      .filter((s) => s.length != 0);
+    if (bits.length != 3 && bits.length != 4) {
+      return null;
+    }
 
     const dayOfWeek = DayOfWeek.tryFromCodeName(bits[0]);
-    if (dayOfWeek == null) { return null; }
+    if (dayOfWeek == null) {
+      return null;
+    }
 
     const startTime = LocalTime.tryParse(bits[1]);
-    if (startTime == null) { return null; }
+    if (startTime == null) {
+      return null;
+    }
 
     const durationStr = bits[2];
-    const durationNum = parseIntNull(durationStr.substring(0, durationStr.length - 1));
-    if (durationNum == null) { return null; }
-    const durationMins = durationStr.endsWith("h") ? durationNum * 60 : durationNum;
+    const durationNum = parseIntNull(
+      durationStr.substring(0, durationStr.length - 1)
+    );
+    if (durationNum == null) {
+      return null;
+    }
+    const durationMins = durationStr.endsWith("h")
+      ? durationNum * 60
+      : durationNum;
 
     let online = false;
     if (bits.length == 4) {
-      if (bits[3] != "online") { return null; }
+      if (bits[3] != "online") {
+        return null;
+      }
       online = true;
     }
 
@@ -96,7 +122,9 @@ export class TimetableBlock {
    */
   static fromString(value: string): TimetableBlock {
     const block = TimetableBlock.tryFromString(value);
-    if (block == null) { throw TimetableError.badBlockString(value); }
+    if (block == null) {
+      throw TimetableError.badBlockString(value);
+    }
     return block;
   }
 
@@ -118,9 +146,10 @@ export class TimetableBlock {
     const time = this.startTime.toString(false);
 
     // Use hours for duration if possible.
-    const duration = this.durationMins % 60 == 0
-      ? `${this.durationMins / 60}h`
-      : `${this.durationMins}m`;
+    const duration =
+      this.durationMins % 60 == 0
+        ? `${this.durationMins / 60}h`
+        : `${this.durationMins}m`;
 
     return this.online
       ? `${dow} ${time} ${duration} online`
@@ -150,11 +179,15 @@ export class TimetableBlock {
     })();
 
     const onlineSuffix = this.online
-      ? (includeDuration ? " (online)" : " online")
+      ? includeDuration
+        ? " (online)"
+        : " online"
       : "";
 
-    return `${dow} ${this.startTime.to12HString()}`
-      + `${includeDuration ? (" " + duration) : ""}${onlineSuffix}`;
+    return (
+      `${dow} ${this.startTime.to12HString()}` +
+      `${includeDuration ? " " + duration : ""}${onlineSuffix}`
+    );
   }
 
   /**
@@ -164,9 +197,12 @@ export class TimetableBlock {
    */
   clashesWith(other: TimetableBlock): boolean {
     // They don't overlap if one starts before the other ends.
-    const rangesOverlap =
-      (aStart: number, aEnd: number, bStart: number, bEnd: number) =>
-        !(aEnd <= bStart || bEnd <= aStart);
+    const rangesOverlap = (
+      aStart: number,
+      aEnd: number,
+      bStart: number,
+      bEnd: number
+    ) => !(aEnd <= bStart || bEnd <= aStart);
 
     if (this.dayOfWeek.equals(other.dayOfWeek)) {
       return rangesOverlap(

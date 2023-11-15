@@ -35,15 +35,15 @@
   },
   "homepage": "https://github.com/schel-d/timetabler#readme",
   "dependencies": {
+    "@schel-d/js-utils": "^2.0.0",
     "concurrently": "^7.5.0",
     "copyfiles": "^2.4.1",
+    "dialog-polyfill": "^0.5.6",
     "esbuild": "^0.15.12",
     "onchange": "^7.1.0",
     "pug": "^3.0.2",
     "rimraf": "^3.0.2",
     "sass": "^1.56.2",
-    "schel-d-utils": "^2.8.0",
-    "schel-d-utils-browser": "^2.1.6",
     "typescript": "^4.8.4",
     "zod": "^3.19.1"
   },

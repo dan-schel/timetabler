@@ -1,4 +1,4 @@
-import { areUnique, arraysMatch } from "schel-d-utils";
+import { areUnique, arraysMatch } from "@schel-d/js-utils";
 import { z } from "zod";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
@@ -11,24 +11,28 @@ export class TimetableOption {
   readonly blocks: readonly TimetableBlock[];
 
   /** Zod schema for parsing from JSON. */
-  static readonly json = z.union([
-    z.string()
-      .refine(s => TimetableBlock.isValidString(s), {
-        message: "Time blocks should be in the format \"day time duration " +
-          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
-      })
-      .transform(s => [TimetableBlock.fromString(s)]),
-    z.string()
-      .refine(s => TimetableBlock.isValidString(s), {
-        message: "Time blocks should be in the format \"day time duration " +
-          "[online]\", e.g. \"mon 13:00 2h online\" or \"fri 9:30 90m\""
-      })
-      .transform(s => TimetableBlock.fromString(s))
-      .array()
-      .min(1)
-  ]).transform(x =>
-    new TimetableOption(x)
-  );
+  static readonly json = z
+    .union([
+      z
+        .string()
+        .refine((s) => TimetableBlock.isValidString(s), {
+          message:
+            'Time blocks should be in the format "day time duration ' +
+            '[online]", e.g. "mon 13:00 2h online" or "fri 9:30 90m"',
+        })
+        .transform((s) => [TimetableBlock.fromString(s)]),
+      z
+        .string()
+        .refine((s) => TimetableBlock.isValidString(s), {
+          message:
+            'Time blocks should be in the format "day time duration ' +
+            '[online]", e.g. "mon 13:00 2h online" or "fri 9:30 90m"',
+        })
+        .transform((s) => TimetableBlock.fromString(s))
+        .array()
+        .min(1),
+    ])
+    .transform((x) => new TimetableOption(x));
 
   /**
    * Creates a {@link TimetableOption}.
@@ -46,7 +50,11 @@ export class TimetableOption {
     }
 
     // Blocks within the same option cannot clash.
-    if (blocks.some(b1 => blocks.some(b2 => !b1.equals(b2) && b1.clashesWith(b2)))) {
+    if (
+      blocks.some((b1) =>
+        blocks.some((b2) => !b1.equals(b2) && b1.clashesWith(b2))
+      )
+    ) {
       throw TimetableError.optionInternalClash();
     }
 
@@ -71,7 +79,7 @@ export class TimetableOption {
     // array of strings.
     return this.blocks.length == 1
       ? this.blocks[0].toString()
-      : this.blocks.map(b => b.toString());
+      : this.blocks.map((b) => b.toString());
   }
 
   /**
@@ -79,7 +87,7 @@ export class TimetableOption {
    * string returned doesn't include the durations of the blocks.
    */
   toDisplayString(): string {
-    return this.blocks.map(b => b.toDisplayString(false)).join(" & ");
+    return this.blocks.map((b) => b.toDisplayString(false)).join(" & ");
   }
 
   /**
@@ -88,17 +96,20 @@ export class TimetableOption {
    * next day. The time passed here should have the next day flag set.
    */
   hasWeekendBlocks(daySplitTime: LocalTime): boolean {
-    return this.blocks.some(b => b.dayOfWeek.isWeekend ||
-      (b.dayOfWeek.equals(DayOfWeek.fri) && b.endTime.isAfter(daySplitTime)));
+    return this.blocks.some(
+      (b) =>
+        b.dayOfWeek.isWeekend ||
+        (b.dayOfWeek.equals(DayOfWeek.fri) && b.endTime.isAfter(daySplitTime))
+    );
   }
 
   /** Returns the time the earliest block in this option starts. */
   earliestStartTime(): LocalTime {
-    return LocalTime.earliest(...this.blocks.map(x => x.startTime));
+    return LocalTime.earliest(...this.blocks.map((x) => x.startTime));
   }
 
   /** Returns the time the latest block in this option ends. */
   latestEndTime(): LocalTime {
-    return LocalTime.latest(...this.blocks.map(x => x.endTime));
+    return LocalTime.latest(...this.blocks.map((x) => x.endTime));
   }
 }
