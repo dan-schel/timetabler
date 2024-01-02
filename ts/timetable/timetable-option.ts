@@ -77,7 +77,7 @@ export class TimetableOption {
   toJSON(): z.input<typeof TimetableOption.json> {
     // If there's just one block output the single string, otherwise output the
     // array of strings.
-    return this.blocks.length == 1
+    return this.blocks.length === 1
       ? this.blocks[0].toString()
       : this.blocks.map((b) => b.toString());
   }

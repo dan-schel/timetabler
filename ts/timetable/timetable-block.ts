@@ -78,8 +78,8 @@ export class TimetableBlock {
     const bits = value
       .trim()
       .split(" ")
-      .filter((s) => s.length != 0);
-    if (bits.length != 3 && bits.length != 4) {
+      .filter((s) => s.length !== 0);
+    if (bits.length !== 3 && bits.length !== 4) {
       return null;
     }
 
@@ -105,8 +105,8 @@ export class TimetableBlock {
       : durationNum;
 
     let online = false;
-    if (bits.length == 4) {
-      if (bits[3] != "online") {
+    if (bits.length === 4) {
+      if (bits[3] !== "online") {
         return null;
       }
       online = true;
@@ -147,7 +147,7 @@ export class TimetableBlock {
 
     // Use hours for duration if possible.
     const duration =
-      this.durationMins % 60 == 0
+      this.durationMins % 60 === 0
         ? `${this.durationMins / 60}h`
         : `${this.durationMins}m`;
 
@@ -169,11 +169,11 @@ export class TimetableBlock {
     const hrs = Math.floor(this.durationMins / 60);
     const mins = this.durationMins % 60;
     const duration = (() => {
-      if (hrs == 0) {
-        return `${mins}${mins == 1 ? "min" : "mins"}`;
+      if (hrs === 0) {
+        return `${mins}${mins === 1 ? "min" : "mins"}`;
       }
-      if (mins == 0) {
-        return `${hrs}${hrs == 1 ? "hr" : "hrs"}`;
+      if (mins === 0) {
+        return `${hrs}${hrs === 1 ? "hr" : "hrs"}`;
       }
       return `${hrs}h${mins}m`;
     })();

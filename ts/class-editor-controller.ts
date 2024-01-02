@@ -143,7 +143,7 @@ export class ClassEditorController {
       this._html.classEditor.nameInput.value = existingClass.name;
       this._html.classEditor.typeInput.value = existingClass.type;
       this._colorRadios.forEach((r) => {
-        r.$radio.checked = existingClass.color == r.color;
+        r.$radio.checked = existingClass.color === r.color;
       });
       this._html.classEditor.optionalSwitchInput.checked =
         existingClass.optional;

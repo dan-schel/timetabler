@@ -212,7 +212,7 @@ export class CanvasController {
    */
   cancelAnimation(animation: Animation) {
     const index = this._animations.indexOf(animation);
-    if (index == -1) {
+    if (index === -1) {
       throw new Error("Couldn't find that animation to cancel.");
     }
     this._animations.splice(index, 1);

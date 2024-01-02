@@ -36,7 +36,7 @@ export class DropdownCoordinator {
         return;
       }
 
-      if (e.code == "Escape") {
+      if (e.code === "Escape") {
         this.close();
         e.preventDefault();
       }
@@ -53,7 +53,7 @@ export class DropdownCoordinator {
    * @param div The dropdown to check.
    */
   isOpen(div: HTMLDivElement) {
-    return this._current?.$dropdown == div;
+    return this._current?.$dropdown === div;
   }
 
   /**

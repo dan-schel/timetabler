@@ -143,7 +143,7 @@ export class ControlsController {
       // Add the "non-empty" class to the controls (hides the startup message).
       this._html.controls.classList.toggle(
         "non-empty",
-        timetable.timetable.classes.length != 0
+        timetable.timetable.classes.length !== 0
       );
 
       this._classUIs = timetable.timetable.classes.map((cl) => {
