@@ -102,7 +102,7 @@
             var count = errors.length;
             for (let i = count - 1; i >= 0 && i >= count - maxErrors; i--) {
               // Add a gap between this error and the last one.
-              if (i != errors.length - 1) {
+              if (i !== errors.length - 1) {
                 errorLogElement.innerHTML += "<br><br>";
               }
 
