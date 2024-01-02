@@ -147,7 +147,7 @@ export class LocalTime {
    * @param value The string, e.g. ">2:04" or "15:28".
    */
   static parseWithMarker(value: string): LocalTime {
-    return this.parse(value.replace(">", ""), value.charAt(0) == ">");
+    return this.parse(value.replace(">", ""), value.charAt(0) === ">");
   }
 
   /**
@@ -216,7 +216,7 @@ export class LocalTime {
    * @param other The other.
    */
   equals(other: LocalTime): boolean {
-    return this.minuteOfDay == other.minuteOfDay;
+    return this.minuteOfDay === other.minuteOfDay;
   }
 
   /**
@@ -248,7 +248,7 @@ export class LocalTime {
    * minute component is already 0).
    */
   endOfHour(): LocalTime {
-    if (this.minute == 0) {
+    if (this.minute === 0) {
       return this;
     }
     return LocalTime.fromHour48(this.hour48 + 1, 0);

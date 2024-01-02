@@ -37,10 +37,10 @@ export class TimetableError extends Error {
   /** Returns true if the given object is a {@link TimetableError}. */
   static detect(obj: unknown): obj is TimetableError {
     return (
-      typeof obj == "object" &&
+      typeof obj === "object" &&
       obj != null &&
       "name" in obj &&
-      (obj as TimetableError).name == "TimetableError"
+      (obj as TimetableError).name === "TimetableError"
     );
   }
 

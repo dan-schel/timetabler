@@ -186,13 +186,13 @@ export class BlocksRenderer {
     // will be required. Work out where the end of the first block should
     // go.
     const firstBlockEnd =
-      start.x == end.x
+      start.x === end.x
         ? end.y
         : this._gridlines.endHour - this._gridlines.startHour;
 
     // Work out where the overflow block should go (if appropriate).
     let overflow = null;
-    if (start.x != end.x) {
+    if (start.x !== end.x) {
       overflow = { x: end.x, y1: 0, y2: end.y };
     }
 
@@ -214,7 +214,7 @@ export class BlocksRenderer {
       const block = this._primaryBlocks[i];
 
       // We'll render the dragging block later (so it's on top).
-      if (block != this._draggingBlock) {
+      if (block !== this._draggingBlock) {
         block.draw(ctx);
       }
     }

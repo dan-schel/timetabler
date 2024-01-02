@@ -147,11 +147,17 @@ export class TimetableClass {
   /** Returns a three-letter abbreviation suiting the class name. */
   getAbbreviatedName(): string {
     const bits = this.name.toUpperCase().split(" ");
-    if (bits.length == 1) {
+    if (bits.length === 1) {
       if (bits[0].length < 4) {
         return bits[0];
       }
-      return bits[0].replace(/[AEIOU]/g, "").slice(0, 3);
+      return (
+        bits[0][0] +
+        bits[0]
+          .slice(1)
+          .replace(/[AEIOU]/g, "")
+          .slice(0, 2)
+      );
     }
     return bits
       .map((x) => x[0])

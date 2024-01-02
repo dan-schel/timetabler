@@ -121,8 +121,8 @@ export function dialog(id: string): HTMLDialogElement {
 
     // If window.HTMLDialogElement is false, then the dialog element is not
     // supported (but the polyfill will add support any, so allow it).
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (x): x is HTMLDialogElement =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       !window.HTMLDialogElement || (x as any).showModal
   );
 

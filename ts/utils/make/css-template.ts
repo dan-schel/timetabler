@@ -63,7 +63,7 @@ export function select<K extends ElementCollection>(
  */
 export type PickerGroupAttributes = ElementAttributes & {
   radioName?: string;
-  autocomplete?: string;
+  autocomplete?: "off";
 };
 
 /**
@@ -79,7 +79,7 @@ export function pickerGroup<K extends ElementCollection>(
   // if none provided.
   const radioName = attributes.radioName ?? uuid();
   getChildrenArrayRecursive(children)
-    .filter((x) => x instanceof HTMLInputElement && x.type == "radio")
+    .filter((x) => x instanceof HTMLInputElement && x.type === "radio")
     .forEach((x) => {
       const radio = x as HTMLInputElement;
       radio.name = radioName;

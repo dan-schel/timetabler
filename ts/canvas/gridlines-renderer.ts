@@ -140,7 +140,7 @@ export class GridlinesRenderer {
       const dayIndex = this.days.findIndex((d) =>
         d.equals(dayOfWeek.yesterday())
       );
-      if (dayIndex == -1) {
+      if (dayIndex === -1) {
         return null;
       }
       return {
@@ -158,7 +158,7 @@ export class GridlinesRenderer {
       const dayIndex = this.days.findIndex((d) =>
         d.equals(dayOfWeek.tomorrow())
       );
-      if (dayIndex == -1) {
+      if (dayIndex === -1) {
         return null;
       }
       return {
@@ -169,7 +169,7 @@ export class GridlinesRenderer {
 
     // Otherwise, show it on today's column.
     const dayIndex = this.days.findIndex((d) => d.equals(dayOfWeek));
-    if (dayIndex == -1) {
+    if (dayIndex === -1) {
       return null;
     }
     return { x: dayIndex, y: time.fractionalHour48 - this.startHour };
@@ -225,7 +225,7 @@ export class GridlinesRenderer {
       drawText(ctx, text, textX, textY, 0.75, null, colorInk80);
 
       // Draw the horizontal lines for each hour.
-      if (i != 0) {
+      if (i !== 0) {
         const hourDividerY = y1 + hourHeight * i;
         drawLine(ctx, x1, hourDividerY, x2, hourDividerY, colorInk10, 2);
       }

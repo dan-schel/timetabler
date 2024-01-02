@@ -15,7 +15,7 @@ export class Timetable {
   /** Zod schema for parsing from JSON. */
   static readonly json = z
     .object({
-      version: z.string().refine((s) => s == version),
+      version: z.string().refine((s) => s === version),
       classes: TimetableClass.json.array(),
     })
     .transform((x) => new Timetable(x.classes));

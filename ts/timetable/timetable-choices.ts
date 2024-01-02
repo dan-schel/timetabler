@@ -26,7 +26,7 @@ export class TimetableChoices {
   /** Zod schema for parsing from JSON. */
   static readonly json = z
     .object({
-      version: z.string().refine((s) => s == version, {
+      version: z.string().refine((s) => s === version, {
         message: `Only version '${version}' timetables are supported`,
       }),
       classes: TimetableClass.json.array(),
@@ -87,7 +87,7 @@ export class TimetableChoices {
       );
     }
 
-    if (indices.length != timetable.classes.length) {
+    if (indices.length !== timetable.classes.length) {
       throw TimetableError.badChoiceArrayLength();
     }
 
@@ -106,7 +106,7 @@ export class TimetableChoices {
       // Create the array by finding the index of each option in each class,
       // in the order the classes are in the timetable.
       choices = this.timetable.classes.map((cl) => {
-        const choice = this.choices.find((ch) => ch.timetableClass == cl);
+        const choice = this.choices.find((ch) => ch.timetableClass === cl);
 
         // Wont happen. The constructor ensures all classes have choices.
         if (choice == null) {
@@ -141,7 +141,7 @@ export class TimetableChoices {
   ): TimetableChoices {
     const choices = this.choices.map((ch) => {
       // If this is the class to modify, change the option.
-      if (ch.timetableClass == timetableClass) {
+      if (ch.timetableClass === timetableClass) {
         return new TimetableChoice(timetableClass, option);
       }
 
@@ -221,7 +221,7 @@ export class TimetableChoices {
         this.choices.some((other) => {
           // We only want to compare with other choices in the list (so skip
           // this one) that have options chosen (so skip nulls).
-          if (other == ch || other.option == null) {
+          if (other === ch || other.option == null) {
             return false;
           }
 

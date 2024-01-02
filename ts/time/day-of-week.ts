@@ -63,7 +63,7 @@ export class DayOfWeek {
    * Returns true if this day of week is either Saturday or Sunday.
    */
   get isWeekend(): boolean {
-    return this.daysSinceMonday == 5 || this.daysSinceMonday == 6;
+    return this.daysSinceMonday === 5 || this.daysSinceMonday === 6;
   }
 
   /**
@@ -92,7 +92,7 @@ export class DayOfWeek {
    * @param other The other.
    */
   equals(other: DayOfWeek): boolean {
-    return this.daysSinceMonday == other.daysSinceMonday;
+    return this.daysSinceMonday === other.daysSinceMonday;
   }
 
   /**

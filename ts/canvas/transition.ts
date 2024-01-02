@@ -59,7 +59,7 @@ export class Transition {
    * True by default (will not restart animation).
    */
   animateTo(value: number, ignoreIfSameTarget?: boolean) {
-    if (this.target == value && ignoreIfSameTarget != false) {
+    if (this.target === value && ignoreIfSameTarget !== false) {
       return;
     }
 
