@@ -1,4 +1,4 @@
-import { map } from "@schel-d/js-utils";
+import { map } from "@dan-schel/js-utils";
 import { LerpAnimation } from "./animation";
 import { CanvasController } from "./canvas-controller";
 
