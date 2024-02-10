@@ -1,4 +1,4 @@
-import { tryParseUserTimeString as timeStringUtil } from "@schel-d/js-utils";
+import { tryParseUserTimeString as timeStringUtil } from "@dan-schel/js-utils";
 import { LocalTime } from "./local-time";
 
 /**

@@ -1,4 +1,4 @@
-import { areUnique, arraysMatch } from "@schel-d/js-utils";
+import { areUnique, arraysMatch } from "@dan-schel/js-utils";
 import { z } from "zod";
 import { LocalTime } from "../time/local-time";
 import { TimetableClass } from "./timetable-class";

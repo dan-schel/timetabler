@@ -1,4 +1,4 @@
-import { hour24To12 } from "@schel-d/js-utils";
+import { hour24To12 } from "@dan-schel/js-utils";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
 import { Timetable } from "../timetable/timetable";

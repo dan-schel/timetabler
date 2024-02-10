@@ -1,4 +1,4 @@
-import { posMod } from "@schel-d/js-utils";
+import { posMod } from "@dan-schel/js-utils";
 import { TimeError } from "./time-error";
 
 const DayOfWeekNumbers = [0, 1, 2, 3, 4, 5, 6] as const;

@@ -1,4 +1,4 @@
-import { parseIntNull } from "@schel-d/js-utils";
+import { parseIntNull } from "@dan-schel/js-utils";
 import { DayOfWeek } from "../time/day-of-week";
 import { LocalTime } from "../time/local-time";
 import { TimetableError } from "./timetable-error";

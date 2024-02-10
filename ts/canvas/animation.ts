@@ -1,4 +1,4 @@
-import { mapClamp } from "@schel-d/js-utils";
+import { mapClamp } from "@dan-schel/js-utils";
 
 /** An animation running on the canvas. */
 export abstract class Animation {

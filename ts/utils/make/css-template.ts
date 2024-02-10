@@ -7,10 +7,10 @@ import {
   getChildrenArrayRecursive,
 } from "./make";
 import { checkbox, label, radio, select as formSelect } from "./form";
-import { uuid } from "@schel-d/js-utils";
+import { uuid } from "@dan-schel/js-utils";
 
 /**
- * The possible configuration for a `schel-d/css-template` compatible select
+ * The possible configuration for a `dan-schel/css-template` compatible select
  * structure.
  */
 export type SelectAttributes = {
@@ -24,7 +24,7 @@ export type SelectAttributes = {
 };
 
 /**
- * Creates a `schel-d/css-template` compatible select structure.
+ * Creates a `dan-schel/css-template` compatible select structure.
  * @param attributes Attributes to apply to the element, e.g. classes.
  * @param innerSelectChildren Children to append to the inner select element
  * (the options) and return.
@@ -59,7 +59,7 @@ export function select<K extends ElementCollection>(
 
 /**
  * The possible configuration for the group div that forms part of a
- * `schel-d/css-template` compatible picker structure.
+ * `dan-schel/css-template` compatible picker structure.
  */
 export type PickerGroupAttributes = ElementAttributes & {
   radioName?: string;
@@ -67,7 +67,7 @@ export type PickerGroupAttributes = ElementAttributes & {
 };
 
 /**
- * Creates the parent div for a `schel-d/css-template` compatible picker
+ * Creates the parent div for a `dan-schel/css-template` compatible picker
  * structure.
  * @param attributes Attributes to apply to the element, e.g. classes.
  */
@@ -91,7 +91,7 @@ export function pickerGroup<K extends ElementCollection>(
 
 /**
  * The possible configuration for a button that forms part of a
- * `schel-d/css-template` compatible picker structure.
+ * `dan-schel/css-template` compatible picker structure.
  */
 export type PickerButtonAttributes = {
   labelClass?: string;
@@ -100,7 +100,7 @@ export type PickerButtonAttributes = {
 };
 
 /**
- * Creates a button in a `schel-d/css-template` compatible picker structure.
+ * Creates a button in a `dan-schel/css-template` compatible picker structure.
  * @param attributes Attributes to apply to the element, e.g. classes.
  * @param innerChildren Children to append to the content div inside the picker
  * button.
@@ -122,7 +122,7 @@ export function pickerButton<K extends ElementCollection>(
 
 /**
  * The possible configuration for a button that forms part of a
- * `schel-d/css-template` compatible picker structure.
+ * `dan-schel/css-template` compatible picker structure.
  */
 export type SwitchAttributes = {
   wrapperID?: string;
@@ -134,7 +134,7 @@ export type SwitchAttributes = {
 };
 
 /**
- * Creates a `schel-d/css-template` compatible switch structure.
+ * Creates a `dan-schel/css-template` compatible switch structure.
  * @param attributes Attributes to apply to the element, e.g. classes.
  * @param innerChildren Children to append to the content div inside the switch.
  */

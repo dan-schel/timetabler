@@ -25,17 +25,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/schel-d/timetabler.git"
+    "url": "git+https://github.com/dan-schel/timetabler.git"
   },
   "keywords": [],
-  "author": "schel-d",
+  "author": "dan-schel",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/schel-d/timetabler/issues"
+    "url": "https://github.com/dan-schel/timetabler/issues"
   },
-  "homepage": "https://github.com/schel-d/timetabler#readme",
+  "homepage": "https://github.com/dan-schel/timetabler#readme",
   "dependencies": {
-    "@schel-d/js-utils": "^2.0.0",
+    "@dan-schel/js-utils": "^3.0.2",
     "concurrently": "^7.5.0",
     "copyfiles": "^2.4.1",
     "dialog-polyfill": "^0.5.6",

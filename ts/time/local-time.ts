@@ -1,4 +1,4 @@
-import { hour24To12 } from "@schel-d/js-utils";
+import { hour24To12 } from "@dan-schel/js-utils";
 import { TimeError } from "./time-error";
 
 /**
