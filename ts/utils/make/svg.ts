@@ -13,8 +13,8 @@ import {
 export type SVGAttributes = {
   id?: string;
   classes?: DynamicCollection<string>;
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   viewBox?: string;
   preserveAspectRatio?: string;
   innerHTML?: string;
@@ -31,12 +31,8 @@ export function svg(
   ifDefined(attributes.id, (x) => (element.id = x));
   withDefined(attributes.classes, (x) => element.classList.add(...x));
 
-  ifDefined(attributes.width, (x) =>
-    element.setAttribute("width", x.toFixed())
-  );
-  ifDefined(attributes.height, (x) =>
-    element.setAttribute("height", x.toFixed())
-  );
+  ifDefined(attributes.width, (x) => element.setAttribute("width", x));
+  ifDefined(attributes.height, (x) => element.setAttribute("height", x));
   ifDefined(attributes.viewBox, (x) => element.setAttribute("viewBox", x));
   ifDefined(attributes.preserveAspectRatio, (x) =>
     element.setAttribute("preserveAspectRatio", x)
@@ -75,8 +71,9 @@ export function icon<K extends IconLibrary, S extends keyof K>(
     viewBox: iconData.viewBox,
     preserveAspectRatio: "xMidYMid meet",
     innerHTML: iconData.data,
+    width: "1em",
+    height: "1em",
     ...attributes,
   });
-  dom.$element.classList.add("icon");
   return dom;
 }
