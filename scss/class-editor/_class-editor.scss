@@ -60,11 +60,17 @@
     @include template.gone;
   }
 
-  // The "Add option" button.
-  #class-editor-add-option-button {
-    @include common.secondary-button;
-    align-self: flex-start;
+  // The row containing the "Add option" and "Paste options" buttons.
+  #timetable-options-actions {
+    @include template.row;
     margin-top: -0.5rem;
+    gap: 0.5rem;
+  }
+
+  // The "Add option" and "Paste options" buttons.
+  #class-editor-add-option-button,
+  #class-editor-paste-options-button {
+    @include common.secondary-button;
   }
 
   // The div containing the dynamically populated options.

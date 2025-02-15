@@ -28,6 +28,7 @@ const html = {
     typeInput: find.input("class-editor-type-input"),
     colorPicker: find.div("class-editor-color-picker"),
     addOptionButton: find.button("class-editor-add-option-button"),
+    pasteOptionsButton: find.button("class-editor-paste-options-button"),
     optionsDiv: find.div("class-editor-options"),
     optionalSwitchInput: find.input("class-editor-optional-switch-input"),
     submitButton: find.button("class-editor-submit-button"),
