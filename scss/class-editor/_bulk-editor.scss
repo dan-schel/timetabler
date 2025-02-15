@@ -1,0 +1,83 @@
+@use "../css-template/import" as template;
+@use "picker-swatches";
+@use "../colors";
+@use "../common";
+
+// The styles applied to the bulk editor page in the class editor dialog.
+@mixin main {
+  flex-grow: 1;
+  padding: 1rem;
+  gap: 1rem;
+
+  // The "Back" button.
+  #bulk-editor-back-button {
+    @include common.secondary-button;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  // The "New option" title.
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+
+  // The instructions message below the title.
+  #bulk-editor-message {
+    margin-top: -0.5rem;
+  }
+
+  // The main text input.
+  textarea {
+    padding: 1rem;
+    flex-grow: 1;
+    resize: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: scroll;
+
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    transition: background-color 0.05s;
+    background-color: var(--color-ink-10);
+    border-radius: var(--input-rounding);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--color-ink-20);
+    }
+
+    &:focus {
+      outline: var(--input-outline) solid var(--color-accent);
+      outline-offset: calc(-1 * var(--input-outline));
+    }
+
+    &:disabled,
+    &[disabled] {
+      opacity: 50%;
+      background-color: transparent;
+      outline: var(--input-outline-disabled) solid var(--color-ink-20);
+      outline-offset: calc(-1 * var(--input-outline-disabled));
+    }
+  }
+
+  // The error UI. Only shown when the .submit-error class is present.
+  #bulk-editor-error-ui {
+    @include common.error-ui;
+  }
+  &:not(.error) #bulk-editor-error-ui {
+    @include template.gone;
+  }
+
+  // The "Add option to class" button.
+  #bulk-editor-submit-button {
+    @include common.primary-button;
+  }
+}

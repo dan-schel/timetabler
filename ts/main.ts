@@ -28,6 +28,7 @@ const html = {
     typeInput: find.input("class-editor-type-input"),
     colorPicker: find.div("class-editor-color-picker"),
     addOptionButton: find.button("class-editor-add-option-button"),
+    pasteOptionsButton: find.button("class-editor-paste-options-button"),
     optionsDiv: find.div("class-editor-options"),
     optionalSwitchInput: find.input("class-editor-optional-switch-input"),
     submitButton: find.button("class-editor-submit-button"),
@@ -47,6 +48,13 @@ const html = {
     blocksDivContainer: find.div("option-editor-blocks-container"),
     blocksDiv: find.div("option-editor-blocks"),
     submitButton: find.button("option-editor-submit-button"),
+  },
+  bulkEditor: {
+    div: find.div("bulk-editor"),
+    backButton: find.button("bulk-editor-back-button"),
+    textarea: find.textarea("bulk-editor-textarea"),
+    errorText: find.any("bulk-editor-error-text"),
+    submitButton: find.button("bulk-editor-submit-button"),
   },
 };
 

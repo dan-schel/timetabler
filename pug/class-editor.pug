@@ -25,9 +25,13 @@ mixin class-editor
 
     //- "Timetable options" section
     p.label Timetable options
-    button#class-editor-add-option-button
-      +icon("uil:plus")
-      p ADD OPTION
+    #timetable-options-actions
+      button#class-editor-add-option-button
+        +icon("uil:plus")
+        p ADD OPTION
+      button#class-editor-paste-options-button
+        +icon("uil:clipboard-notes")
+        p PASTE OPTIONS
 
     //- Message shown when no options have been added yet.
     p#class-editor-no-options-message

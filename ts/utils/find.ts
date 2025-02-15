@@ -71,6 +71,19 @@ export function input(id: string): HTMLInputElement {
 }
 
 /**
+ * Get a {@link HTMLTextAreaElement} from the document. Throws an error if the
+ * ID is invalid or the type is incorrect.
+ * @param id The ID of the element (without the "#" prefix).
+ */
+export function textarea(id: string): HTMLTextAreaElement {
+  return elementOfType<HTMLTextAreaElement>(
+    id,
+    "HTMLTextAreaElement",
+    (x): x is HTMLTextAreaElement => x instanceof HTMLTextAreaElement
+  );
+}
+
+/**
  * Get a {@link HTMLButtonElement} from the document. Throws an error if the
  * ID is invalid or the type is incorrect.
  * @param id The ID of the element (without the "#" prefix).

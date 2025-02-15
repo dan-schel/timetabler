@@ -10,6 +10,7 @@ import {
 } from "./timetable/timetable-class-color";
 import { TimetableError } from "./timetable/timetable-error";
 import { TimetableOption } from "./timetable/timetable-option";
+import { BulkEditorController } from "./bulk-editor-controller";
 
 /** Manages the class editor dialog. */
 export class ClassEditorController {
@@ -32,6 +33,7 @@ export class ClassEditorController {
   private _options: TimetableOption[];
 
   private readonly optionEditorController: OptionEditorController;
+  private readonly bulkEditorController: BulkEditorController;
 
   /**
    * Creates a {@link ClassEditorController}.
@@ -47,7 +49,12 @@ export class ClassEditorController {
     this.optionEditorController = new OptionEditorController(
       html,
       (blocks) => this.onOptionEditorSubmitted(blocks),
-      () => this.closeOptionEditor()
+      () => this.closeInnerEditor()
+    );
+    this.bulkEditorController = new BulkEditorController(
+      html,
+      (options) => this.onBulkEditorSubmitted(options),
+      () => this.closeInnerEditor()
     );
     this.attachEvents();
   }
@@ -63,6 +70,10 @@ export class ClassEditorController {
     this._html.classEditor.addOptionButton.addEventListener("click", () => {
       this.optionEditorController.reset();
       this._html.classEditorDialog.classList.add("edit-option");
+    });
+    this._html.classEditor.pasteOptionsButton.addEventListener("click", () => {
+      this.bulkEditorController.reset();
+      this._html.classEditorDialog.classList.add("edit-bulk");
     });
   }
 
@@ -164,6 +175,7 @@ export class ClassEditorController {
   /** Called when the dialog is about to open. Clears any old values. */
   reset() {
     this._html.classEditorDialog.classList.remove("edit-option");
+    this._html.classEditorDialog.classList.remove("edit-bulk");
     this._html.classEditor.div.classList.remove("new");
 
     this._html.classEditor.nameInput.value = "";
@@ -174,6 +186,7 @@ export class ClassEditorController {
     this.showError(null);
 
     this.optionEditorController.reset();
+    this.bulkEditorController.reset();
   }
 
   /**
@@ -234,7 +247,41 @@ export class ClassEditorController {
       }
 
       this.setOptions([...this._options, newOption]);
-      this.closeOptionEditor();
+      this.closeInnerEditor();
+      return null;
+    } catch (ex) {
+      if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
+        return ex.editClassUIMessage;
+      }
+      console.warn(ex);
+      return "Something went wrong";
+    }
+  }
+
+  /**
+   * Called when the bulk editor is submitted. Provides the options to this
+   * controller. Returns an error message if applicable, otherwise null. If
+   * accepted, closes the bulk editor page.
+   * @param options The options created in the bulk editor.
+   */
+  onBulkEditorSubmitted(options: TimetableOption[]): string | null {
+    try {
+      const duplicateWithin = options.find((x, i) =>
+        options.some((o, j) => i !== j && o.equals(x))
+      );
+      if (duplicateWithin != null) {
+        return `Looks like ${duplicateWithin.toDisplayString()} is listed twice.`;
+      }
+
+      const duplicateOfExisting = options.find((x) =>
+        this._options.some((o) => o.equals(x))
+      );
+      if (duplicateOfExisting != null) {
+        return `${duplicateOfExisting.toDisplayString()} is already an option in this class.`;
+      }
+
+      this.setOptions([...this._options, ...options]);
+      this.closeInnerEditor();
       return null;
     } catch (ex) {
       if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
@@ -246,13 +293,15 @@ export class ClassEditorController {
   }
 
   /** Closes the option editor page within the dialog. */
-  closeOptionEditor() {
+  closeInnerEditor() {
     this._html.classEditorDialog.classList.remove("edit-option");
+    this._html.classEditorDialog.classList.remove("edit-bulk");
 
     // Reset after the animation plays. Not essential, since we'll reset before
     // we open again, but resets still animate the UI, so it's nice if the reset
     // occurs while the page is hidden rather than as it's opening.
     setTimeout(() => this.optionEditorController.reset(), 500);
+    setTimeout(() => this.bulkEditorController.reset(), 500);
   }
 
   /**
