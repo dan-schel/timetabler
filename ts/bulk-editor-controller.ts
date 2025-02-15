@@ -108,18 +108,14 @@ export class BulkEditorController {
           .map((term) => term.trim().toLowerCase())
           .filter((term) => term.length > 0);
 
-        const online = onlineTerms.some((x) => terms.includes(x));
-
         const dow = terms.reduce<DayOfWeek | null>(
           (acc, x) => acc ?? dowMapping[x] ?? null,
           null
         );
-
         const time = terms.reduce<LocalTime | null>(
           (acc, x) => acc ?? tryParseUserTimeString(x),
           null
         );
-
         const durationMins = terms.reduce<number | null>(
           (acc, x) => acc ?? tryParseUserArbitraryDurationString(x),
           null
@@ -128,6 +124,8 @@ export class BulkEditorController {
         if (dow == null || time == null || durationMins == null) {
           return null;
         }
+
+        const online = onlineTerms.some((x) => terms.includes(x));
 
         return new TimetableOption([
           new TimetableBlock(dow, time, durationMins, online),

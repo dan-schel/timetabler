@@ -259,10 +259,10 @@ export class ClassEditorController {
   }
 
   /**
-   * Called when the bulk editor is submitted. Provides the blocks to this
+   * Called when the bulk editor is submitted. Provides the options to this
    * controller. Returns an error message if applicable, otherwise null. If
-   * accepted, closes the option editor page.
-   * @param blocks The blocks created in the option editor.
+   * accepted, closes the bulk editor page.
+   * @param options The options created in the bulk editor.
    */
   onBulkEditorSubmitted(options: TimetableOption[]): string | null {
     try {
