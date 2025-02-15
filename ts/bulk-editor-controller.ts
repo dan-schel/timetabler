@@ -1,6 +1,32 @@
+import { nonNull } from "@dan-schel/js-utils";
 import { Html } from "./main";
+import { DayOfWeek } from "./time/day-of-week";
+import { LocalTime } from "./time/local-time";
+import {
+  tryParseUserArbitraryDurationString,
+  tryParseUserTimeString,
+} from "./time/parse-user-time-string";
 import { TimetableBlock } from "./timetable/timetable-block";
 import { TimetableOption } from "./timetable/timetable-option";
+
+const onlineTerms = ["online", "web", "remote", "virtual", "zoom"];
+
+const dowMapping: Record<string, DayOfWeek> = {
+  mon: DayOfWeek.mon,
+  tue: DayOfWeek.tue,
+  wed: DayOfWeek.wed,
+  thu: DayOfWeek.thu,
+  fri: DayOfWeek.fri,
+  sat: DayOfWeek.sat,
+  sun: DayOfWeek.sun,
+  monday: DayOfWeek.mon,
+  tuesday: DayOfWeek.tue,
+  wednesday: DayOfWeek.wed,
+  thursday: DayOfWeek.thu,
+  friday: DayOfWeek.fri,
+  saturday: DayOfWeek.sat,
+  sunday: DayOfWeek.sun,
+};
 
 /** Manages the bulk editor ("paste options") page in the edit class dialog. */
 export class BulkEditorController {
@@ -26,7 +52,6 @@ export class BulkEditorController {
     this._callback = callback;
     this._onBack = onBack;
     this.attachEvents();
-    console.log("ashdasd");
   }
 
   /** Sets up event handlers. */
@@ -41,7 +66,9 @@ export class BulkEditorController {
 
   /** Runs when the submit button is clicked. */
   onSubmit() {
-    const parsedOptions: TimetableOption[] = [];
+    const parsedOptions: TimetableOption[] = this._parseArbitraryText(
+      this._html.bulkEditor.textarea.value
+    );
 
     if (parsedOptions.length > 0) {
       const error = this._callback(parsedOptions);
@@ -49,7 +76,7 @@ export class BulkEditorController {
         this.showError(error);
       }
     } else {
-      this.showError("Couldn't make anything useful of that text.");
+      this.showError("Unable make anything useful of that text");
     }
   }
 
@@ -66,5 +93,46 @@ export class BulkEditorController {
   showError(message: string | null) {
     this._html.bulkEditor.div.classList.toggle("error", message != null);
     this._html.bulkEditor.errorText.textContent = message;
+  }
+
+  private _parseArbitraryText(text: string): TimetableOption[] {
+    const lines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0);
+
+    return lines
+      .map((line) => {
+        const terms = line
+          .split(/\s\s+/)
+          .map((term) => term.trim().toLowerCase())
+          .filter((term) => term.length > 0);
+
+        const online = onlineTerms.some((x) => terms.includes(x));
+
+        const dow = terms.reduce<DayOfWeek | null>(
+          (acc, x) => acc ?? dowMapping[x] ?? null,
+          null
+        );
+
+        const time = terms.reduce<LocalTime | null>(
+          (acc, x) => acc ?? tryParseUserTimeString(x),
+          null
+        );
+
+        const durationMins = terms.reduce<number | null>(
+          (acc, x) => acc ?? tryParseUserArbitraryDurationString(x),
+          null
+        );
+
+        if (dow == null || time == null || durationMins == null) {
+          return null;
+        }
+
+        return new TimetableOption([
+          new TimetableBlock(dow, time, durationMins, online),
+        ]);
+      })
+      .filter(nonNull);
   }
 }

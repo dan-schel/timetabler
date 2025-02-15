@@ -266,11 +266,18 @@ export class ClassEditorController {
    */
   onBulkEditorSubmitted(options: TimetableOption[]): string | null {
     try {
-      const duplicate = options.find((x) =>
+      const duplicateWithin = options.find((x, i) =>
+        options.some((o, j) => i !== j && o.equals(x))
+      );
+      if (duplicateWithin != null) {
+        return `Looks like ${duplicateWithin.toDisplayString()} is listed twice.`;
+      }
+
+      const duplicateOfExisting = options.find((x) =>
         this._options.some((o) => o.equals(x))
       );
-      if (duplicate != null) {
-        return `${duplicate.toDisplayString()} is already an option in this class.`;
+      if (duplicateOfExisting != null) {
+        return `${duplicateOfExisting.toDisplayString()} is already an option in this class.`;
       }
 
       this.setOptions([...this._options, ...options]);

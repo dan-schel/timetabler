@@ -39,3 +39,25 @@ export function tryParseUserDurationString(
 
   return mins;
 }
+
+export function tryParseUserArbitraryDurationString(
+  input: string
+): number | null {
+  const hoursMatcher = /([0-9]+) ?hr?s?/g;
+  const minsMatcher = /([0-9]+) ?m(in)?s?/g;
+  const hoursMatch = hoursMatcher.exec(input);
+  const minsMatch = minsMatcher.exec(input);
+
+  if (hoursMatch == null && minsMatch == null) {
+    return null;
+  }
+
+  let durationMins = 0;
+  if (hoursMatch != null) {
+    durationMins += parseInt(hoursMatch[1]) * 60;
+  }
+  if (minsMatch != null) {
+    durationMins += parseInt(minsMatch[1]);
+  }
+  return durationMins;
+}
