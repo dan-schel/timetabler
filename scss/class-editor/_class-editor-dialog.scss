@@ -1,6 +1,7 @@
 @use "../css-template/import" as template;
 @use "class-editor";
 @use "option-editor";
+@use "bulk-editor";
 @use "../common";
 
 // The styles applied to the dialog element.
@@ -20,19 +21,30 @@
     @include option-editor.main;
   }
 
+  #bulk-editor {
+    @include bulk-editor.main;
+  }
+
   #class-editor,
-  #option-editor {
+  #option-editor,
+  #bulk-editor {
     transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
     visibility: visible;
     opacity: 1;
   }
 
-  &.edit-option #class-editor {
+  &.edit-option #class-editor,
+  &.edit-bulk #class-editor {
     @include fade-out;
     transform: translate(-1rem, 0rem);
   }
 
   &:not(.edit-option) #option-editor {
+    @include fade-out;
+    transform: translate(1rem, 0rem);
+  }
+
+  &:not(.edit-bulk) #bulk-editor {
     @include fade-out;
     transform: translate(1rem, 0rem);
   }

@@ -49,6 +49,12 @@ const html = {
     blocksDiv: find.div("option-editor-blocks"),
     submitButton: find.button("option-editor-submit-button"),
   },
+  bulkEditor: {
+    div: find.div("bulk-editor"),
+    backButton: find.button("bulk-editor-back-button"),
+    errorText: find.any("bulk-editor-error-text"),
+    submitButton: find.button("bulk-editor-submit-button"),
+  },
 };
 
 // Used by other files to refer to the above html object.

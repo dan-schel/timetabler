@@ -1,0 +1,43 @@
+@use "../css-template/import" as template;
+@use "picker-swatches";
+@use "../colors";
+@use "../common";
+
+// The styles applied to the bulk editor page in the class editor dialog.
+@mixin main {
+  flex-grow: 1;
+  padding: 1rem;
+  gap: 1rem;
+
+  // The "Back" button.
+  #bulk-editor-back-button {
+    @include common.secondary-button;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  // The "New option" title.
+  h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--color-ink-100);
+  }
+
+  // The instructions message below the title.
+  #bulk-editor-message {
+    margin-top: -0.5rem;
+  }
+
+  // The error UI. Only shown when the .submit-error class is present.
+  #bulk-editor-error-ui {
+    @include common.error-ui;
+  }
+  &:not(.error) #bulk-editor-error-ui {
+    @include template.gone;
+  }
+
+  // The "Add option to class" button.
+  #bulk-editor-submit-button {
+    @include common.primary-button;
+  }
+}

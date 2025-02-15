@@ -1,0 +1,30 @@
+include icons.pug
+
+mixin bulk-editor
+  div&attributes(attributes)
+    //- The "Back" button.
+    button#bulk-editor-back-button
+      +icon("uil:angle-left-b")
+      p BACK
+
+    //- Title.
+    h2 Paste timetable options
+
+    //- Instructions message.
+    p#bulk-editor-message
+      | An option can have multiple time blocks which must be taken together.
+      | Add as many time blocks as you need (in most cases, one), then click
+      | "add option to class".
+
+    
+
+    //- Error message UI. Hides when not in use. Only shows errors that occur
+    //- when clicking the button below.
+    #bulk-editor-error-ui
+      +icon("uil:exclamation-circle")
+      p#bulk-editor-error-text
+
+    //- The "Add options to class" button.
+    button#bulk-editor-submit-button
+      +icon("uil:check")
+      p Add options to class
