@@ -1,5 +1,6 @@
 import { Html } from "./main";
 import { TimetableBlock } from "./timetable/timetable-block";
+import { TimetableOption } from "./timetable/timetable-option";
 
 /** Manages the bulk editor ("paste options") page in the edit class dialog. */
 export class BulkEditorController {
@@ -7,7 +8,7 @@ export class BulkEditorController {
   private readonly _html: Html;
 
   /** The function called when submitted. Informs the dialog controller. */
-  private readonly _callback: (blocks: TimetableBlock[]) => string | null;
+  private readonly _callback: (options: TimetableOption[]) => string | null;
 
   /** Tells the dialog controller to close the page. */
   private readonly _onBack: () => void;
@@ -18,7 +19,7 @@ export class BulkEditorController {
    */
   constructor(
     html: Html,
-    callback: (blocks: TimetableBlock[]) => string | null,
+    callback: (options: TimetableOption[]) => string | null,
     onBack: () => void
   ) {
     this._html = html;
@@ -40,21 +41,21 @@ export class BulkEditorController {
 
   /** Runs when the submit button is clicked. */
   onSubmit() {
-    const parsedBlocks: TimetableBlock[] = [];
+    const parsedOptions: TimetableOption[] = [];
 
-    if (parsedBlocks.length > 0) {
-      const error = this._callback(parsedBlocks);
+    if (parsedOptions.length > 0) {
+      const error = this._callback(parsedOptions);
       if (error != null) {
         this.showError(error);
       }
     } else {
-      this.showError("No, bad.");
+      this.showError("Couldn't make anything useful of that text.");
     }
   }
 
   /** Called when the page is about to open. Clears any old values. */
   reset() {
-    // TODO: Clear the text.
+    this._html.bulkEditor.textarea.value = "";
     this.showError(null);
   }
 

@@ -53,7 +53,7 @@ export class ClassEditorController {
     );
     this.bulkEditorController = new BulkEditorController(
       html,
-      (blocks) => this.onOptionEditorSubmitted(blocks),
+      (options) => this.onBulkEditorSubmitted(options),
       () => this.closeInnerEditor()
     );
     this.attachEvents();
@@ -247,6 +247,33 @@ export class ClassEditorController {
       }
 
       this.setOptions([...this._options, newOption]);
+      this.closeInnerEditor();
+      return null;
+    } catch (ex) {
+      if (TimetableError.detect(ex) && ex.editClassUIMessage != null) {
+        return ex.editClassUIMessage;
+      }
+      console.warn(ex);
+      return "Something went wrong";
+    }
+  }
+
+  /**
+   * Called when the bulk editor is submitted. Provides the blocks to this
+   * controller. Returns an error message if applicable, otherwise null. If
+   * accepted, closes the option editor page.
+   * @param blocks The blocks created in the option editor.
+   */
+  onBulkEditorSubmitted(options: TimetableOption[]): string | null {
+    try {
+      const duplicate = options.find((x) =>
+        this._options.some((o) => o.equals(x))
+      );
+      if (duplicate != null) {
+        return `${duplicate.toDisplayString()} is already an option in this class.`;
+      }
+
+      this.setOptions([...this._options, ...options]);
       this.closeInnerEditor();
       return null;
     } catch (ex) {
