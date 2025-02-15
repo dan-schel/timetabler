@@ -52,6 +52,7 @@ const html = {
   bulkEditor: {
     div: find.div("bulk-editor"),
     backButton: find.button("bulk-editor-back-button"),
+    textarea: find.textarea("bulk-editor-textarea"),
     errorText: find.any("bulk-editor-error-text"),
     submitButton: find.button("bulk-editor-submit-button"),
   },
