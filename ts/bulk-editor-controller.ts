@@ -104,7 +104,7 @@ export class BulkEditorController {
     return lines
       .map((line) => {
         const terms = line
-          .split(/\s\s+/)
+          .split(/\s\s+|\t/)
           .map((term) => term.trim().toLowerCase())
           .filter((term) => term.length > 0);
 
